@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class Tp extends StatelessWidget {
-  const Tp({super.key});
-
+class Module extends StatelessWidget {
+  const Module({super.key, required this.module});
+  final String module;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,20 +14,25 @@ class Tp extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: 90,
       child: Align(
-        alignment: Alignment.centerLeft, 
+        alignment: Alignment.centerLeft,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20), 
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: TextButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, "/contnu_module_student");
+            },
             label: Text(
-              "tp",
+              module,
               style: TextStyle(
-              color: Colors.black,
-              fontSize: 24,
-              
+                color: Colors.black,
+                fontSize: 16,
               ),
             ),
-            icon: Icon(Icons.computer,size: 30,color: Colors.black,),
+            icon: Icon(
+              Icons.folder,
+              size: 30,
+              color: Colors.black,
+            ),
           ),
         ),
       ),

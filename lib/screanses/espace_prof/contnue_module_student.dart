@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:hear_learn1/componente/cour.dart';
-import 'package:hear_learn1/componente/td.dart';
-import 'package:hear_learn1/componente/tp.dart';
+import 'package:hear_learn1/componente/student_side/cour.dart';
+import 'package:hear_learn1/componente/student_side/td.dart';
+import 'package:hear_learn1/componente/student_side/tp.dart';
 
-class ContnueModule extends StatelessWidget {
-  const ContnueModule({super.key});
+class Contnue_Module_Student extends StatelessWidget {
+  const Contnue_Module_Student({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightGreen,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("module",
             style: TextStyle(
                 color: Colors.white,
@@ -21,7 +22,7 @@ class ContnueModule extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(
                 context,
-                 "/home"
+                 "/home_student"
               );
             },
             icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),

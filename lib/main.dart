@@ -1,9 +1,23 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hear_learn1/screanses/Home_student.dart';
-import 'package:hear_learn1/screanses/contnue_module.dart';
+import 'package:hear_learn1/data/auth.dart';
+import 'package:hear_learn1/firebase_options.dart';
+import 'package:hear_learn1/screanses/home/Home_student.dart';
+import 'package:hear_learn1/screanses/espace_prof/contnue_module_student.dart';
+import 'package:hear_learn1/screanses/espace_prof/contnue_module_teacher.dart';
+import 'package:hear_learn1/screanses/espace_prof/teacher_dashboard.dart';
+import 'package:hear_learn1/screanses/home/fonctionalite_screen.dart';
+import 'package:hear_learn1/screanses/home/home.techer.dart';
+import 'package:hear_learn1/screanses/sign_in_and_sign_up/log_in_screen.dart';
+import 'package:hear_learn1/screanses/sign_in_and_sign_up/signup_etud_screen.dart';
+import 'package:hear_learn1/screanses/sign_in_and_sign_up/signup_prof_screen.dart';
+//import 'package:hear_learn1/tts_stt/PDFToSpeechScreen.dart';
 
-void main() {
-  
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+          await Firebase.initializeApp(
+              options: DefaultFirebaseOptions.currentPlatform, // Ensure firebase_options.dart exists
+  );
   runApp(const hearlern());
 }
 
@@ -13,12 +27,21 @@ class hearlern extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: "/",
       routes: {
-        "/contnu_module": (context) => ContnueModule(),
-        "/home": (context) => Home(),
+        "/": (context) => const Auth(),
+        "/fonctionalite_screen": (context) => const Fonctionalite(),
+        "/log_in_screen": (context) => const LoginScreen(),
+        "/signup_prof_screen": (context) => const SignUpProf(),
+        "/signup_etud_screen": (context) => const SignUpEtud(),
+        "/contnu_module_student": (context) => Contnue_Module_Student(),
+        "/contnu_module_teacher": (context) => Contnue_Module_Teacher(),
+        "/teacher_option": (context) => TeacherDashboard(),
+        "/home_student": (context) => Home_student(),
+        "/home_techer": (context) => Home_Teacher(),
       },
       debugShowCheckedModeBanner: false,
-      home: Home(),
+     
     );
   }
 }

@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:370210909643:android:6c253a56707589f7499a4e",
+        "android_client_info": {
+          "package_name": "kd.my_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcdPjJeuqjnL3yNR0-YpJuzJbIay0rdnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:370210909643:android:164b73dbfc9188f1499a4e",
         "android_client_info": {
           "package_name": "le.ikchkaka.hear_learn"

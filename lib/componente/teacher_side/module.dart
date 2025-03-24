@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Cour extends StatelessWidget {
-  const Cour({super.key});
 
+class Module extends StatelessWidget {
+  const Module({super.key, required this.module});
+  final String module;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,16 +19,23 @@ class Cour extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20), 
           child: TextButton.icon(
-            onPressed: () {},
+            onPressed: () {
+               Navigator.pushNamed(
+                context,
+                 "/contnu_module_teacher",
+                 arguments: module
+                 
+              );
+            },
             label: Text(
-              "cour",
+              module,
               style: TextStyle(
               color: Colors.black,
-              fontSize: 24,
+              fontSize: 16,
               
               ),
             ),
-            icon: Icon(Icons.book,size: 30,color: Colors.black,),
+            icon: Icon(Icons.folder,size: 30,color: Colors.black,),
           ),
         ),
       ),

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:hear_learn1/componente/module.dart';
+import 'package:hear_learn1/componente/student_side/module.dart';
+import 'package:hear_learn1/data/appwrite.dart';
 
+//import 'package:hear_learn1/screanses/teacher_dashboard.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class Home_student extends StatelessWidget {
+  const Home_student({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightGreen,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("student Page",
             style: TextStyle(
                 color: Colors.white,
@@ -18,14 +21,19 @@ class Home extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-             
+              Navigator.pushNamed(context, "/fonctionalite_screen");
             },
             icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
           ),
         ],
         backgroundColor: Colors.lightGreen[800],
       ),
-      body: Module(),
+      body: ListView.builder(
+        itemCount: AppWrite.L3_S1.length,
+        itemBuilder: (context, index) {
+          return Module(module: AppWrite.L3_S1[index]);
+        },
+      ),
     );
   }
 }
