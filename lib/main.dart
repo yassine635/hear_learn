@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hear_learn1/STT_TTS/flutter/PDFToSpeechScreen.dart';
 import 'package:hear_learn1/data/auth.dart';
 import 'package:hear_learn1/firebase_options.dart';
 import 'package:hear_learn1/screanses/home/Home_student.dart';
@@ -15,8 +16,9 @@ import 'package:hear_learn1/screanses/sign_in_and_sign_up/signup_prof_screen.dar
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-          await Firebase.initializeApp(
-              options: DefaultFirebaseOptions.currentPlatform, // Ensure firebase_options.dart exists
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions
+        .currentPlatform, // Ensure firebase_options.dart exists
   );
   runApp(const hearlern());
 }
@@ -41,7 +43,7 @@ class hearlern extends StatelessWidget {
         "/home_techer": (context) => Home_Teacher(),
       },
       debugShowCheckedModeBanner: false,
-     
+      
     );
   }
 }

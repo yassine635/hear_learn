@@ -44,7 +44,11 @@ dependencies:
   pdfx: ^2.8.0
   flutter_tts: ^4.2.2
   path_provider: ^2.1.5
-  #pdf_text: ^0.5.0
+  pdf_text: ^0.5.0
+  #flutter_ffmpeg: ^0.4.2
+  #ffmpeg_kit_flutter_full_gpl: ^6.0.3
+  ffmpeg_kit_flutter: ^6.0.3
+  
 
 dev_dependencies:
   flutter_test:

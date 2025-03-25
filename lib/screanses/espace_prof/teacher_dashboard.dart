@@ -33,7 +33,7 @@ class TeacherDashboard extends StatelessWidget {
               },
               icon: Icon(Icons.upload_file,color: Colors.black,),
               label: Text(
-                "Upload Course (Cour,TD,TP)",
+                "Upload file",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18

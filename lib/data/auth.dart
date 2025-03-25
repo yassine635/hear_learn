@@ -13,9 +13,9 @@ class Auth extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator()); // Show loading spinner
+            return const Center(child: CircularProgressIndicator()); 
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}")); // Show error message
+            return Center(child: Text("Error: ${snapshot.error}")); 
           } else if (snapshot.hasData) {
             return Fonctionalite();
           } else {
