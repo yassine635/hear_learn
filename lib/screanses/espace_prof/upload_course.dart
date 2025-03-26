@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:hear_learn1/data/appwrite.dart'; // Import your AppWriteService
+ // Import your AppWriteService
 
 class UploadCourse extends StatefulWidget {
   @override
@@ -9,7 +9,7 @@ class UploadCourse extends StatefulWidget {
 
 class _UploadCourseState extends State<UploadCourse> {
   PlatformFile? selectedFile;
-  final AppWrite appWriteService = AppWrite(); 
+  
 
   // Pick a file
   Future<void> pickFile() async {
@@ -29,23 +29,7 @@ class _UploadCourseState extends State<UploadCourse> {
   }
 
   // Upload file using AppWriteService
-  Future<void> uploadFile() async {
-    if (selectedFile == null) return;
-
-    String? fileId = await appWriteService.uploadFile(selectedFile!);
-
-    if (fileId != null) {
-      print("File uploaded successfully: $fileId");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("File uploaded successfully: $fileId")),
-      );
-    } else {
-      print("File upload failed.");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("File upload failed")),
-      );
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +58,7 @@ class _UploadCourseState extends State<UploadCourse> {
             ),
             SizedBox(height: 20),
             ElevatedButton.icon(
-              onPressed: uploadFile,
+              onPressed:(){} ,
               icon: Icon(Icons.cloud_upload, color: Colors.black),
               label: Text("Upload File",
                   style: TextStyle(color: Colors.black, fontSize: 18)),

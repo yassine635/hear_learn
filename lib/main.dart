@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hear_learn1/STT_TTS/flutter/PDFToSpeechScreen.dart';
+
 import 'package:hear_learn1/data/auth.dart';
 import 'package:hear_learn1/firebase_options.dart';
 import 'package:hear_learn1/screanses/home/Home_student.dart';
@@ -43,7 +43,6 @@ class hearlern extends StatelessWidget {
         "/home_techer": (context) => Home_Teacher(),
       },
       debugShowCheckedModeBanner: false,
-      
     );
   }
 }

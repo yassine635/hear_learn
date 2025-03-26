@@ -44,7 +44,7 @@ class _SignUpEtudState extends State<SignUpEtud> {
         password: mdpctr.text.trim(),
       );
 
-      String uid = userCredential.user!.uid; // Get UID from Firebase Authentication
+      String uid = userCredential.user!.uid; 
 
       // Store user details in Firestore with the same UID
       await FirebaseFirestore.instance.collection("etudiants").doc(uid).set({
