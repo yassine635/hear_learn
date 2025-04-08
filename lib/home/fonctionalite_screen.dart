@@ -66,6 +66,14 @@ class _FonctionaliteState extends State<Fonctionalite> {
     }
   }
 
+  bool whattype() {
+    if (userType == 1) {
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +82,8 @@ class _FonctionaliteState extends State<Fonctionalite> {
         backgroundColor: Colors.lightGreen[700],
         title: const Text(
           "HearLearn",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(
+              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         leading: IconButton(
           onPressed: () async {
@@ -97,33 +106,47 @@ class _FonctionaliteState extends State<Fonctionalite> {
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            _buildButton("Espace d'éducation", Icons.book, navigateToModule),
-            _buildButton("Reconnaissance couleur", Icons.color_lens, () {}),
-            _buildButton("Reconnaissance de billets", Icons.money, () {}),
-            _buildButton("Bouton d'urgence", Icons.phone, () {}),
+            _buildButton("Espace d'éducation", Icons.book, navigateToModule,showForUser: true),
+            _buildButton("Reconnaissance couleur", Icons.color_lens, () {},showForUser: whattype()),
+            _buildButton("Reconnaissance de billets", Icons.money, () {},showForUser: whattype()),
+            _buildButton("Bouton d'urgence", Icons.phone, () {
+              Navigator.pushNamed(context, "/emergency");
+            },showForUser: whattype()),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildButton(String text, IconData icon, VoidCallback onPressed) {
-    return Container(
-      height: 80,
-      margin: const EdgeInsets.all(5),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(Colors.lightGreen[600]),
-        ),
-        child: ListTile(
-          leading: Icon(icon, color: Colors.black),
-          title: Text(
-            text,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-          ),
-        ),
-      ),
-    );
+  Widget _buildButton(
+    String text,
+    IconData icon,
+    VoidCallback onPressed, {
+    required bool showForUser, // Add the condition to show/hide button
+  }) {
+    // Only show the button if showForUser is true
+    return showForUser
+        ? Container(
+            height: 80,
+            margin: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Colors.lightGreen,
+              borderRadius: BorderRadius.circular(40)
+            ),
+            child: ElevatedButton(
+              onPressed: onPressed,
+              child: ListTile(
+                leading: Icon(icon, color: Colors.black),
+                title: Text(
+                  text,
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ),
+            ),
+          )
+        : Container(); // Return an empty container if the button should be hidden
   }
 }

@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'package:hear_learn1/data/auth.dart';
 import 'package:hear_learn1/firebase_options.dart';
-import 'package:hear_learn1/screanses/home/Home_student.dart';
+import 'package:hear_learn1/home/Home_student.dart';
 import 'package:hear_learn1/screanses/espace_prof/contnue_module_student.dart';
 import 'package:hear_learn1/screanses/espace_prof/contnue_module_teacher.dart';
 import 'package:hear_learn1/screanses/espace_prof/teacher_dashboard.dart';
-import 'package:hear_learn1/screanses/home/fonctionalite_screen.dart';
-import 'package:hear_learn1/screanses/home/home.techer.dart';
+import 'package:hear_learn1/home/fonctionalite_screen.dart';
+import 'package:hear_learn1/home/home.techer.dart';
+import 'package:hear_learn1/screanses/espace_student/emrgency/emergency_screen.dart';
+import 'package:hear_learn1/screanses/espace_student/emrgency/emergency_screen_enterise.dart';
 import 'package:hear_learn1/screanses/sign_in_and_sign_up/log_in_screen.dart';
 import 'package:hear_learn1/screanses/sign_in_and_sign_up/signup_etud_screen.dart';
 import 'package:hear_learn1/screanses/sign_in_and_sign_up/signup_prof_screen.dart';
@@ -41,6 +43,8 @@ class hearlern extends StatelessWidget {
         "/teacher_option": (context) => TeacherDashboard(),
         "/home_student": (context) => Home_student(),
         "/home_techer": (context) => Home_Teacher(),
+        "/emergency": (context) => EmergencyScreen(),
+        "/emergency_enterise": (context) => EmergencyScreenEnterise(),
       },
       debugShowCheckedModeBanner: false,
     );

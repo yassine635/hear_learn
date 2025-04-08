@@ -51,10 +51,9 @@ class _LoginScreenState extends State<LoginScreen> {
             // Centering the whole column
             child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment:
-                    MainAxisAlignment.center, // Centering items vertically
-                crossAxisAlignment: CrossAxisAlignment
-                    .center, // Ensuring everything is centered
+                mainAxisAlignment:MainAxisAlignment.center, 
+                crossAxisAlignment: CrossAxisAlignment.center, 
+                    
                 children: [
                   CircleAvatar(
                     radius: 100,
