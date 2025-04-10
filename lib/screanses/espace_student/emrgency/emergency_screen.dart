@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hear_learn1/data/cheker.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({Key? key}) : super(key: key);
@@ -10,13 +11,19 @@ class EmergencyScreen extends StatefulWidget {
 }
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
-   String familyNumber = "";
-   String friendNumber = "";
-   String customNumber = "";
-  // Function to launch a phone call
-  void callNumber(String number) async {
-    
+  String familyNumber = "";
+  String friendNumber = "";
+  String customNumber = "";
+  String? uid;
 
+  @override
+  void initState() {
+    super.initState();
+    checkFirstTime();
+  }
+
+  // 🔔 Function to launch a phone call
+  void callNumber(String number) async {
     final Uri phoneUri = Uri(scheme: 'tel', path: number);
     if (await canLaunchUrl(phoneUri)) {
       await launchUrl(phoneUri);
@@ -25,35 +32,32 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    checkFirstTime();
-  }
-
-  // Check if it's the first time the emergency numbers are set up
+  // 🔍 Check Firestore if it's first time setup
   void checkFirstTime() async {
-    bool firstTime = await Cheker.isFirstTimeEmergency();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    uid = user.uid;
+    bool firstTime = await Cheker.isFirstTimeEmergency(uid!);
+
     if (firstTime) {
-      Navigator.pushNamed(context, "/emergency_enterise");
+      // First time, go to the input screen
+      Navigator.pushReplacementNamed(
+        context,
+        "/emergency_enterise",
+        arguments: uid, 
+      );
     } else {
-      // Get the emergency numbers and display or use them
-      Map<String, String> emergencyNumbers = await Cheker.getEmergencyNumbers();
+      // Get emergency numbers from Firestore
+      Map<String, String> emergencyNumbers = await Cheker.getEmergencyNumbers(uid!);
 
-       familyNumber = emergencyNumbers['family'] ?? 'No number set';
-       friendNumber = emergencyNumbers['friend'] ?? 'No number set';
-       customNumber = emergencyNumbers['choice'] ?? 'No number set';
-
-      // Print the numbers (you can use them for calling or displaying in the UI)
-      print("Family Number: $familyNumber");
-      print("Friend Number: $friendNumber");
-      print("Custom Number: $customNumber");
-
-      
+      setState(() {
+        familyNumber = emergencyNumbers['family'] ?? 'No number set';
+        friendNumber = emergencyNumbers['friend'] ?? 'No number set';
+        customNumber = emergencyNumbers['choice'] ?? 'No number set';
+      });
     }
   }
-
-  // Function to show emergency options (bottom sheet)
 
   @override
   Widget build(BuildContext context) {
@@ -63,24 +67,35 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         backgroundColor: Colors.lightGreen,
       ),
       body: Center(
-        
         child: Column(
-          mainAxisAlignment:MainAxisAlignment.center, 
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          _buildButton(context, "famely", Colors.lightGreen,() =>callNumber(familyNumber)),
-          SizedBox(height: 40,),
-          _buildButton(context, "frend", Colors.lightGreen,() =>callNumber(friendNumber)),
-          SizedBox(height: 40,),
-          _buildButton(context, "custom number", Colors.lightGreen,() =>callNumber(customNumber)),
-          SizedBox(height: 40,),
-        ]),
+            _buildButton(context, "Family", Colors.lightGreen, () => callNumber(familyNumber)),
+            const SizedBox(height: 30),
+            _buildButton(context, "Friend", Colors.lightGreen, () => callNumber(friendNumber)),
+            const SizedBox(height: 30),
+            _buildButton(context, "Custom", Colors.lightGreen, () => callNumber(customNumber)),
+            const SizedBox(height: 30),
+            _buildButton(context, "Change Numbers", Colors.redAccent, () {
+              Navigator.pushReplacementNamed(
+                context,
+                "/emergency_enterise",
+                arguments: uid, // Pass uid when editing
+              );
+            }),
+          ],
+        ),
       ),
     );
   }
 
+  // 🔘 Reusable button widget
   Widget _buildButton(
-      BuildContext context, String text, Color? color, VoidCallback onPressed) {
+    BuildContext context,
+    String text,
+    Color? color,
+    VoidCallback onPressed,
+  ) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       height: 60,

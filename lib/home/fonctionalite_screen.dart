@@ -27,7 +27,7 @@ class _FonctionaliteState extends State<Fonctionalite> {
 
   Future<int> getUserType() async {
     User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) return 0; // No user logged in
+    if (user == null) return 0; 
 
     String uid = user.uid;
 
@@ -37,16 +37,16 @@ class _FonctionaliteState extends State<Fonctionalite> {
           .doc(uid)
           .get();
 
-      if (studentDoc.exists) return 1; // Student
+      if (studentDoc.exists) return 1;
 
       DocumentSnapshot profDoc = await FirebaseFirestore.instance
           .collection('utilisateurs')
           .doc(uid)
           .get();
 
-      if (profDoc.exists) return 2; // Professor
+      if (profDoc.exists) return 2; 
 
-      return 0; // Not found in any collection
+      return 0; 
     } catch (e) {
       print("ERROR: $e");
       return 0;
@@ -122,9 +122,9 @@ class _FonctionaliteState extends State<Fonctionalite> {
     String text,
     IconData icon,
     VoidCallback onPressed, {
-    required bool showForUser, // Add the condition to show/hide button
+    required bool showForUser, 
   }) {
-    // Only show the button if showForUser is true
+    
     return showForUser
         ? Container(
             height: 80,
@@ -147,6 +147,6 @@ class _FonctionaliteState extends State<Fonctionalite> {
               ),
             ),
           )
-        : Container(); // Return an empty container if the button should be hidden
+        : Container(); 
   }
 }

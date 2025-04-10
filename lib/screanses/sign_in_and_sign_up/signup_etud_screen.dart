@@ -52,6 +52,7 @@ class _SignUpEtudState extends State<SignUpEtud> {
         'niveau': niveauctr.text.trim(),
         'nom_prenom': npctr.text.trim(),
         'specialite': specialitectr.text.trim(),
+        'first_time': true,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(

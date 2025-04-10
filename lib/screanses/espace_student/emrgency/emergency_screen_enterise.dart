@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hear_learn1/data/cheker.dart';
 
 class EmergencyScreenEnterise extends StatelessWidget {
-  EmergencyScreenEnterise({super.key});
+  final String uid; 
+  EmergencyScreenEnterise({super.key, required this.uid});
+
   final GlobalKey<FormState> keyFormState = GlobalKey<FormState>();
   final TextEditingController familyController = TextEditingController();
   final TextEditingController friendController = TextEditingController();
@@ -27,38 +29,43 @@ class EmergencyScreenEnterise extends StatelessWidget {
         child: Form(
           key: keyFormState,
           child: Column(
-            mainAxisAlignment:MainAxisAlignment.center, 
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("please neter your numbers"),
+              const Text("Please enter your emergency numbers"),
               const SizedBox(height: 20),
               _buildTextField(
                 context,
-               familyController,
+                familyController,
                 "Family Number",
-                TFValidator: (val)=>Cheker.isEmpty(val)
-                ),
+                TFValidator: (val) => Cheker.isEmpty(val),
+              ),
               const SizedBox(height: 15),
               _buildTextField(
                 context,
-               friendController,
+                friendController,
                 "Friend Number",
-                TFValidator: (val)=>Cheker.isEmpty(val)
-                ),
+                TFValidator: (val) => Cheker.isEmpty(val),
+              ),
               const SizedBox(height: 15),
               _buildTextField(
-                  context,
-                  choiceController,
-                   "Custom Emergency Number",
-                   TFValidator: (val)=>Cheker.isEmpty(val)
-                   ),
+                context,
+                choiceController,
+                "Custom Emergency Number",
+                TFValidator: (val) => Cheker.isEmpty(val),
+              ),
               const SizedBox(height: 30),
-              _buildButton(context, "Save Numbers", Colors.lightGreen, () {
+              _buildButton(context, "Save Numbers", Colors.lightGreen, () async {
                 if (keyFormState.currentState!.validate()) {
-                  Cheker.saveEmergencyNumbers(
+                  await Cheker.saveEmergencyNumbers(
+                    uid: uid,
                     family: familyController.text.trim(),
                     friend: friendController.text.trim(),
                     choice: choiceController.text.trim(),
+                  );
+                  // Optional: Show success snackbar
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Emergency numbers saved!")),
                   );
                   Navigator.pushReplacementNamed(context, "/emergency");
                 }
@@ -72,8 +79,12 @@ class EmergencyScreenEnterise extends StatelessWidget {
 
   // Build a custom TextField
   Widget _buildTextField(
-      BuildContext context, TextEditingController controller, String hintText,
-      {bool obscureText = false,String? Function(String?)? TFValidator}) { 
+    BuildContext context,
+    TextEditingController controller,
+    String hintText, {
+    bool obscureText = false,
+    String? Function(String?)? TFValidator,
+  }) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -82,7 +93,6 @@ class EmergencyScreenEnterise extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextFormField(
-
         controller: controller,
         validator: TFValidator,
         obscureText: obscureText,
@@ -100,7 +110,11 @@ class EmergencyScreenEnterise extends StatelessWidget {
 
   // Build a custom button
   Widget _buildButton(
-      BuildContext context, String text, Color? color, VoidCallback onPressed) {
+    BuildContext context,
+    String text,
+    Color? color,
+    VoidCallback onPressed,
+  ) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       height: 60,

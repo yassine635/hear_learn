@@ -44,7 +44,10 @@ class hearlern extends StatelessWidget {
         "/home_student": (context) => Home_student(),
         "/home_techer": (context) => Home_Teacher(),
         "/emergency": (context) => EmergencyScreen(),
-        "/emergency_enterise": (context) => EmergencyScreenEnterise(),
+        '/emergency_enterise': (context) {
+    final uid = ModalRoute.of(context)!.settings.arguments as String;
+    return EmergencyScreenEnterise(uid: uid);
+  },
       },
       debugShowCheckedModeBanner: false,
     );
