@@ -63,7 +63,7 @@ class EmergencyScreenEnterise extends StatelessWidget {
                     friend: friendController.text.trim(),
                     choice: choiceController.text.trim(),
                   );
-                  // Optional: Show success snackbar
+                  
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Emergency numbers saved!")),
                   );
@@ -77,7 +77,7 @@ class EmergencyScreenEnterise extends StatelessWidget {
     );
   }
 
-  // Build a custom TextField
+  
   Widget _buildTextField(
     BuildContext context,
     TextEditingController controller,

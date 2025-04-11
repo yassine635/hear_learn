@@ -1,8 +1,8 @@
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Cheker {
-  // Check if it's the first time the emergency setup is being done
+  
   static Future<bool> isFirstTimeEmergency(String uid) async {
     try {
       DocumentSnapshot doc = await FirebaseFirestore.instance
@@ -37,7 +37,7 @@ class Cheker {
           'num_family': family,
           'num_freind': friend,
           'num_custome': choice,
-          'first_time': false, // Set to false after setup
+          'first_time': false, 
         });
     print("Emergency numbers saved successfully.");
   } catch (e) {
@@ -69,7 +69,7 @@ static Future<Map<String, String>> getEmergencyNumbers(String uid) async {
 }
 
 
-  // Validate if a value is empty
+  
   static String? isEmpty(String? val) {
     if (val == null || val.isEmpty) {
       return "can't be empty";

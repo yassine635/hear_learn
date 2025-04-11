@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hear_learn1/STT_TTS/TTS.DART/PDFToSpeechScreen.dart';
 
 import 'package:hear_learn1/data/auth.dart';
 import 'package:hear_learn1/firebase_options.dart';
@@ -20,7 +21,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions
-        .currentPlatform, // Ensure firebase_options.dart exists
+        .currentPlatform, 
   );
   runApp(const hearlern());
 }
@@ -45,9 +46,11 @@ class hearlern extends StatelessWidget {
         "/home_techer": (context) => Home_Teacher(),
         "/emergency": (context) => EmergencyScreen(),
         '/emergency_enterise': (context) {
-    final uid = ModalRoute.of(context)!.settings.arguments as String;
-    return EmergencyScreenEnterise(uid: uid);
-  },
+              final uid = ModalRoute.of(context)!.settings.arguments as String;
+              return EmergencyScreenEnterise(uid: uid);
+           },
+
+           "/_PDFToSpeechScreenState": (context) => PDFToSpeechScreen(),
       },
       debugShowCheckedModeBanner: false,
     );

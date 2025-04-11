@@ -22,7 +22,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     checkFirstTime();
   }
 
-  // 🔔 Function to launch a phone call
+ 
   void callNumber(String number) async {
     final Uri phoneUri = Uri(scheme: 'tel', path: number);
     if (await canLaunchUrl(phoneUri)) {
@@ -32,7 +32,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     }
   }
 
-  // 🔍 Check Firestore if it's first time setup
+  
   void checkFirstTime() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
@@ -41,14 +41,14 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     bool firstTime = await Cheker.isFirstTimeEmergency(uid!);
 
     if (firstTime) {
-      // First time, go to the input screen
+      
       Navigator.pushReplacementNamed(
         context,
         "/emergency_enterise",
         arguments: uid, 
       );
     } else {
-      // Get emergency numbers from Firestore
+      
       Map<String, String> emergencyNumbers = await Cheker.getEmergencyNumbers(uid!);
 
       setState(() {
@@ -80,7 +80,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
               Navigator.pushReplacementNamed(
                 context,
                 "/emergency_enterise",
-                arguments: uid, // Pass uid when editing
+                arguments: uid,
               );
             }),
           ],
@@ -89,7 +89,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     );
   }
 
-  // 🔘 Reusable button widget
+  
   Widget _buildButton(
     BuildContext context,
     String text,

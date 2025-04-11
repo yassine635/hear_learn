@@ -107,6 +107,7 @@ class _FonctionaliteState extends State<Fonctionalite> {
             ),
             const SizedBox(height: 20),
             _buildButton("Espace d'éducation", Icons.book, navigateToModule,showForUser: true),
+            _buildButton("créer un quiz", Icons.computer_sharp, () {},showForUser: !whattype()),
             _buildButton("Reconnaissance couleur", Icons.color_lens, () {},showForUser: whattype()),
             _buildButton("Reconnaissance de billets", Icons.money, () {},showForUser: whattype()),
             _buildButton("Bouton d'urgence", Icons.phone, () {
@@ -136,7 +137,7 @@ class _FonctionaliteState extends State<Fonctionalite> {
             child: ElevatedButton(
               onPressed: onPressed,
               child: ListTile(
-                leading: Icon(icon, color: Colors.black),
+                leading: Icon(icon, color: Colors.black,size: 40,),
                 title: Text(
                   text,
                   style: const TextStyle(

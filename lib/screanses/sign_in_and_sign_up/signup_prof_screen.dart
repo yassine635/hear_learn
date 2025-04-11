@@ -30,14 +30,14 @@ class _SignupprofState extends State<SignUpProf> {
       }
 
       try {
-        // Show loading message
+       
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Envoi en cours...")),
         );
 
         FocusScope.of(context).unfocus();
 
-        // Create user in Firebase Authentication
+        
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
           email: emailctr.text.trim(),
@@ -46,7 +46,7 @@ class _SignupprofState extends State<SignUpProf> {
 
         String uid = userCredential.user!.uid;
 
-        // Save user details in Firestore
+        
         await FirebaseFirestore.instance.collection("utilisateurs").doc(uid).set({
           'uid': uid,
           'nom_prenom': npctr.text.trim(),
@@ -54,7 +54,7 @@ class _SignupprofState extends State<SignUpProf> {
           'email': emailctr.text.trim(),
         });
 
-        // Navigate to home page after successful signup
+        
         Navigator.pushNamed(context, "/");
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(

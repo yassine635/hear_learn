@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       padding:
-          EdgeInsets.symmetric(horizontal: 20), // Centering text inside field
+          EdgeInsets.symmetric(horizontal: 20), 
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 245, 255, 233),
         borderRadius: BorderRadius.circular(15),
@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildButton(String text, Color? color, VoidCallback onPressed) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.9, // Centering the button
+      width: MediaQuery.of(context).size.width * 0.9, 
       height: 60,
       child: ElevatedButton(
         onPressed: onPressed,

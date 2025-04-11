@@ -37,7 +37,7 @@ dependencies:
   firebase_auth: ^5.5.1
   cloud_firestore: ^5.6.5
   firebase_storage: ^12.4.4
-  file_picker: ^9.2.0
+  file_picker: ^10.0.0
   http: ^0.13.5
   appwrite: ^15.0.0
   get: ^4.7.2
@@ -45,10 +45,18 @@ dependencies:
   flutter_tts: ^4.2.2
   path_provider: ^2.1.5
   url_launcher: ^6.3.1
-  shared_preferences: ^2.2.1
+  open_file: ^3.3.2
+  ffmpeg_kit_flutter_full_gpl: ^6.0.3
+  syncfusion_flutter_pdf: ^24.1.41
+  google_mlkit_text_recognition: ^0.15.0
+  pdf_render: ^1.4.12
+  path: ^1.8.3
+  image: ^3.0.1
+  audioplayers: ^5.2.1
+  
   #pdf_text: ^0.5.0
   #flutter_ffmpeg: ^0.4.2
-  #ffmpeg_kit_flutter_full_gpl: ^6.0.3
+  
   #ffmpeg_kit_flutter: ^6.0.3
   
 
