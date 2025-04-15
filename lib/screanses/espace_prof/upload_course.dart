@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
- // Import your AppWriteService
+import 'package:get/get.dart';
+// Import your AppWriteService
 
 class UploadCourse extends StatefulWidget {
   @override
@@ -9,7 +10,6 @@ class UploadCourse extends StatefulWidget {
 
 class _UploadCourseState extends State<UploadCourse> {
   PlatformFile? selectedFile;
-  
 
   // Pick a file
   Future<void> pickFile() async {
@@ -29,7 +29,6 @@ class _UploadCourseState extends State<UploadCourse> {
   }
 
   // Upload file using AppWriteService
-  
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +57,9 @@ class _UploadCourseState extends State<UploadCourse> {
             ),
             SizedBox(height: 20),
             ElevatedButton.icon(
-              onPressed:(){} ,
+              onPressed: () {
+                Navigator.pushNamed(context, "/_PDFToSpeechScreenState");
+              },
               icon: Icon(Icons.cloud_upload, color: Colors.black),
               label: Text("Upload File",
                   style: TextStyle(color: Colors.black, fontSize: 18)),

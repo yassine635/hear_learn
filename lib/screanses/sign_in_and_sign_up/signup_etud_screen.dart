@@ -13,11 +13,28 @@ class _SignUpEtudState extends State<SignUpEtud> {
   final formKey = GlobalKey<FormState>();
 
   final npctr = TextEditingController();
-  final niveauctr = TextEditingController();
-  final specialitectr = TextEditingController();
   final emailctr = TextEditingController();
   final mdpctr = TextEditingController();
   final confirmemdpctr = TextEditingController();
+
+  
+  String? selectedSpecialite;
+  List<String> specialiteOptions = [
+    'Informatique',
+    'Math',
+    'Science technique',
+    'Science de la matière',
+  ];
+
+  
+  String? selectedlevel;
+  List<String> levelOptions = [
+    'Licence1',
+    'Licence2',
+    'Licence3',
+    'Master1',
+    'Master2',
+  ];
 
   bool mdpconfirmer() {
     return mdpctr.text.trim() == confirmemdpctr.text.trim();
@@ -38,20 +55,19 @@ class _SignUpEtudState extends State<SignUpEtud> {
     FocusScope.of(context).unfocus();
 
     try {
-      // Create User in Firebase Authentication
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailctr.text.trim(),
         password: mdpctr.text.trim(),
       );
 
-      String uid = userCredential.user!.uid; 
+      String uid = userCredential.user!.uid;
 
-      // Store user details in Firestore with the same UID
       await FirebaseFirestore.instance.collection("etudiants").doc(uid).set({
         'email': emailctr.text.trim(),
-        'niveau': niveauctr.text.trim(),
+        'niveau': selectedlevel,
         'nom_prenom': npctr.text.trim(),
-        'specialite': specialitectr.text.trim(),
+        'specialite': selectedSpecialite,
         'first_time': true,
       });
 
@@ -72,8 +88,6 @@ class _SignUpEtudState extends State<SignUpEtud> {
     npctr.dispose();
     mdpctr.dispose();
     emailctr.dispose();
-    niveauctr.dispose();
-    specialitectr.dispose();
     confirmemdpctr.dispose();
     super.dispose();
   }
@@ -96,9 +110,76 @@ class _SignUpEtudState extends State<SignUpEtud> {
                     backgroundImage: AssetImage('images/student.png'),
                   ),
                   const SizedBox(height: 20),
-                  buildTextField(npctr, "Nom Prenom:"),
-                  buildTextField(niveauctr, "Niveau:"),
-                  buildTextField(specialitectr, "Specialité:"),
+                  buildTextField(npctr, "Nom Prénom:"),
+
+                  // 🔽 Niveau Dropdown
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: DropdownButtonFormField<String>(
+                      value: selectedlevel,
+                      hint: const Text("Niveau:"),
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedlevel = value;
+                        });
+                      },
+                      validator: (value) =>
+                          value == null ? "Veuillez choisir un niveau" : null,
+                      items: levelOptions.map((option) {
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(option),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+
+                  // 🔽 Specialité Dropdown
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: DropdownButtonFormField<String>(
+                      value: selectedSpecialite,
+                      hint: const Text("Spécialité:"),
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedSpecialite = value;
+                        });
+                      },
+                      validator: (value) =>
+                          value == null ? "Veuillez choisir une spécialité" : null,
+                      items: specialiteOptions.map((option) {
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(option),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+
                   buildTextField(emailctr, "Email:", isEmail: true),
                   buildTextField(mdpctr, "Mot de passe:", isPassword: true),
                   buildTextField(confirmemdpctr, "Confirmer mot de passe:", isPassword: true),
@@ -113,7 +194,11 @@ class _SignUpEtudState extends State<SignUpEtud> {
                       onPressed: signupetud,
                       child: const Text(
                         "S'inscrire",
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),
@@ -126,7 +211,8 @@ class _SignUpEtudState extends State<SignUpEtud> {
     );
   }
 
-  Widget buildTextField(TextEditingController controller, String hintText, {bool isPassword = false, bool isEmail = false}) {
+  Widget buildTextField(TextEditingController controller, String hintText,
+      {bool isPassword = false, bool isEmail = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
@@ -136,15 +222,18 @@ class _SignUpEtudState extends State<SignUpEtud> {
         decoration: InputDecoration(
           hintText: hintText,
           enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderSide:
+                const BorderSide(color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
             borderRadius: BorderRadius.circular(30),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderSide:
+                const BorderSide(color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
             borderRadius: BorderRadius.circular(30),
           ),
         ),
-        validator: (value) => value == null || value.isEmpty ? "Ce champ est obligatoire" : null,
+        validator: (value) =>
+            value == null || value.isEmpty ? "Ce champ est obligatoire" : null,
       ),
     );
   }

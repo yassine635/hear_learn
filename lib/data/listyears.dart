@@ -1,60 +1,54 @@
 
-class Listyears {
+class list {
   
 
-  // University levels
-  static List<String> L3_S1 = [
+  static Map<String, List<String>> subjectsByGroup = {
+  "Informatique_Licence1_S1": [
     "Système d'exploitation",
     "Interface Homme-Machine",
     "Software Engineering",
-    "Compilation"
+    "Compilation",
+  ],
+  "Informatique_Licence1_S2": [
+    "IA",
+    "Réseaux",
+    "Analyse",
+    "Sécurité",
+  ],
+  // Add more here...
+};
+
+ 
+
+
+
+
+
+ static List<String> levelOptions = [
+    'Licence1',
+    'Licence2',
+    'Licence3',
+    'Master1',
+    'Master2',
   ];
 
-  static List<String> L3_S2 = [
-    "App Mobile",
-    "Sécurité",
-    "DSS (Données et Structures de Stockage)",
-    "Compilation"
-  ];
-  static List<String> L1_S1 = [
-    "Système d'exploitation",
-    "Interface Homme-Machine",
-    "Software Engineering",
-    "Compilation"
-  ];
-
-  static List<String> L1_S2 = [
-    "App Mobile",
-    "Sécurité",
-    "DSS (Données et Structures de Stockage)",
-    "Compilation"
-  ];
-  static List<String> L2_S1 = [
-    "Système d'exploitation",
-    "Interface Homme-Machine",
-    "Software Engineering",
-    "Compilation"
-  ];
-
-  static List<String> L2_S2 = [
-    "App Mobile",
-    "Sécurité",
-    "DSS (Données et Structures de Stockage)",
-    "Compilation"
-  ];
-  static List<String> M1_S1 = [
-    "Système d'exploitation",
-    "Interface Homme-Machine",
-    "Software Engineering",
-    "Compilation"
-  ];
-
-  static List<String> M1_S2 = [
-    "App Mobile",
-    "Sécurité",
-    "DSS (Données et Structures de Stockage)",
-    "Compilation"
-  ];
   
+  
+static List<String> departementOptions = [
+    'Informatique',
+    "Science_de_la_matière",
+    'Science_technique',
+    'Phisiqye',
+    'Math',
+    'Science_technique' ,
+    'Science_de_la_matière',
+    "Génie_Civil" ,
+    "Génie_Electrique et Electronique ",
+    "Génie_Industriel",
+    'Génie_Mécanique',
+    "Hydraulique",
+    "Télécommunications "
+  ];
+
   
 }

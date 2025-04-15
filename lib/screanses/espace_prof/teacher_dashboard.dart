@@ -5,7 +5,7 @@ class TeacherDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Teacher interface"),
         backgroundColor: Colors.lightGreen[800],
@@ -26,9 +26,9 @@ class TeacherDashboard extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(builder: (context) => UploadCourse()),
+                  "/_PDFToSpeechScreenState"
                 );
               },
               icon: Icon(Icons.upload_file,color: Colors.black,),

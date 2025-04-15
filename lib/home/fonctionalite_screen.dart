@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hear_learn1/screanses/espace_prof/create_quiz.dart';
+import 'package:hear_learn1/screanses/espace_prof/teacher_quiz_dashboard.dart';
+import 'package:hear_learn1/screanses/espace_student/take_quiz.dart';
+
 
 class Fonctionalite extends StatefulWidget {
   const Fonctionalite({super.key});
@@ -27,7 +31,7 @@ class _FonctionaliteState extends State<Fonctionalite> {
 
   Future<int> getUserType() async {
     User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) return 0; 
+    if (user == null) return 0;
 
     String uid = user.uid;
 
@@ -44,9 +48,9 @@ class _FonctionaliteState extends State<Fonctionalite> {
           .doc(uid)
           .get();
 
-      if (profDoc.exists) return 2; 
+      if (profDoc.exists) return 2;
 
-      return 0; 
+      return 0;
     } catch (e) {
       print("ERROR: $e");
       return 0;
@@ -66,13 +70,7 @@ class _FonctionaliteState extends State<Fonctionalite> {
     }
   }
 
-  bool whattype() {
-    if (userType == 1) {
-      return true;
-    }else{
-      return false;
-    }
-  }
+  bool isStudent() => userType == 1;
 
   @override
   Widget build(BuildContext context) {
@@ -106,48 +104,89 @@ class _FonctionaliteState extends State<Fonctionalite> {
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            _buildButton("Espace d'éducation", Icons.book, navigateToModule,showForUser: true),
-            _buildButton("créer un quiz", Icons.computer_sharp, () {},showForUser: !whattype()),
-            _buildButton("Reconnaissance couleur", Icons.color_lens, () {},showForUser: whattype()),
-            _buildButton("Reconnaissance de billets", Icons.money, () {},showForUser: whattype()),
-            _buildButton("Bouton d'urgence", Icons.phone, () {
-              Navigator.pushNamed(context, "/emergency");
-            },showForUser: whattype()),
+
+            // Shared
+            _buildButton("Espace d'éducation", Icons.book, navigateToModule),
+
+            // Teacher-only
+            if (!isStudent())
+              _buildButton("Créer un quiz", Icons.computer, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CreateQuizScreen()),
+                );
+              }),
+
+            if (!isStudent())
+              _buildButton("Gérer mes quiz", Icons.list_alt, () {
+                final teacherId = FirebaseAuth.instance.currentUser?.uid;
+
+                if (teacherId != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          TeacherQuizDashboard(teacherId: teacherId),
+                    ),
+                  );
+                }
+              }),
+
+            // Student-only
+            if (isStudent())
+              _buildButton("Commencer le Quiz", Icons.quiz, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TakeQuizScreen()),
+                );
+              }),
+
+            if (isStudent())
+              _buildButton("Reconnaissance couleur", Icons.color_lens, () {
+                // Add functionality
+              }),
+
+            if (isStudent())
+              _buildButton("Reconnaissance de billets", Icons.money, () {
+                // Add functionality
+              }),
+
+            if (isStudent())
+              _buildButton("Bouton d'urgence", Icons.phone, () {
+                Navigator.pushNamed(context, "/emergency");
+              }),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildButton(
-    String text,
-    IconData icon,
-    VoidCallback onPressed, {
-    required bool showForUser, 
-  }) {
-    
-    return showForUser
-        ? Container(
-            height: 80,
-            margin: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Colors.lightGreen,
-              borderRadius: BorderRadius.circular(40)
+  Widget _buildButton(String text, IconData icon, VoidCallback onPressed) {
+    return Container(
+      height: 80,
+      margin: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Colors.lightGreen,
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.lightGreen,
+          foregroundColor: Colors.black,
+        ),
+        child: ListTile(
+          leading: Icon(icon, color: Colors.black, size: 40),
+          title: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
-            child: ElevatedButton(
-              onPressed: onPressed,
-              child: ListTile(
-                leading: Icon(icon, color: Colors.black,size: 40,),
-                title: Text(
-                  text,
-                  style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-              ),
-            ),
-          )
-        : Container(); 
+          ),
+        ),
+      ),
+    );
   }
 }

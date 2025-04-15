@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hear_learn1/data/listyears.dart';
 
 class SignUpProf extends StatefulWidget {
   const SignUpProf({super.key});
@@ -13,10 +14,13 @@ class _SignupprofState extends State<SignUpProf> {
   final formKey = GlobalKey<FormState>();
 
   final npctr = TextEditingController();
-  final modulectr = TextEditingController();
+  
   final emailctr = TextEditingController();
   final mdpctr = TextEditingController();
   final confirmmdpctr = TextEditingController();
+  List<String> selectedLevels = [];
+  String? selecteddepartement;
+  
 
   Future<void> signup() async {
     if (formKey.currentState!.validate()) {
@@ -48,11 +52,13 @@ class _SignupprofState extends State<SignUpProf> {
 
         
         await FirebaseFirestore.instance.collection("utilisateurs").doc(uid).set({
-          'uid': uid,
-          'nom_prenom': npctr.text.trim(),
-          'module': modulectr.text.trim(),
-          'email': emailctr.text.trim(),
-        });
+        'uid': uid,
+        'nom_prenom': npctr.text.trim(),
+        'email': emailctr.text.trim(),
+        'departement': selecteddepartement,
+        'niveaux': selectedLevels, 
+        'role': 'professeur',
+      });
 
         
         Navigator.pushNamed(context, "/");
@@ -71,12 +77,63 @@ class _SignupprofState extends State<SignUpProf> {
   @override
   void dispose() {
     npctr.dispose();
-    modulectr.dispose();
     emailctr.dispose();
     mdpctr.dispose();
     confirmmdpctr.dispose();
-    super.dispose(); // Call super.dispose() at the end
+    super.dispose(); 
   }
+  void _showLevelDialog() {
+  showDialog(
+    context: context,
+    builder: (context) {
+      List<String> tempSelected = List.from(selectedLevels);
+
+      return StatefulBuilder( // ✅ This is the fix
+        builder: (context, setStateDialog) {
+          return AlertDialog(
+            title: Text("Choisir les niveaux"),
+            content: SingleChildScrollView(
+              child: Column(
+                children: list.levelOptions.map((level) {
+                  return CheckboxListTile(
+                    title: Text(level),
+                    value: tempSelected.contains(level),
+                    onChanged: (bool? selected) {
+                      setStateDialog(() { // ✅ Use this to update only the dialog
+                        if (selected == true) {
+                          tempSelected.add(level);
+                        } else {
+                          tempSelected.remove(level);
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text("Annuler"),
+                onPressed: () => Navigator.pop(context),
+              ),
+              ElevatedButton(
+                child: Text("Valider"),
+                onPressed: () {
+                  setState(() {
+                    selectedLevels = tempSelected;
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +155,70 @@ class _SignupprofState extends State<SignUpProf> {
                   const SizedBox(height: 20),
                   _buildTextField(npctr, "Nom Prenom"),
                   const SizedBox(height: 10),
-                  _buildTextField(modulectr, "Module"),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: DropdownButtonFormField<String>(
+                      value: selecteddepartement,
+                      hint: const Text("departement:"),
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          selecteddepartement = value;
+                        });
+                      },
+                      validator: (value) =>
+                          value == null ? "Veuillez choisir un departement" : null,
+                      items: list.departementOptions.map((option) {
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(option),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+
+
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          
+                          const SizedBox(height: 5),
+                          InkWell(
+                            onTap: () => _showLevelDialog(),
+                            child: Container(
+                              width:MediaQuery.of(context).size.width*0.9 ,
+                              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text(
+                                selectedLevels.isEmpty
+                                    ? "Choisir un ou plusieurs niveaux"
+                                    : selectedLevels.join(", "),
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+
                   const SizedBox(height: 10),
                   _buildTextField(emailctr, "Email"),
                   const SizedBox(height: 10),
