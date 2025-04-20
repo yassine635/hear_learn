@@ -156,7 +156,7 @@ class TextToSpeechService {
       print("📁 Output WAV path: $wavPath");
 
       // Set TTS settings
-      await tts.setLanguage("en-US");
+      await tts.setLanguage("ar");
       await tts.setSpeechRate(0.5);
       await tts.setPitch(1.0);
       await tts.awaitSynthCompletion(true); // Important for file saving!
@@ -181,6 +181,7 @@ class TextToSpeechService {
       return null;
     }
   }
+
 
   Future<String> extractTextFromPDF(File pdfFile) async {
     try {
@@ -208,4 +209,5 @@ class TextToSpeechService {
       return "__USE_OCR__";
     }
   }
+ 
 }

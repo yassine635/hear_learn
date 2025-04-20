@@ -13,7 +13,7 @@ class Contnue_Module_Teacher extends StatelessWidget {
     final String module = args is String ? args : "Unknown Module";
 
     return Scaffold(
-      backgroundColor: Colors.lightGreen,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(

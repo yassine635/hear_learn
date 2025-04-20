@@ -49,7 +49,7 @@ class _PDFToSpeechScreenState extends State<PDFToSpeechScreen> {
         // 👇 Call your OCR method here
         text = await ttsService.extractTextUsingOCR(pdfFile);
       }
-
+      print("theextracted text:$extractedText");
       setState(() {
         extractedText = text;
       });
@@ -93,30 +93,32 @@ class _PDFToSpeechScreenState extends State<PDFToSpeechScreen> {
       appBar: AppBar(title: Text("PDF to Speech")),
       body: Padding(
         padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: pickPDF,
-              child: Text("Pick PDF"),
-            ),
-            SizedBox(height: 20),
-            extractedText.isNotEmpty
-                ? Expanded(
-                    child: SingleChildScrollView(child: Text(extractedText)))
-                : Text("No text extracted"),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: textToMp3,
-              child: Text("Convert to MP3"),
-            ),
-            ElevatedButton.icon(
-              onPressed: extractedText.isNotEmpty ? togglePlayPause : null,
-              icon: Icon(isSpeaking ? Icons.pause : Icons.play_arrow),
-              label: Text(isSpeaking ? "Pause" : "Play"),
-            ),
-          ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: pickPDF,
+                child: Text("Pick PDF"),
+              ),
+              SizedBox(height: 20),
+              extractedText.isNotEmpty
+                  ? Expanded(
+                      child: SingleChildScrollView(child: Text(extractedText)))
+                  : Text("No text extracted"),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: textToMp3,
+                child: Text("Convert to MP3"),
+              ),
+              ElevatedButton.icon(
+                onPressed: extractedText.isNotEmpty ? togglePlayPause : null,
+                icon: Icon(isSpeaking ? Icons.pause : Icons.play_arrow),
+                label: Text(isSpeaking ? "Pause" : "Play"),
+              ),
+            ],
+          ),
         ),
       ),
     );

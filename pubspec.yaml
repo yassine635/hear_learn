@@ -54,6 +54,7 @@ dependencies:
   image: ^3.0.1
   audioplayers: ^5.2.1
   
+  
   #pdf_text: ^0.5.0
   #flutter_ffmpeg: ^0.4.2
   
