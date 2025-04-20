@@ -8,13 +8,40 @@ class CreateQuizScreen extends StatefulWidget {
 }
 
 class _CreateQuizScreenState extends State<CreateQuizScreen> {
+  void initState() {
+    super.initState();
+    getTeacherData();
+  }
+
   final TextEditingController questionController = TextEditingController();
   final TextEditingController optionAController = TextEditingController();
   final TextEditingController optionBController = TextEditingController();
   final TextEditingController optionCController = TextEditingController();
   final TextEditingController optionDController = TextEditingController();
-
+  final teacherId = FirebaseAuth.instance.currentUser?.uid;
+  List<dynamic>? modules;
   String? correctAnswer;
+  String? selectedModule;
+  bool did_the_quiz=false;
+
+  Future<void> getTeacherData() async {
+    try {
+      DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+          .collection('utilisateurs')
+          .doc(teacherId)
+          .get();
+
+      if (docSnapshot.exists) {
+        Map<String, dynamic> userData = docSnapshot.data() as Map<String, dynamic>;
+        modules = userData["modules"];
+        setState(() {});
+      } else {
+        print(" No teacher found with ID $teacherId");
+      }
+    } catch (e) {
+      print(" Error getting teacher data: $e");
+    }
+  }
 
   void saveQuiz() async {
     final question = questionController.text.trim();
@@ -22,7 +49,6 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
     final optionB = optionBController.text.trim();
     final optionC = optionCController.text.trim();
     final optionD = optionDController.text.trim();
-    final teacherId = FirebaseAuth.instance.currentUser?.uid;
 
     if (question.isEmpty ||
         optionA.isEmpty ||
@@ -30,7 +56,8 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
         optionC.isEmpty ||
         optionD.isEmpty ||
         correctAnswer == null ||
-        teacherId == null) {
+        teacherId == null ||
+        selectedModule == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Veuillez remplir tous les champs.")),
       );
@@ -39,6 +66,7 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
 
     try {
       await FirebaseFirestore.instance.collection('quizzes').add({
+        "did_the_quiz":did_the_quiz,
         'question': question,
         'options': {
           'a': optionA,
@@ -47,7 +75,8 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
           'd': optionD,
         },
         'correctAnswer': correctAnswer,
-        'createdBy': teacherId, // ✅ now dynamic
+        'createdBy': teacherId,
+        'quiz_module': selectedModule,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
@@ -62,10 +91,11 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
       optionDController.clear();
       setState(() {
         correctAnswer = null;
+        selectedModule = null;
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erreur lors de l'enregistrement: \$e")),
+        SnackBar(content: Text("Erreur lors de l'enregistrement: $e")),
       );
     }
   }
@@ -82,8 +112,7 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
           children: [
             TextField(
               controller: questionController,
-              decoration:
-                  InputDecoration(labelText: "Question avec un espace vide"),
+              decoration: InputDecoration(labelText: "Question avec un espace vide"),
             ),
             SizedBox(height: 16),
             TextField(
@@ -116,9 +145,24 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
                   correctAnswer = value;
                 });
               },
-              decoration:
-                  InputDecoration(labelText: "Choisir la bonne réponse"),
+              decoration: InputDecoration(labelText: "Choisir la bonne réponse"),
             ),
+            SizedBox(height: 16),
+            DropdownButtonFormField<String>(
+                value: selectedModule,
+                items: modules?.map((module) {
+                  return DropdownMenuItem<String>(
+                    value: module.toString(), 
+                    child: Text(module.toString()),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedModule = value;
+                  });
+                },
+                decoration: InputDecoration(labelText: "Choisir le module"),
+              ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: saveQuiz,

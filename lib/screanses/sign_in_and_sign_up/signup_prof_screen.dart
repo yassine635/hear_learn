@@ -62,6 +62,7 @@ class _SignupprofState extends State<SignUpProf> {
           'email': emailctr.text.trim(),
           'departement': selecteddepartement,
           'niveaux': selectedLevels,
+          'modules':selectedmodule,
           'role': 'professeur',
         });
 

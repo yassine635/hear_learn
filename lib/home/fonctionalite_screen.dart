@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hear_learn1/screanses/espace_prof/create_quiz.dart';
-import 'package:hear_learn1/screanses/espace_prof/teacher_quiz_dashboard.dart';
-import 'package:hear_learn1/screanses/espace_student/take_quiz.dart';
+import 'package:hear_learn1/screanses/espace_prof/quizz_teacher/create_quiz.dart';
+import 'package:hear_learn1/screanses/espace_prof/quizz_teacher/teacher_quiz_dashboard.dart';
+import 'package:hear_learn1/screanses/espace_student/quzz_student/take_quiz.dart';
 
 
 class Fonctionalite extends StatefulWidget {
@@ -137,7 +137,7 @@ class _FonctionaliteState extends State<Fonctionalite> {
               _buildButton("Commencer le Quiz", Icons.quiz, () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TakeQuizScreen()),
+                  MaterialPageRoute(builder: (context) => TakeQuizScreen(quizId: "",)),
                 );
               }),
 
