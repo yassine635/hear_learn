@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_learn1/screanses/espace_student/quzz_student/quiz_results.dart';
+import 'package:hear_learn1/screanses/espace_student/quzz_student/quizz_passthrow.dart';
 
 class TakeQuizScreen extends StatefulWidget {
   final String quizId;
@@ -25,11 +26,36 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
 
   Future<DocumentSnapshot> _fetchQuizData() async {
     try {
-      return await FirebaseFirestore.instance
+      DocumentSnapshot quizSnapshot = await FirebaseFirestore.instance
           .collection('quizzes')
           .doc(widget.quizId)
           .get();
+      if (quizSnapshot.exists) {
+          Map<String, dynamic> quizData = quizSnapshot.data() as Map<String, dynamic>;
+          if (quizData['did_the_quiz'] == true) {
+            // Quiz has already been done, redirect
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizPassThrough(), // Replace with the screen you want to show
+                ),
+              );
+            });
+          }
+           return quizSnapshot;
+      }
+      else {
+        throw Exception('Quiz document does not exist');
+      }
     } catch (e) {
+      if (e is Exception) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => QuizPassThrough()),
+              );
+            });}
       print('Error fetching quiz data: $e');
       rethrow;
     }
@@ -59,6 +85,14 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
         'isCorrect': isCorrect,
         'timestamp': FieldValue.serverTimestamp(),
       });
+       // Update the quiz document to set 'did_the_quiz' to true
+      await FirebaseFirestore.instance
+        .collection('quizzes')
+        .doc(widget.quizId)
+        .update({
+          'did_the_quiz': true,
+        });
+
     } catch (e) {
       print('Error saving quiz response: $e');
     }

@@ -94,8 +94,9 @@ class _QuizPassThroughState extends State<QuizPassThrough> {
                       itemBuilder: (context, index) {
                         DocumentSnapshot quiz = filteredQuizzes[index];
                         return ListTile(
-                          title: Text(quiz.get('question')),
+                          title: Text(quiz.get('quiz_module')),
                           onTap: () {
+                            print("========================> $quiz.id");
                             Navigator.push(
                               context,
                               MaterialPageRoute(

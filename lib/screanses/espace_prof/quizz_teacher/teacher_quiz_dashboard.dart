@@ -61,7 +61,7 @@ class TeacherQuizDashboard extends StatelessWidget {
                         children: responses.map((resp) {
                           final studentId = resp['studentId'];
                           final isCorrect = resp['isCorrect'] as bool;
-                          final note = resp['note'];
+                          
 
                           return ListTile(
                             title: FutureBuilder<DocumentSnapshot>(
@@ -94,14 +94,14 @@ class TeacherQuizDashboard extends StatelessWidget {
                               children: [
                                 Text(
                                     "Résultat: ${isCorrect ? '✅ Correct' : '❌ Faux'}"),
-                                Text("Note: ${note ?? 'Non noté'}"),
+                               
                               ],
                             ),
                             trailing: IconButton(
                               icon: const Icon(Icons.edit_note),
                               tooltip: "Attribuer une note",
                               onPressed: () {
-                                _showNoteDialog(context, resp.id, note);
+                                _showNoteDialog(context, resp.id);
                               },
                             ),
                           );
@@ -179,8 +179,8 @@ class TeacherQuizDashboard extends StatelessWidget {
   }
 
   void _showNoteDialog(
-      BuildContext context, String responseId, String? currentNote) {
-    final noteController = TextEditingController(text: currentNote);
+      BuildContext context, String responseId) {
+    final noteController = TextEditingController();
 
     showDialog(
       context: context,
