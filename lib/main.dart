@@ -41,7 +41,7 @@ class hearlern extends StatelessWidget {
         "/signup_etud_screen": (context) => const SignUpEtud(),
         "/contnu_module_student": (context) => Contnue_Module_Student(),
         "/contnu_module_teacher": (context) => Contnue_Module_Teacher(),
-        "/teacher_option": (context) => TeacherDashboard(),
+        "/teacher_option": (context) => TeacherDashboard(type: '',),
         "/home_student": (context) => Home_student(),
         "/home_techer": (context) => Home_Teacher(),
         "/emergency": (context) => EmergencyScreen(),

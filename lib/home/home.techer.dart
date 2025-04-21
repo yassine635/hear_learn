@@ -41,7 +41,7 @@ class Home_Teacher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("teacher Page",
@@ -50,6 +50,14 @@ class Home_Teacher extends StatelessWidget {
                 fontSize: 24,
                 fontWeight: FontWeight.bold)),
         backgroundColor: Colors.lightGreen[800],
+        actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
+            ),
+          ],
       ),
       body: FutureBuilder<List<String>>(
         future: getSubjectsForTEACHER(),

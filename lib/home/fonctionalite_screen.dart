@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hear_learn1/screanses/espace_prof/quizz_teacher/create_quiz.dart';
 import 'package:hear_learn1/screanses/espace_prof/quizz_teacher/teacher_quiz_dashboard.dart';
 import 'package:hear_learn1/screanses/espace_student/quzz_student/quizz_passthrow.dart';
-import 'package:hear_learn1/screanses/espace_student/quzz_student/take_quiz.dart';
+
+import 'package:hear_learn1/data/cheker.dart';
 
 
 class Fonctionalite extends StatefulWidget {
@@ -21,6 +22,7 @@ class _FonctionaliteState extends State<Fonctionalite> {
   void initState() {
     super.initState();
     fetchUserType();
+    checkQuizzesDate();
   }
 
   Future<void> fetchUserType() async {
@@ -70,6 +72,24 @@ class _FonctionaliteState extends State<Fonctionalite> {
       );
     }
   }
+
+  Future<void> checkQuizzesDate() async {
+  try {
+    final quizzesSnapshot = await FirebaseFirestore.instance.collection('quizzes').get();
+
+    for (var doc in quizzesSnapshot.docs) {
+      final quizData = doc.data();
+      final addedAt = quizData['addedAt'] as Timestamp?;
+
+      if (addedAt != null && Cheker.isMoreThanThreeDaysAgo(addedAt.toDate())) {
+        await doc.reference.delete();
+        print('Quiz with ID ${doc.id} deleted due to being older than three days.');
+      }
+    }
+  } catch (e) {
+    print('Error checking/deleting quizzes: $e');
+  }
+}
 
   bool isStudent() => userType == 1;
 

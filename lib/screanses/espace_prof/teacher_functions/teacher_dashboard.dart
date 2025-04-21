@@ -2,13 +2,34 @@ import 'package:flutter/material.dart';
 import 'upload_course.dart';
 
 class TeacherDashboard extends StatelessWidget {
+  final String type;
+  TeacherDashboard({required this.type});
   @override
   Widget build(BuildContext context) {
+    final Object? args = ModalRoute.of(context)?.settings.arguments;
+    final List data = args as List;
+    final String type = data[0];
+    final String module = data[1];
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Teacher interface"),
+        automaticallyImplyLeading: false,
+        title: Text(
+          "Teacher interface ",
+        style: TextStyle(
+          fontSize: 24,
+          color: Colors.white
+          ),
+        ),
         backgroundColor: Colors.lightGreen[800],
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -23,12 +44,30 @@ class TeacherDashboard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
+            Row(
+              children: [
+                SizedBox(width: 60,),
+                Expanded(
+                  child: Text(
+                    "uploade to $module,$type",
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                ),
+                SizedBox(width: 60,),
+              ],
+            ),
+            
             SizedBox(height: 20),
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.pushNamed(
+                Navigator.push(
                   context,
-                  "/_PDFToSpeechScreenState"
+                  MaterialPageRoute(
+                      builder: (context) => UploadCourse(module_name: module),
+                    ),
                 );
               },
               icon: Icon(Icons.upload_file,color: Colors.black,),

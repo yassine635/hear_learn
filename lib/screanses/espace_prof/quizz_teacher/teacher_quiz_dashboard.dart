@@ -84,7 +84,7 @@ class TeacherQuizDashboard extends StatelessWidget {
                                 final studentData = studentSnapshot.data!.data()
                                     as Map<String, dynamic>;
                                 final studentName =
-                                    studentData['nom'] ?? "Sans nom";
+                                    studentData['nom_prenom'] ?? "Sans nom";
 
                                 return Text("👤 Étudiant: $studentName");
                               },

@@ -68,7 +68,10 @@ static Future<Map<String, String>> getEmergencyNumbers(String uid) async {
   }
 }
 
-
+static bool isMoreThanThreeDaysAgo(DateTime date) {
+    DateTime threeDaysAgo = DateTime.now().subtract(const Duration(days: 3));
+    return date.isBefore(threeDaysAgo);
+  }
   
   static String? isEmpty(String? val) {
     if (val == null || val.isEmpty) {

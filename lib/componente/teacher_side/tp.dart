@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:hear_learn1/componente/teacher_side/deposer.dart'; 
 
 class Tp extends StatelessWidget {
-  const Tp({super.key});
+  final VoidCallback onpressed; // better type than just Function
+
+  const Tp({
+    Key? key,
+    required this.onpressed, // marked as required
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.lightGreenAccent,
+        color: Colors.lightGreen[600],
         borderRadius: BorderRadius.circular(20),
       ),
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -34,7 +39,7 @@ class Tp extends StatelessWidget {
             ),
 
             
-            Deposer(),
+            Deposer(onpressed: onpressed,),
           ],
         ),
       ),

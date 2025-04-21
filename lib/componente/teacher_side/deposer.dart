@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 
 class Deposer extends StatelessWidget {
-  const Deposer({super.key});
-  
+  final VoidCallback onpressed; // better type than just Function
+
+  const Deposer({
+    Key? key,
+    required this.onpressed, // marked as required
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
-      onPressed: () {
-        Navigator.pushNamed(context, "/teacher_option");
-      },
-      icon: Icon(Icons.add, color: Colors.black),
-      label: Text("OPTIONS"),
+      onPressed: onpressed,
+      icon: const Icon(Icons.add, color: Colors.black),
+      label: const Text("OPTIONS"),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.lightGreen[800],
         foregroundColor: Colors.white,
-        textStyle: TextStyle(fontSize: 18),
+        textStyle: const TextStyle(fontSize: 18),
       ),
     );
   }

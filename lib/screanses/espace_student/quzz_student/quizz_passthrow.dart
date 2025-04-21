@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hear_learn1/componente/student_side/quizz_contaner.dart';
 import 'package:hear_learn1/screanses/espace_student/quzz_student/take_quiz.dart';
-import 'package:hear_learn1/screanses/espace_student/quzz_student/quiz_results.dart';
 
 class QuizPassThrough extends StatefulWidget {
   @override
@@ -43,6 +43,7 @@ class _QuizPassThroughState extends State<QuizPassThrough> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green[800],
         title: Text("Quizzes"),
       ),
       body: studentLevel == null
@@ -94,7 +95,7 @@ class _QuizPassThroughState extends State<QuizPassThrough> {
                       itemBuilder: (context, index) {
                         DocumentSnapshot quiz = filteredQuizzes[index];
                         return ListTile(
-                          title: Text(quiz.get('quiz_module')),
+                          title: QuizzContaner(text: quiz.get('quiz_module')),
                           onTap: () {
                             print("========================> $quiz.id");
                             Navigator.push(
