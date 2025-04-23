@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Tp extends StatelessWidget {
-  const Tp({super.key, });
+  final VoidCallback onpressed; 
+
+  const Tp({
+    Key? key,
+    required this.onpressed, 
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

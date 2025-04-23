@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hear_learn1/screanses/espace_student/contnue_module_student.dart';
+import 'package:hear_learn1/screanses/espace_student/filemanegment_cour_td_tp/contnue_module_student.dart';
 
 class Module extends StatelessWidget {
   const Module({super.key, required this.module});

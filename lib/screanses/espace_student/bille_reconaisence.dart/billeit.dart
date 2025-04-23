@@ -21,13 +21,13 @@ class _ReconBilletState extends State<ReconBillet> {
   @override
   void initState() {
     super.initState();
-    tts.setLanguage("ar-AR");
+    tts.setLanguage("ar");
     tts.setSpeechRate(0.7);
     tts.setVolume(1.0);
     tts.setPitch(1.0);
  
     tts.speak(
-      "       مرحبًا بك. التقط صورة للتعرف على العملة. أنقر على الزر في الأسفل .إذا أردت الرجوع أنقر على اليمين في أعلى الشاشة",
+      " مرحبًا بك. التقط صورة للتعرف على العملة. أنقر على الزر في الأسفل .إذا أردت الرجوع أنقر على اليمين في أعلى الشاشة",
     );
   }
  

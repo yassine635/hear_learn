@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hear_learn1/STT_TTS/TTS.DART/PDFToSpeechScreen.dart';
+import 'package:hear_learn1/screanses/espace_student/extract_read_flutter_tts/PDFToSpeechScreen.dart';
 import 'package:hear_learn1/data/auth.dart';
 import 'package:hear_learn1/firebase_options.dart';
 import 'package:hear_learn1/home/Home_student.dart';
 import 'package:hear_learn1/screanses/espace_student/bille_reconaisence.dart/billeit.dart';
-import 'package:hear_learn1/screanses/espace_student/contnue_module_student.dart';
+import 'package:hear_learn1/screanses/espace_student/filemanegment_cour_td_tp/contnue_module_student.dart';
 import 'package:hear_learn1/screanses/espace_prof/teacher_functions/contnue_module_teacher.dart';
 import 'package:hear_learn1/screanses/espace_prof/teacher_functions/teacher_dashboard.dart';
 import 'package:hear_learn1/home/fonctionalite_screen.dart';
@@ -20,8 +20,7 @@ import 'package:hear_learn1/screanses/sign_in_and_sign_up/signup_prof_screen.dar
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions
-        .currentPlatform, 
+    options: DefaultFirebaseOptions.currentPlatform, 
   );
   runApp(const hearlern());
 }
@@ -49,7 +48,7 @@ class hearlern extends StatelessWidget {
               final uid = ModalRoute.of(context)!.settings.arguments as String;
               return EmergencyScreenEnterise(uid: uid);
            },
-           "/_PDFToSpeechScreenState": (context) => PDFToSpeechScreen(),
+           "/_PDFToSpeechScreenState": (context) => Pdftospeechscreen(downloader: '',),
            "/reconnaissence_couleur_sceen": (context) => ReconnaissanceCouleur(),
            "/reconnaissence_billet_sceen": (context) => ReconBillet(),
       },

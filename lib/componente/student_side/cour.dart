@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 class Cour extends StatelessWidget {
   
-  const Cour({super.key});
- 
+  final VoidCallback onpressed; 
+
+  const Cour({
+    Key? key,
+    required this.onpressed, // marked as required
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,7 +23,7 @@ class Cour extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: TextButton.icon(
-            onPressed: () {},
+            onPressed: onpressed,
             label: Text(
               "cour",
               style: TextStyle(
