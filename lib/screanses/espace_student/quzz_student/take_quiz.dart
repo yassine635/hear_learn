@@ -85,7 +85,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
         'isCorrect': isCorrect,
         'timestamp': FieldValue.serverTimestamp(),
       });
-       // Update the quiz document to set 'did_the_quiz' to true
+       
       await FirebaseFirestore.instance
         .collection('quizzes')
         .doc(widget.quizId)

@@ -79,7 +79,7 @@ class _QuizResultsScreenState extends State<QuizResultsScreen> {
                 TextButton(
                   child: Text('Return to Quizzes'),
                   onPressed: () {
-                    Navigator.pop(context); // Go back to the quizzes list
+                    Navigator.pop(context); 
                   },
                 ),
               ],

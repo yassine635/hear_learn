@@ -4,6 +4,7 @@ import 'package:hear_learn1/componente/teacher_side/td.dart';
 import 'package:hear_learn1/componente/teacher_side/tp.dart';
 
 class Contnue_Module_Teacher extends StatelessWidget {
+  
   const Contnue_Module_Teacher({super.key});
 
   @override
@@ -18,7 +19,7 @@ class Contnue_Module_Teacher extends StatelessWidget {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text(
-            module, // Using the received module name
+            module, 
             style: const TextStyle(
                 color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
           ),
@@ -30,7 +31,7 @@ class Contnue_Module_Teacher extends StatelessWidget {
               icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
             ),
           ],
-          backgroundColor: Colors.lightGreen[800],
+          backgroundColor: Colors.purple[800],
         ),
         body: Column(
           children: [
@@ -43,24 +44,7 @@ class Contnue_Module_Teacher extends StatelessWidget {
             Tp(onpressed:() {
               Navigator.pushNamed(context, "/teacher_option", arguments: ["TP",module]);
             },),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: 60,
-              child: ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.people,
-                  color: Colors.black,
-                ),
-                label: const Text(
-                  "messages",
-                  style: TextStyle(color: Colors.black, fontSize: 18),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightGreen[800],
-                ),
-              ),
-            ),
+           
           ],
         ),
       ),

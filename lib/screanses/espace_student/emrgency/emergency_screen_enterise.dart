@@ -15,7 +15,7 @@ class EmergencyScreenEnterise extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.lightGreen,
+        backgroundColor: Colors.purple[800],
         title: const Text(
           "Emergency Numbers",
           style: TextStyle(
@@ -55,7 +55,7 @@ class EmergencyScreenEnterise extends StatelessWidget {
                 TFValidator: (val) => Cheker.isEmpty(val),
               ),
               const SizedBox(height: 30),
-              _buildButton(context, "Save Numbers", Colors.lightGreen, () async {
+              _buildButton(context, "Save Numbers", Colors.purple, () async {
                 if (keyFormState.currentState!.validate()) {
                   await Cheker.saveEmergencyNumbers(
                     uid: uid,

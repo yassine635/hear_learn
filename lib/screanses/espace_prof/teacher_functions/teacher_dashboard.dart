@@ -21,7 +21,7 @@ class TeacherDashboard extends StatelessWidget {
           color: Colors.white
           ),
         ),
-        backgroundColor: Colors.lightGreen[800],
+        backgroundColor: Colors.purple[800],
         actions: [
           IconButton(
             onPressed: () {
@@ -80,7 +80,7 @@ class TeacherDashboard extends StatelessWidget {
               ),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 70),
-                backgroundColor: Colors.lightGreen[700],
+                backgroundColor: Colors.purple[600],
               ),
             ),
             SizedBox(height: 10),
@@ -96,7 +96,7 @@ class TeacherDashboard extends StatelessWidget {
                 ),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 70),
-                backgroundColor: Colors.lightGreen[700],
+                backgroundColor: Colors.purple[600],
               ),
             ),
             SizedBox(height: 10),

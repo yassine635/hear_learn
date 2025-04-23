@@ -7,7 +7,7 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
-
+ 
 class _LoginScreenState extends State<LoginScreen> {
   final emailctr = TextEditingController();
   final mdpctr = TextEditingController();
@@ -44,11 +44,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen[100],
+      backgroundColor: Colors.white,
       body: Scrollbar(
         child: SafeArea(
           child: Center(
-            // Centering the whole column
+            
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment:MainAxisAlignment.center, 
@@ -78,13 +78,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   _isLoading
                       ? CircularProgressIndicator()
                       : _buildButton(
-                          "Connexion", Colors.lightGreen[300], signin),
+                          "Connexion", Colors.purple[300], signin),
                   SizedBox(height: 20),
 
                   // Signup as Teacher Button
                   _buildButton(
                     "Inscrire comme enseignant(e)",
-                    Colors.lightGreen[300],
+                    Colors.purple[300],
                     () => Navigator.pushNamed(context, "/signup_prof_screen"),
                   ),
                   SizedBox(height: 10),
@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Signup as Student Button
                   _buildButton(
                     "Inscrire comme étudiant(e)",
-                    Colors.lightGreen[300],
+                    Colors.purple[300],
                     () => Navigator.pushNamed(context, "/signup_etud_screen"),
                   ),
                 ],
@@ -103,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
+  
   Widget _buildTextField(TextEditingController controller, String hintText,
       {bool obscureText = false}) {
     return Container(
@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
       padding:
           EdgeInsets.symmetric(horizontal: 20), 
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 245, 255, 233),
+        color: const Color.fromARGB(255, 251, 227, 255),
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextField(

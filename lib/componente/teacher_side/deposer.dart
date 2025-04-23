@@ -15,7 +15,7 @@ class Deposer extends StatelessWidget {
       icon: const Icon(Icons.add, color: Colors.black),
       label: const Text("OPTIONS"),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.lightGreen[800],
+        backgroundColor: Colors.purple[800],
         foregroundColor: Colors.white,
         textStyle: const TextStyle(fontSize: 18),
       ),

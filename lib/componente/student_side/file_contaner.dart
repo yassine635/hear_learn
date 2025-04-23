@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-class QuizzContaner extends StatelessWidget {
-  final String text;
-
-  const QuizzContaner({required this.text}); 
+class FileContaner extends StatelessWidget {
+  final String file_name;
+  const FileContaner({super.key, required this.file_name});
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +12,11 @@ class QuizzContaner extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           color: Colors.purple[400],
         ),
-        
         width: MediaQuery.of(context).size.width * 0.9,
         height: 80,
-        
         child: Center(
           child: Text(
-            text,
+            file_name,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,

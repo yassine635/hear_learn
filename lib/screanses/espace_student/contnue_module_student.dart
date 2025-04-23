@@ -4,15 +4,16 @@ import 'package:hear_learn1/componente/student_side/td.dart';
 import 'package:hear_learn1/componente/student_side/tp.dart';
 
 class Contnue_Module_Student extends StatelessWidget {
-  const Contnue_Module_Student({super.key});
+  final  String module;
+  const Contnue_Module_Student({super.key, required this.module});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("module",
+        title:Text(module,
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -20,15 +21,12 @@ class Contnue_Module_Student extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(
-                context,
-                 "/home_student"
-              );
+              Navigator.pushNamed(context, "/home_student");
             },
             icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
           ),
         ],
-        backgroundColor: Colors.lightGreen[800],
+        backgroundColor: Colors.purple[800],
       ),
       body: Column(
         children: [

@@ -112,7 +112,7 @@ class _SignUpEtudState extends State<SignUpEtud> {
                   const SizedBox(height: 20),
                   buildTextField(npctr, "Nom Prénom:"),
 
-                  // 🔽 Niveau Dropdown
+                  
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: DropdownButtonFormField<String>(

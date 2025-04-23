@@ -8,7 +8,7 @@ class Module extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.lightGreen,
+        color: Colors.purple[400],
         borderRadius: BorderRadius.circular(20),
       ),
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),

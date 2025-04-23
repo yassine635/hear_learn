@@ -64,17 +64,17 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Bouton d'Urgence"),
-        backgroundColor: Colors.lightGreen,
+        backgroundColor: Colors.purple[800],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildButton(context, "Family", Colors.lightGreen, () => callNumber(familyNumber)),
+            _buildButton(context, "Family", Colors.purple, () => callNumber(familyNumber)),
             const SizedBox(height: 30),
-            _buildButton(context, "Friend", Colors.lightGreen, () => callNumber(friendNumber)),
+            _buildButton(context, "Friend", Colors.purple, () => callNumber(friendNumber)),
             const SizedBox(height: 30),
-            _buildButton(context, "Custom", Colors.lightGreen, () => callNumber(customNumber)),
+            _buildButton(context, "Custom", Colors.purple, () => callNumber(customNumber)),
             const SizedBox(height: 30),
             _buildButton(context, "Change Numbers", Colors.redAccent, () {
               Navigator.pushReplacementNamed(

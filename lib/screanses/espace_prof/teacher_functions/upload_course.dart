@@ -20,7 +20,8 @@ class _UploadCourseState extends State<UploadCourse> {
   PlatformFile? selectedFile;
   List<dynamic> niveaux = [];
   List<dynamic> modulse = [];
-
+  String? selectedType;
+  List<String> typeoptions = ["cour", "td", "tp"];
   @override
   void initState() {
     super.initState();
@@ -70,24 +71,32 @@ class _UploadCourseState extends State<UploadCourse> {
       Get.snackbar("Erreur", "Veuillez sélectionner un fichier");
       return;
     }
-    if (selectedlevel == null || selectedmodule == null) {
-      Get.snackbar("Erreur", "Veuillez choisir le niveau et le module");
+    if (selectedlevel == null ||
+        selectedmodule == null ||
+        selectedType == null) {
+      Get.snackbar(
+          "Erreur", "Veuillez choisir le niveau et le module et le type");
       return;
     }
-
+   
     try {
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString() + "_" + selectedFile!.name;
-      var storageRef = FirebaseStorage.instance.ref().child("espace_teacher_student/$fileName");
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString() +
+          "_" +
+          selectedFile!.name;
+      var storageRef = FirebaseStorage.instance
+          .ref()
+          .child("espace_teacher_student/$fileName");
       UploadTask uploadTask = storageRef.putData(selectedFile!.bytes!);
 
       TaskSnapshot snapshot = await uploadTask;
       String downloadURL = await snapshot.ref.getDownloadURL();
 
-      String identifire = "${deprtemnt}_$selectedlevel\_$selectedmodule";
+      String identifire = "${deprtemnt}_${selectedlevel}_${selectedmodule}_$selectedType";
 
       await FirebaseFirestore.instance.collection("urls").add({
         "file_id": downloadURL,
         "identifire": identifire,
+        "file_name": selectedFile!.name,
         "uploaded_at": FieldValue.serverTimestamp(),
       });
 
@@ -104,8 +113,9 @@ class _UploadCourseState extends State<UploadCourse> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("Upload file ", style: TextStyle(fontSize: 24, color: Colors.white)),
-        backgroundColor: Colors.lightGreen[800],
+        title: Text("Upload file ",
+            style: TextStyle(fontSize: 24, color: Colors.white)),
+        backgroundColor: Colors.purple[800],
         actions: [
           IconButton(
             onPressed: () {
@@ -122,14 +132,16 @@ class _UploadCourseState extends State<UploadCourse> {
             children: [
               Row(
                 children: [
-                  SizedBox(width: 60),
+                  SizedBox(width: 50),
                   Expanded(
                     child: Text(
                       "Upload file to ${widget.module_name}",
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                   ),
-                  SizedBox(width: 60),
                 ],
               ),
               Icon(Icons.upload_file, size: 100, color: Colors.black),
@@ -137,10 +149,11 @@ class _UploadCourseState extends State<UploadCourse> {
               ElevatedButton.icon(
                 onPressed: pickFile,
                 icon: Icon(Icons.folder_open, color: Colors.black),
-                label: Text("Select File", style: TextStyle(color: Colors.black, fontSize: 18)),
+                label: Text("Select File",
+                    style: TextStyle(color: Colors.black, fontSize: 18)),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
-                  backgroundColor: Colors.lightGreen[700],
+                  backgroundColor: Colors.purple[400],
                 ),
               ),
               SizedBox(height: 20),
@@ -149,11 +162,13 @@ class _UploadCourseState extends State<UploadCourse> {
                 hint: const Text("Niveau:"),
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Color.fromARGB(255, 24, 202, 33), width: 1.5),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Color.fromARGB(255, 22, 105, 35), width: 1.5),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
@@ -162,7 +177,8 @@ class _UploadCourseState extends State<UploadCourse> {
                     selectedlevel = value;
                   });
                 },
-                validator: (value) => value == null ? "Veuillez choisir un niveau" : null,
+                validator: (value) =>
+                    value == null ? "Veuillez choisir un niveau" : null,
                 items: niveaux.map((option) {
                   return DropdownMenuItem<String>(
                     value: option.toString(),
@@ -176,11 +192,13 @@ class _UploadCourseState extends State<UploadCourse> {
                 hint: const Text("Module:"),
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Color.fromARGB(255, 24, 202, 33), width: 1.5),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Color.fromARGB(255, 22, 105, 35), width: 1.5),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
@@ -189,8 +207,39 @@ class _UploadCourseState extends State<UploadCourse> {
                     selectedmodule = value;
                   });
                 },
-                validator: (value) => value == null ? "Veuillez choisir un module" : null,
+                validator: (value) =>
+                    value == null ? "Veuillez choisir un module" : null,
                 items: modulse.map((option) {
+                  return DropdownMenuItem<String>(
+                    value: option.toString(),
+                    child: Text(option.toString()),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: selectedType,
+                hint: const Text("type:"),
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    selectedType = value;
+                  });
+                },
+                validator: (value) =>
+                    value == null ? "Veuillez choisir un type" : null,
+                items: typeoptions.map((option) {
                   return DropdownMenuItem<String>(
                     value: option.toString(),
                     child: Text(option.toString()),
@@ -201,10 +250,11 @@ class _UploadCourseState extends State<UploadCourse> {
               ElevatedButton.icon(
                 onPressed: uploadFile,
                 icon: Icon(Icons.cloud_upload, color: Colors.black),
-                label: Text("Upload File", style: TextStyle(color: Colors.black, fontSize: 18)),
+                label: Text("Upload File",
+                    style: TextStyle(color: Colors.black, fontSize: 18)),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
-                  backgroundColor: Colors.lightGreen[700],
+                  backgroundColor: Colors.purple[400],
                 ),
               ),
             ],

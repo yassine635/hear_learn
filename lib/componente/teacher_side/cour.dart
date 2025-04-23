@@ -14,16 +14,16 @@ class Cour extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.lightGreen[600],
+        color: Colors.purple[600],
         borderRadius: BorderRadius.circular(20),
       ),
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       width: MediaQuery.of(context).size.width,
       height: 90,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20), // Added padding for better spacing
+        padding: EdgeInsets.symmetric(horizontal: 20), 
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // 👈 Align items to left & right
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, 
           children: [
             TextButton.icon(
               onPressed: () {},
@@ -36,7 +36,7 @@ class Cour extends StatelessWidget {
               ),
               icon: Icon(Icons.book, size: 30, color: Colors.black),
             ),
-            Deposer(onpressed: onpressed,), // 👈 Moves to the right side automatically
+            Deposer(onpressed: onpressed,),
           ],
         ),
       ),

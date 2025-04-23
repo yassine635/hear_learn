@@ -12,15 +12,15 @@ class Home_student extends StatelessWidget {
   Future<List<String>> getSubjectsForSTUDENT() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
-    // Get user data from Firestore
+    
     DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('etudiants').doc(uid).get();
 
     final data = snapshot.data() as Map<String, dynamic>;
     final String specialite = data['specialite'];
-    final String niveau = data['niveau']; // From Firebase
+    final String niveau = data['niveau']; 
 
-    // Prepare the list of subjects
+   
     List<String> allSubjects = [];
 
     String key = "${specialite.trim()}_${niveau.trim()}_S1";
@@ -37,7 +37,7 @@ class Home_student extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("student Page",
@@ -53,7 +53,7 @@ class Home_student extends StatelessWidget {
             icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
           ),
         ],
-        backgroundColor: Colors.lightGreen[800],
+        backgroundColor: Colors.purple[800],
       ),
       body: Column(
         children: [

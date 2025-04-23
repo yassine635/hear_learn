@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:hear_learn1/screanses/espace_prof/quizz_teacher/create_quiz.dart';
 import 'package:hear_learn1/screanses/espace_prof/quizz_teacher/teacher_quiz_dashboard.dart';
 import 'package:hear_learn1/screanses/espace_student/quzz_student/quizz_passthrow.dart';
 
 import 'package:hear_learn1/data/cheker.dart';
-
 
 class Fonctionalite extends StatefulWidget {
   const Fonctionalite({super.key});
@@ -74,31 +74,34 @@ class _FonctionaliteState extends State<Fonctionalite> {
   }
 
   Future<void> checkQuizzesDate() async {
-  try {
-    final quizzesSnapshot = await FirebaseFirestore.instance.collection('quizzes').get();
+    try {
+      final quizzesSnapshot =
+          await FirebaseFirestore.instance.collection('quizzes').get();
 
-    for (var doc in quizzesSnapshot.docs) {
-      final quizData = doc.data();
-      final addedAt = quizData['addedAt'] as Timestamp?;
+      for (var doc in quizzesSnapshot.docs) {
+        final quizData = doc.data();
+        final addedAt = quizData['addedAt'] as Timestamp?;
 
-      if (addedAt != null && Cheker.isMoreThanThreeDaysAgo(addedAt.toDate())) {
-        await doc.reference.delete();
-        print('Quiz with ID ${doc.id} deleted due to being older than three days.');
+        if (addedAt != null &&
+            Cheker.isMoreThanThreeDaysAgo(addedAt.toDate())) {
+          await doc.reference.delete();
+          print(
+              'Quiz with ID ${doc.id} deleted due to being older than three days.');
+        }
       }
+    } catch (e) {
+      print('Error checking/deleting quizzes: $e');
     }
-  } catch (e) {
-    print('Error checking/deleting quizzes: $e');
   }
-}
 
   bool isStudent() => userType == 1;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen[100],
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.lightGreen[700],
+        backgroundColor: Colors.purple[700],
         title: const Text(
           "HearLearn",
           style: TextStyle(
@@ -158,18 +161,16 @@ class _FonctionaliteState extends State<Fonctionalite> {
               _buildButton("Commencer le Quiz", Icons.quiz, () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => QuizPassThrough() ),
+                  MaterialPageRoute(builder: (context) => QuizPassThrough()),
                 );
               }),
 
             if (isStudent())
-              _buildButton("Reconnaissance couleur", Icons.color_lens, () {
-                // Add functionality
-              }),
+              _buildButton("Reconnaissance couleur", Icons.color_lens, () {}),
 
             if (isStudent())
               _buildButton("Reconnaissance de billets", Icons.money, () {
-                // Add functionality
+                Navigator.pushNamed(context, "/reconnaissence_couleur_sceen");
               }),
 
             if (isStudent())
@@ -187,13 +188,13 @@ class _FonctionaliteState extends State<Fonctionalite> {
       height: 80,
       margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Colors.lightGreen,
+        color: Colors.purple,
         borderRadius: BorderRadius.circular(40),
       ),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.lightGreen,
+          backgroundColor: Colors.purple[400],
           foregroundColor: Colors.black,
         ),
         child: ListTile(

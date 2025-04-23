@@ -43,7 +43,7 @@ class _QuizPassThroughState extends State<QuizPassThrough> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green[800],
+        backgroundColor: Colors.purple[800],
         title: Text("Quizzes"),
       ),
       body: studentLevel == null
@@ -87,7 +87,7 @@ class _QuizPassThroughState extends State<QuizPassThrough> {
                     if (_.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
                     }
-                    if (filteredQuizzes.isEmpty) {
+                    if(filteredQuizzes.isEmpty){
                       return Center(child: Text('No quizzes available for your level.'));
                     }
                     return ListView.builder(
@@ -97,7 +97,6 @@ class _QuizPassThroughState extends State<QuizPassThrough> {
                         return ListTile(
                           title: QuizzContaner(text: quiz.get('quiz_module')),
                           onTap: () {
-                            print("========================> $quiz.id");
                             Navigator.push(
                               context,
                               MaterialPageRoute(

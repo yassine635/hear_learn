@@ -12,6 +12,7 @@ import 'package:hear_learn1/home/fonctionalite_screen.dart';
 import 'package:hear_learn1/home/home.techer.dart';
 import 'package:hear_learn1/screanses/espace_student/emrgency/emergency_screen.dart';
 import 'package:hear_learn1/screanses/espace_student/emrgency/emergency_screen_enterise.dart';
+import 'package:hear_learn1/screanses/espace_student/reconesonce_couleur/reconnaissence_couleur_sceen.dart';
 import 'package:hear_learn1/screanses/sign_in_and_sign_up/log_in_screen.dart';
 import 'package:hear_learn1/screanses/sign_in_and_sign_up/signup_etud_screen.dart';
 import 'package:hear_learn1/screanses/sign_in_and_sign_up/signup_prof_screen.dart';
@@ -39,7 +40,7 @@ class hearlern extends StatelessWidget {
         "/log_in_screen": (context) => const LoginScreen(),
         "/signup_prof_screen": (context) => const SignUpProf(),
         "/signup_etud_screen": (context) => const SignUpEtud(),
-        "/contnu_module_student": (context) => Contnue_Module_Student(),
+        "/contnu_module_student": (context) => Contnue_Module_Student(module: '',),
         "/contnu_module_teacher": (context) => Contnue_Module_Teacher(),
         "/teacher_option": (context) => TeacherDashboard(type: '',),
         "/home_student": (context) => Home_student(),
@@ -49,8 +50,8 @@ class hearlern extends StatelessWidget {
               final uid = ModalRoute.of(context)!.settings.arguments as String;
               return EmergencyScreenEnterise(uid: uid);
            },
-
            "/_PDFToSpeechScreenState": (context) => PDFToSpeechScreen(),
+           "/reconnaissence_couleur_sceen": (context) => ReconnaissanceCouleur(),
       },
       debugShowCheckedModeBanner: false,
     );

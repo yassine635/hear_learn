@@ -10,7 +10,7 @@ class Home_Teacher extends StatelessWidget {
   Future<List<String>> getSubjectsForTEACHER() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
-    // Get user data from Firestore
+    
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
         .collection('utilisateurs')
         .doc(uid)
@@ -49,7 +49,7 @@ class Home_Teacher extends StatelessWidget {
                 color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.lightGreen[800],
+        backgroundColor: Colors.purple[800],
         actions: [
             IconButton(
               onPressed: () {

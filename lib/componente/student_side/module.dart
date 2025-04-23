@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hear_learn1/screanses/espace_student/contnue_module_student.dart';
 
 class Module extends StatelessWidget {
   const Module({super.key, required this.module});
@@ -7,7 +8,7 @@ class Module extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.lightGreen[600],
+        color: Colors.purple[400],
         borderRadius: BorderRadius.circular(20),
       ),
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -19,13 +20,19 @@ class Module extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: TextButton.icon(
             onPressed: () {
-              Navigator.pushNamed(context, "/contnu_module_student");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Contnue_Module_Student(module:module ,), 
+                ),
+              );
             },
             label: Text(
               module,
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 16,
+                fontSize: 20,
+                fontWeight: FontWeight.bold
               ),
             ),
             icon: Icon(
