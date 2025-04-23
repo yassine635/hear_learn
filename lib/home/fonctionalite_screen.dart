@@ -166,11 +166,13 @@ class _FonctionaliteState extends State<Fonctionalite> {
               }),
 
             if (isStudent())
-              _buildButton("Reconnaissance couleur", Icons.color_lens, () {}),
+              _buildButton("Reconnaissance couleur", Icons.color_lens, () {
+                Navigator.pushNamed(context, "/reconnaissence_couleur_sceen");
+              }),
 
             if (isStudent())
               _buildButton("Reconnaissance de billets", Icons.money, () {
-                Navigator.pushNamed(context, "/reconnaissence_couleur_sceen");
+                Navigator.pushNamed(context, "/reconnaissence_billet_sceen");
               }),
 
             if (isStudent())
