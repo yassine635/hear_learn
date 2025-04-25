@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hear_learn1/componente/student_side/file_contaner.dart';
 
-class ShouCour extends StatefulWidget {
+class Shou extends StatefulWidget {
   final String type;
   
   final List<String> filename;
   final List<String> fileids;
-  const ShouCour({super.key, required this.type, required this.filename, required this.fileids, });
+  const Shou({super.key, required this.type, required this.filename, required this.fileids, });
 
   @override
-  State<ShouCour> createState() => _ShouCourState();
+  State<Shou> createState() => _ShouCourState();
 }
 
-class _ShouCourState extends State<ShouCour> {
+class _ShouCourState extends State<Shou> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

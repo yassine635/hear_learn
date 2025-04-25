@@ -3,28 +3,30 @@ import 'package:flutter/material.dart';
 class QuizzContaner extends StatelessWidget {
   final String text;
 
-  const QuizzContaner({required this.text}); 
+  const QuizzContaner({required this.text});
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.purple[400],
-        ),
-        
         width: MediaQuery.of(context).size.width * 0.9,
-        height: 80,
-        
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.white, // White background
+          borderRadius: BorderRadius.circular(400),
+          border: Border.all( 
+            color: Colors.purple,
+            width: 3,
+          ),
+        ),
         child: Center(
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Colors.purple,
             ),
           ),
         ),

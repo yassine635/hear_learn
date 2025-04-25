@@ -15,7 +15,6 @@ class list {
     "Analyse",
     "Sécurité",
   ],
-  // Add more here...
 };
 
  
@@ -37,15 +36,13 @@ class list {
 static List<String> departementOptions = [
     'Informatique',
     "Science_de_la_matière",
-    'Science_technique',
-    'Phisiqye',
-    'Math',
-    'Science_technique' ,
-    'Science_de_la_matière',
+    "Science_technique",
+    "Phisiqye",
+    "Math",
     "Génie_Civil" ,
     "Génie_Electrique et Electronique ",
     "Génie_Industriel",
-    'Génie_Mécanique',
+    "Génie_Mécanique",
     "Hydraulique",
     "Télécommunications "
   ];

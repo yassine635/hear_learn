@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:google_mlkit_language_id/google_mlkit_language_id.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf_render/pdf_render.dart' as pdf_render;
@@ -24,10 +25,28 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
   double progress = 0.0;
   String status = "le début du téléchargement";
 
+  // 🔁 For sentence-based playback
+  List<String> textChunks = [];
+  int currentChunkIndex = 0;
+
   @override
   void initState() {
     super.initState();
     textToSpeech();
+  }
+
+  List<String> splitTextIntoChunks(String text, int chunkSize) {
+    List<String> chunks = [];
+    int start = 0;
+
+    while (start < text.length) {
+      int end =
+          (start + chunkSize < text.length) ? start + chunkSize : text.length;
+      chunks.add(text.substring(start, end));
+      start = end;
+    }
+
+    return chunks;
   }
 
   Future<String> downloaderTextExtractor() async {
@@ -47,7 +66,8 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
       );
 
       setState(() {
-        status = "le telecharjement est terminer le fichier restera jusqu'à ce que vous quittiez cette page";
+        status =
+            "le telecharjement est terminer le fichier restera jusqu'à ce que vous quittiez cette page";
         isDownloading = false;
       });
 
@@ -65,6 +85,11 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
 
   Future<void> textToSpeech() async {
     extractedText = await downloaderTextExtractor();
+    await detectGlobalLanguage(extractedText);
+    textChunks = splitTextIntoChunks(extractedText, 200);
+
+    currentChunkIndex = 0;
+
     setState(() {});
   }
 
@@ -80,7 +105,9 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
         extractedText += text + "\n";
       }
       document.dispose();
-      return extractedText.trim().isEmpty ? "__USE_OCR__" : extractedText.trim();
+      return extractedText.trim().isEmpty
+          ? "__USE_OCR__"
+          : extractedText.trim();
     } catch (e) {
       return "__USE_OCR__";
     }
@@ -118,26 +145,62 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
     return ocrExtractedText.trim();
   }
 
-  Future<void> speak() async {
-    await tts.setLanguage("en");
+  Future<void> speakChunks() async {
+    if (currentChunkIndex >= textChunks.length) {
+      setState(() {
+        isPlaying = false;
+        currentChunkIndex = 0;
+      });
+      return;
+    }
+
+    await tts.setLanguage(detectedLang ?? "en-US");
     await tts.setSpeechRate(0.5);
     await tts.setPitch(1.0);
-    await tts.speak(extractedText);
+
+    await tts.speak(textChunks[currentChunkIndex]);
+
+    tts.setCompletionHandler(() {
+      if (isPlaying) {
+        currentChunkIndex++;
+        speakChunks();
+      }
+    });
   }
 
   Future<void> stop() async {
     await tts.stop();
   }
 
+  String? detectedLang; 
+
+  Future<void> detectGlobalLanguage(String fullText) async {
+    final languageIdentifier = LanguageIdentifier(confidenceThreshold: 0.5);
+    detectedLang = await languageIdentifier.identifyLanguage(fullText);
+    print("Detected language: $detectedLang");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.purple[800],
         title: const Text(
           "text extraction",
-          style: TextStyle(fontWeight: FontWeight.bold,color:Colors.white70),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white70),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              if (isPlaying) {
+                await stop();
+              }
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
           ),
+        ],
       ),
       backgroundColor: Colors.white,
       body: isDownloading
@@ -158,7 +221,10 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
                         ),
                         Text(
                           '${progress.toStringAsFixed(0)}%',
-                        style: TextStyle(fontSize: 18, color: Colors.black,),
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                          ),
                         ),
                       ],
                     ),
@@ -205,28 +271,30 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.purple,
                           foregroundColor: Colors.white,
-                          padding:
-                              EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 24),
                         ),
                         onPressed: isDownloading
                             ? null
                             : () async {
                                 if (isPlaying) {
                                   await stop();
+                                  setState(() => isPlaying = false);
                                 } else {
-                                  await speak();
+                                  setState(() => isPlaying = true);
+                                  speakChunks();
                                 }
-                                setState(() => isPlaying = !isPlaying);
                               },
-                        icon: Icon(isPlaying ? Icons.stop : Icons.play_arrow,color: Colors.white,size: 30,),
+                        icon: Icon(
+                          isPlaying ? Icons.stop : Icons.play_arrow,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                         label: Text(
-                          isPlaying ? "POUSE" : "START",
+                          isPlaying ? "PAUSE" : "START",
                           style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold
-                            ),
-                          
-                          ),
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),

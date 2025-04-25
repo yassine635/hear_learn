@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_learn1/screanses/espace_student/quzz_student/quiz_results.dart';
-import 'package:hear_learn1/screanses/espace_student/quzz_student/quizz_passthrow.dart';
 
 class TakeQuizScreen extends StatefulWidget {
   final String quizId;
@@ -15,8 +14,8 @@ class TakeQuizScreen extends StatefulWidget {
 
 class _TakeQuizScreenState extends State<TakeQuizScreen> {
   late Future<DocumentSnapshot> quizData;
-  String? selectedAnswer; // Track the selected answer
-  bool quizSubmitted = false; // Track if the quiz has been submitted
+  String? selectedAnswer;
+  bool quizSubmitted = false;
 
   @override
   void initState() {
@@ -24,42 +23,43 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
     quizData = _fetchQuizData();
   }
 
-  Future<DocumentSnapshot> _fetchQuizData() async {
-    try {
-      DocumentSnapshot quizSnapshot = await FirebaseFirestore.instance
-          .collection('quizzes')
-          .doc(widget.quizId)
-          .get();
-      if (quizSnapshot.exists) {
-          Map<String, dynamic> quizData = quizSnapshot.data() as Map<String, dynamic>;
-          if (quizData['did_the_quiz'] == true) {
-            // Quiz has already been done, redirect
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => QuizPassThrough(), // Replace with the screen you want to show
-                ),
-              );
-            });
-          }
-           return quizSnapshot;
-      }
-      else {
-        throw Exception('Quiz document does not exist');
-      }
-    } catch (e) {
-      if (e is Exception) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => QuizPassThrough()),
-              );
-            });}
-      print('Error fetching quiz data: $e');
-      rethrow;
+ Future<DocumentSnapshot> _fetchQuizData() async {
+  try {
+    final quizRef = FirebaseFirestore.instance.collection('quizzes').doc(widget.quizId);
+    final quizSnapshot = await quizRef.get();
+
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) throw Exception('User not logged in');
+
+    final responseSnapshot = await FirebaseFirestore.instance
+        .collection('quiz_responses')
+        .where('quizId', isEqualTo: widget.quizId)
+        .where('studentId', isEqualTo: userId)
+        .get();
+
+    if (responseSnapshot.docs.isNotEmpty) {
+      
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => QuizResultsScreen(
+              isCorrect: responseSnapshot.docs.first.get('isCorrect'),
+              quizId: widget.quizId,
+            ),
+          ),
+        );
+      });
     }
+
+    return quizSnapshot;
+  } catch (e) {
+    print('Error fetching quiz data: $e');
+    rethrow;
   }
+}
+
+
 
   void _checkAnswer(String answer) {
     setState(() {
@@ -76,7 +76,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
     }
 
     bool isCorrect = selectedAnswer == correctAnswer;
-    
+
     String? userId = FirebaseAuth.instance.currentUser?.uid;
     try {
       await FirebaseFirestore.instance.collection('quiz_responses').add({
@@ -85,26 +85,20 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
         'isCorrect': isCorrect,
         'timestamp': FieldValue.serverTimestamp(),
       });
-       
-      await FirebaseFirestore.instance
-        .collection('quizzes')
-        .doc(widget.quizId)
-        .update({
-          'did_the_quiz': true,
-        });
 
+      
     } catch (e) {
       print('Error saving quiz response: $e');
     }
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => QuizResultsScreen(
-            isCorrect: isCorrect,
-            quizId: widget.quizId,
-          ),
+      context,
+      MaterialPageRoute(
+        builder: (context) => QuizResultsScreen(
+          isCorrect: isCorrect,
+          quizId: widget.quizId,
         ),
-      );
+      ),
+    );
   }
 
   @override
@@ -167,7 +161,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                     ),
                   ),
                 if (quizSubmitted)
-                   Center(
+                  Center(
                     child: Text('Quiz completed!'),
                   )
               ],

@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:get/get.dart';
 
 class UploadCourse extends StatefulWidget {
   final String module_name;
@@ -22,6 +21,7 @@ class _UploadCourseState extends State<UploadCourse> {
   List<dynamic> modulse = [];
   String? selectedType;
   List<String> typeoptions = ["cour", "td", "tp"];
+  String uploadStatus = "";
   @override
   void initState() {
     super.initState();
@@ -67,45 +67,52 @@ class _UploadCourseState extends State<UploadCourse> {
   }
 
   Future<void> uploadFile() async {
-    if (selectedFile == null) {
-      Get.snackbar("Erreur", "Veuillez sélectionner un fichier");
-      return;
-    }
-    if (selectedlevel == null ||
-        selectedmodule == null ||
-        selectedType == null) {
-      Get.snackbar(
-          "Erreur", "Veuillez choisir le niveau et le module et le type");
-      return;
-    }
-   
-    try {
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString() +
-          "_" +
-          selectedFile!.name;
-      var storageRef = FirebaseStorage.instance
-          .ref()
-          .child("espace_teacher_student/$fileName");
-      UploadTask uploadTask = storageRef.putData(selectedFile!.bytes!);
-
-      TaskSnapshot snapshot = await uploadTask;
-      String downloadURL = await snapshot.ref.getDownloadURL();
-
-      String identifire = "${deprtemnt}_${selectedlevel}_${selectedmodule}_$selectedType";
-
-      await FirebaseFirestore.instance.collection("urls").add({
-        "file_id": downloadURL,
-        "identifire": identifire,
-        "file_name": selectedFile!.name,
-        "uploaded_at": FieldValue.serverTimestamp(),
-      });
-
-      Get.snackbar("Succès", "Fichier téléchargé avec succès");
-    } catch (e) {
-      print("Erreur lors de l'upload: $e");
-      Get.snackbar("Erreur", "Le téléchargement a échoué");
-    }
+  if (selectedFile == null) {
+    setState(() {
+      uploadStatus = "Aucun fichier sélectionné.";
+    });
+    return;
   }
+
+  if (selectedlevel == null || selectedmodule == null || selectedType == null) {
+    setState(() {
+      uploadStatus = "Veuillez remplir tous les champs.";
+    });
+    return;
+  }
+
+  try {
+    setState(() {
+      uploadStatus = "Téléchargement en cours..."; // Uploading...
+    });
+
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString() + "_" + selectedFile!.name;
+    var storageRef = FirebaseStorage.instance.ref().child("espace_teacher_student/$fileName");
+
+    UploadTask uploadTask = storageRef.putData(selectedFile!.bytes!);
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadURL = await snapshot.ref.getDownloadURL();
+
+    String identifire = "${deprtemnt}_${selectedlevel}_${selectedmodule}_$selectedType";
+
+    await FirebaseFirestore.instance.collection("urls").add({
+      "file_id": downloadURL,
+      "identifire": identifire,
+      "file_name": selectedFile!.name,
+      "uploaded_at": FieldValue.serverTimestamp(),
+    });
+
+    setState(() {
+      uploadStatus = "Fichier Téléverser avec succès ✅";
+    });
+  } catch (e) {
+    print("Erreur: $e");
+    setState(() {
+      uploadStatus = "Erreur lors du téléchargement ❌";
+    });
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +133,7 @@ class _UploadCourseState extends State<UploadCourse> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -154,6 +161,23 @@ class _UploadCourseState extends State<UploadCourse> {
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                   backgroundColor: Colors.purple[400],
+                ),
+              ),
+              SizedBox(height: 20),
+              Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.purple, // Purple border
+                    width: 1.5,
+                  ),
+                  borderRadius: BorderRadius.circular(8), // Rounded corners
+                ),
+                child: Text(
+                  selectedFile != null
+                      ? "Fichier sélectionné: ${selectedFile!.name}"
+                      : "Aucun fichier sélectionné",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               ),
               SizedBox(height: 20),
@@ -246,7 +270,17 @@ class _UploadCourseState extends State<UploadCourse> {
                   );
                 }).toList(),
               ),
-              SizedBox(height: 20),
+              
+              Text(
+                uploadStatus,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: uploadStatus.contains("succès") ? Colors.green :
+                        uploadStatus.contains("Erreur") ? Colors.red :
+                        Colors.orange,
+                ),
+              ),
               ElevatedButton.icon(
                 onPressed: uploadFile,
                 icon: Icon(Icons.cloud_upload, color: Colors.black),
@@ -257,6 +291,9 @@ class _UploadCourseState extends State<UploadCourse> {
                   backgroundColor: Colors.purple[400],
                 ),
               ),
+              
+              
+
             ],
           ),
         ),

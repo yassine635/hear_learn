@@ -20,9 +20,11 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
   final TextEditingController optionDController = TextEditingController();
   final teacherId = FirebaseAuth.instance.currentUser?.uid;
   List<dynamic>? modules;
+  List<dynamic>? levels;
   String? correctAnswer;
   String? selectedModule;
-  bool did_the_quiz=false;
+  String? selectedlevel;
+  String? departement;
 
   Future<void> getTeacherData() async {
     try {
@@ -32,8 +34,11 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
           .get();
 
       if (docSnapshot.exists) {
-        Map<String, dynamic> userData = docSnapshot.data() as Map<String, dynamic>;
+        Map<String, dynamic> userData =
+            docSnapshot.data() as Map<String, dynamic>;
         modules = userData["modules"];
+        levels = userData["niveaux"];
+        departement = userData["departement"];
         setState(() {});
       } else {
         print(" No teacher found with ID $teacherId");
@@ -66,7 +71,6 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
 
     try {
       await FirebaseFirestore.instance.collection('quizzes').add({
-        "did_the_quiz":did_the_quiz,
         'question': question,
         'options': {
           'a': optionA,
@@ -77,6 +81,8 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
         'correctAnswer': correctAnswer,
         'createdBy': teacherId,
         'quiz_module': selectedModule,
+        "quiz_specialite":departement,
+        "quiz_level":selectedlevel,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
@@ -112,7 +118,8 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
           children: [
             TextField(
               controller: questionController,
-              decoration: InputDecoration(labelText: "Question avec un espace vide"),
+              decoration:
+                  InputDecoration(labelText: "Question avec un espace vide"),
             ),
             SizedBox(height: 16),
             TextField(
@@ -145,24 +152,41 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
                   correctAnswer = value;
                 });
               },
-              decoration: InputDecoration(labelText: "Choisir la bonne réponse"),
+              decoration:
+                  InputDecoration(labelText: "Choisir la bonne réponse"),
             ),
             SizedBox(height: 16),
             DropdownButtonFormField<String>(
-                value: selectedModule,
-                items: modules?.map((module) {
-                  return DropdownMenuItem<String>(
-                    value: module.toString(), 
-                    child: Text(module.toString()),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedModule = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: "Choisir le module"),
-              ),
+              value: selectedModule,
+              items: modules?.map((module) {
+                return DropdownMenuItem<String>(
+                  value: module.toString(),
+                  child: Text(module.toString()),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedModule = value;
+                });
+              },
+              decoration: InputDecoration(labelText: "Choisir le module"),
+            ),
+            SizedBox(height: 20),
+            DropdownButtonFormField<String>(
+              value: selectedlevel,
+              items: levels?.map((level) {
+                return DropdownMenuItem<String>(
+                  value: level.toString(),
+                  child: Text(level.toString()),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedlevel = value;
+                });
+              },
+              decoration: InputDecoration(labelText: "Choisir le neveau"),
+            ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: saveQuiz,

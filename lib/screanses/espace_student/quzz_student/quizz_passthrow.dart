@@ -4,113 +4,150 @@ import 'package:flutter/material.dart';
 import 'package:hear_learn1/componente/student_side/quizz_contaner.dart';
 import 'package:hear_learn1/screanses/espace_student/quzz_student/take_quiz.dart';
 
-class QuizPassThrough extends StatefulWidget {
-  @override
-  _QuizPassThroughState createState() => _QuizPassThroughState();
-}
+class QuizPassThrough extends StatelessWidget {
+  const QuizPassThrough({Key? key}) : super(key: key);
 
-class _QuizPassThroughState extends State<QuizPassThrough> {
-  String? studentLevel;
+  Future<Map<String, dynamic>> _getStudentInfo() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) throw Exception("User not logged in");
 
-  @override
-  void initState() {
-    super.initState();
-    _getStudentLevel();
+    final studentSnapshot = await FirebaseFirestore.instance
+        .collection('etudiants')
+        .doc(userId)
+        .get();
+
+    if (!studentSnapshot.exists) throw Exception("Student not found");
+
+    final data = studentSnapshot.data()!;
+    return {
+      'level': data['niveau'],
+      'specialty': data['specialite'],
+    };
   }
 
-  Future<void> _getStudentLevel() async {
-    String? userId = FirebaseAuth.instance.currentUser?.uid;
+  Future<List<DocumentSnapshot>> _getQuizzesForStudent(
+      String level, String specialty) async {
+    final quizSnapshot =
+        await FirebaseFirestore.instance.collection('quizzes').get();
 
-    if (userId == null) return;
+    return quizSnapshot.docs.where((doc) {
+      final quizData = doc.data();
+      return quizData['quiz_level'] == level &&
+          quizData['quiz_specialite'] == specialty;
+    }).toList();
+  }
 
-    try {
-      DocumentSnapshot studentSnapshot = await FirebaseFirestore.instance
-          .collection('etudiants')
-          .doc(userId)
-          .get();
+  Future<List<String>> _getCompletedQuizIds(String studentId) async {
+    final responses = await FirebaseFirestore.instance
+        .collection('quiz_responses')
+        .where('studentId', isEqualTo: studentId)
+        .get();
 
-      if (studentSnapshot.exists) {
-        setState(() {
-          studentLevel = studentSnapshot.get('niveau') as String?;
-        });
-      }
-    } catch (e) {
-      print('Error fetching student level: $e');
-    }
+    return responses.docs.map((doc) => doc['quizId'] as String).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple[800],
-        title: Text("Quizzes"),
-      ),
-      body: studentLevel == null
-          ? Center(child: CircularProgressIndicator())
-          : StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('quizzes').snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text("No quizzes available."));
-                }
-
-                List<DocumentSnapshot> quizzes = snapshot.data!.docs;
-                List<DocumentSnapshot> filteredQuizzes = [];
-
-                return FutureBuilder(
-                  future: Future.wait(quizzes.map((quiz) async {
-                    String teacherId = quiz.get('createdBy');
-                    String quizModule = quiz.get('quiz_module');
-
-                    DocumentSnapshot teacherSnapshot =
-                        await FirebaseFirestore.instance
-                            .collection('utilisateurs')
-                            .doc(teacherId)
-                            .get();
-
-                    if (teacherSnapshot.exists) {
-                      List<dynamic> teacherLevels =
-                          teacherSnapshot.get('niveaux');
-                       List<dynamic> teacherModules = teacherSnapshot.get('modules');
-
-                      if (teacherLevels.contains(studentLevel) && teacherModules.contains(quizModule)) {
-                        filteredQuizzes.add(quiz);
-                      }
-                    }
-                  })),
-                  builder: (context, _) {
-                    if (_.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    if(filteredQuizzes.isEmpty){
-                      return Center(child: Text('No quizzes available for your level.'));
-                    }
-                    return ListView.builder(
-                      itemCount: filteredQuizzes.length,
-                      itemBuilder: (context, index) {
-                        DocumentSnapshot quiz = filteredQuizzes[index];
-                        return ListTile(
-                          title: QuizzContaner(text: quiz.get('quiz_module')),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TakeQuizScreen(quizId: quiz.id),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                );
-              },
+        title: const Text(
+          'Available Quizzes',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
             ),
+          ),
+        backgroundColor: Colors.purple[800],
+        ),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: _getStudentInfo(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.hasError) {
+            return const Center(child: Text('Failed to load student info'));
+          }
+
+          final level = snapshot.data!['level'];
+          final specialty = snapshot.data!['specialty'];
+
+          return FutureBuilder<List<DocumentSnapshot>>(
+            future: _getQuizzesForStudent(level, specialty),
+            builder: (context, quizSnapshot) {
+              if (quizSnapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (!quizSnapshot.hasData || quizSnapshot.hasError) {
+                return const Center(child: Text('Failed to load quizzes'));
+              }
+
+              final allQuizzes = quizSnapshot.data!;
+              final userId = FirebaseAuth.instance.currentUser?.uid;
+              return FutureBuilder<List<String>>(
+                future: _getCompletedQuizIds(userId!),
+                builder: (context, completedSnapshot) {
+                  if (completedSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  final completedQuizIds = completedSnapshot.data ?? [];
+
+                  // Filter out quizzes the student already did
+                  final quizzesToShow = allQuizzes.where((quiz) {
+                    return !completedQuizIds.contains(quiz.id);
+                  }).toList();
+
+                  if (quizzesToShow.isEmpty) {
+                    return const Center(child: Text('No quizzes available'));
+                  }
+
+                  // Group quizzes by module
+                  final Map<String, List<DocumentSnapshot>> quizzesByModule =
+                      {};
+                  for (var quiz in quizzesToShow) {
+                    final module = quiz.get('quiz_module');
+                    if (!quizzesByModule.containsKey(module)) {
+                      quizzesByModule[module] = [];
+                    }
+                    quizzesByModule[module]!.add(quiz);
+                  }
+
+                  return ListView(
+                    children: quizzesByModule.entries.map((entry) {
+                      final module = entry.key;
+                      final quizzes = entry.value;
+
+                      return ExpansionTile(
+                        title: Text(
+                          module,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        children: quizzes.map((quiz) {
+                          return ListTile(
+                            title: QuizzContaner(text: quiz.get('question')),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      TakeQuizScreen(quizId: quiz.id),
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
+                      );
+                    }).toList(),
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

@@ -34,6 +34,7 @@ class _QuizResultsScreenState extends State<QuizResultsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Quiz Results'),
       ),
       body: FutureBuilder<DocumentSnapshot>(

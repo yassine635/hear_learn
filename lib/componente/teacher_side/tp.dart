@@ -4,10 +4,11 @@ import 'package:hear_learn1/componente/teacher_side/deposer.dart';
 
 class Tp extends StatelessWidget {
   final VoidCallback onpressed; // better type than just Function
-
+  final VoidCallback realonpressed;
   const Tp({
     Key? key,
-    required this.onpressed, // marked as required
+    required this.onpressed, required this.realonpressed,
+     // marked as required
   }) : super(key: key);
 
   @override

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hear_learn1/componente/teacher_side/deposer.dart';
 
 class Cour extends StatelessWidget {
-  final VoidCallback onpressed; // better type than just Function
+  final VoidCallback onpressed;
+  final VoidCallback realonpressed; // better type than just Function
 
   const Cour({
     Key? key,
-    required this.onpressed, // marked as required
+    required this.onpressed,
+    required this.realonpressed, 
   }) : super(key: key);
   
 
@@ -26,7 +28,7 @@ class Cour extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween, 
           children: [
             TextButton.icon(
-              onPressed: () {},
+              onPressed: realonpressed,
               label: Text(
                 "cour",
                 style: TextStyle(

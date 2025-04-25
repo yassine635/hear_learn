@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hear_learn1/componente/student_side/cour.dart';
 import 'package:hear_learn1/componente/student_side/td.dart';
 import 'package:hear_learn1/componente/student_side/tp.dart';
-import 'package:hear_learn1/screanses/espace_student/extract_read_flutter_tts/show.dart';
+import 'package:hear_learn1/extract_read_flutter_tts/show.dart';
 
 class Contnue_Module_Student extends StatefulWidget {
   final String module;
@@ -60,11 +60,11 @@ class _Contnue_Module_StudentState extends State<Contnue_Module_Student> {
         isLoading = false;
       });
       
-      // ✅ Navigate to next screen after loading
+      
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ShouCour(
+          builder: (context) => Shou(
             type: type,
             filename: filesMap.keys.toList(),
             fileids: filesMap.values.toList(),
@@ -93,7 +93,7 @@ class _Contnue_Module_StudentState extends State<Contnue_Module_Student> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, "/home_student");
+              Navigator.pop(context);
             },
             icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
           ),

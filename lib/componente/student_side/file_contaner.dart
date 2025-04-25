@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hear_learn1/screanses/espace_student/extract_read_flutter_tts/PDFToSpeechScreen.dart';
+import 'package:hear_learn1/extract_read_flutter_tts/PDFToSpeechScreen.dart';
 
 class FileContaner extends StatelessWidget {
   final String file_name;
