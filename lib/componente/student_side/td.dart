@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class Td extends StatelessWidget {
   final VoidCallback onpressed; 
   const Td({
-    Key? key,
+    super.key,
     required this.onpressed, 
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return Container(

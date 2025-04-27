@@ -210,7 +210,7 @@ class _SignupprofState extends State<SignUpProf> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.purple[300])),
+                      style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.purple[300])),
                       onPressed: signup,
                       child: const Text(
                         "Sign Up",

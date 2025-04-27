@@ -5,9 +5,9 @@ class Cour extends StatelessWidget {
   final VoidCallback onpressed; 
 
   const Cour({
-    Key? key,
+    super.key,
     required this.onpressed, // marked as required
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return Container(

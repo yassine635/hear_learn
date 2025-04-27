@@ -6,7 +6,7 @@ import 'package:file_picker/file_picker.dart';
 
 class UploadCourse extends StatefulWidget {
   final String module_name;
-  UploadCourse({required this.module_name});
+  const UploadCourse({super.key, required this.module_name});
   @override
   _UploadCourseState createState() => _UploadCourseState();
 }
@@ -86,7 +86,7 @@ class _UploadCourseState extends State<UploadCourse> {
       uploadStatus = "Téléchargement en cours..."; // Uploading...
     });
 
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString() + "_" + selectedFile!.name;
+    String fileName = "${DateTime.now().millisecondsSinceEpoch}_${selectedFile!.name}";
     var storageRef = FirebaseStorage.instance.ref().child("espace_teacher_student/$fileName");
 
     UploadTask uploadTask = storageRef.putData(selectedFile!.bytes!);

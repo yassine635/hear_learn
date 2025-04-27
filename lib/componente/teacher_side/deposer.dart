@@ -4,9 +4,9 @@ class Deposer extends StatelessWidget {
   final VoidCallback onpressed; // better type than just Function
 
   const Deposer({
-    Key? key,
+    super.key,
     required this.onpressed, // marked as required
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

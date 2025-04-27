@@ -6,10 +6,10 @@ class Tp extends StatelessWidget {
   final VoidCallback onpressed; // better type than just Function
   final VoidCallback realonpressed;
   const Tp({
-    Key? key,
+    super.key,
     required this.onpressed, required this.realonpressed,
      // marked as required
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -109,7 +109,7 @@ class TeacherQuizDashboard extends StatelessWidget {
                       );
                     },
                   ),
-                  ButtonBar(
+                  OverflowBar(
                     children: [
                       TextButton(
                         onPressed: () {

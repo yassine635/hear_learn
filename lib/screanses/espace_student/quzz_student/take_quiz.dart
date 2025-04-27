@@ -6,7 +6,7 @@ import 'package:hear_learn1/screanses/espace_student/quzz_student/quiz_results.d
 class TakeQuizScreen extends StatefulWidget {
   final String quizId;
 
-  TakeQuizScreen({required this.quizId});
+  const TakeQuizScreen({super.key, required this.quizId});
 
   @override
   _TakeQuizScreenState createState() => _TakeQuizScreenState();
@@ -151,7 +151,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                             _checkAnswer(value!);
                           },
                   );
-                }).toList(),
+                }),
                 SizedBox(height: 20),
                 if (!quizSubmitted)
                   Center(

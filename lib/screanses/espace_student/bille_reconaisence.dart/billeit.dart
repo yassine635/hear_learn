@@ -47,8 +47,9 @@ class _ReconBilletState extends State<ReconBillet> {
   }
 
   Future<void> _takePictureAndAnalyze() async {
-    if (!_isCameraInitialized || _cameraController!.value.isTakingPicture)
+    if (!_isCameraInitialized || _cameraController!.value.isTakingPicture) {
       return;
+    }
 
     final _ = await getTemporaryDirectory();
     final file = await _cameraController!.takePicture();
@@ -86,10 +87,12 @@ class _ReconBilletState extends State<ReconBillet> {
     if (cleanText.contains('2000')) return '2000 دينار';
     if (cleanText.contains('1000') ||
         cleanText.contains('100') ||
-        lowerText.contains('الف دينار'))
+        lowerText.contains('الف دينار')) {
       return '1000 دينار';
-    if (cleanText.contains('500') || lowerText.contains('خمسمائة دينار'))
+    }
+    if (cleanText.contains('500') || lowerText.contains('خمسمائة دينار')) {
       return '500 دينار';
+    }
 
     if (lowerText.contains('دينار')) {
       if (lowerText.contains('الفين')) return '٢٠٠٠ دينار';
@@ -111,8 +114,9 @@ class _ReconBilletState extends State<ReconBillet> {
     final color = colors[0];
     final r = color.red, g = color.green, b = color.blue;
 
-    if (r > 100 && r < 200 && g > 100 && g < 200 && b > 100 && b < 200)
+    if (r > 100 && r < 200 && g > 100 && g < 200 && b > 100 && b < 200) {
       return 'رمادي';
+    }
 
     return 'غير معروف';
   }

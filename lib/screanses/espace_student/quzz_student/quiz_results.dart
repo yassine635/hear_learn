@@ -5,7 +5,7 @@ class QuizResultsScreen extends StatefulWidget {
   final bool isCorrect;
   final String quizId;
 
-  QuizResultsScreen({required this.isCorrect, required this.quizId});
+  const QuizResultsScreen({super.key, required this.isCorrect, required this.quizId});
   @override
   State<QuizResultsScreen> createState() => _QuizResultsScreenState();
 }

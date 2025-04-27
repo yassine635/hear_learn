@@ -3,7 +3,7 @@ import 'upload_course.dart';
 
 class TeacherDashboard extends StatelessWidget {
   final String type;
-  TeacherDashboard({required this.type});
+  const TeacherDashboard({super.key, required this.type});
   @override
   Widget build(BuildContext context) {
     final Object? args = ModalRoute.of(context)?.settings.arguments;

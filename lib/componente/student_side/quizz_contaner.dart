@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class QuizzContaner extends StatelessWidget {
   final String text;
 
-  const QuizzContaner({required this.text});
+  const QuizzContaner({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

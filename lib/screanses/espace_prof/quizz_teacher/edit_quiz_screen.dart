@@ -125,10 +125,10 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: saveEdits,
-              child: Text("Enregistrer les modifications"),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
               ),
+              child: Text("Enregistrer les modifications"),
             ),
           ],
         ),

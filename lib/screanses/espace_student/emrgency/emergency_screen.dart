@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class EmergencyScreen extends StatefulWidget {
-  const EmergencyScreen({Key? key}) : super(key: key);
+  const EmergencyScreen({super.key});
 
   @override
   State<EmergencyScreen> createState() => _EmergencyScreenState();

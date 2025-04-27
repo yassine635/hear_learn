@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class CreateQuizScreen extends StatefulWidget {
+  const CreateQuizScreen({super.key});
+
   @override
   _CreateQuizScreenState createState() => _CreateQuizScreenState();
 }
 
 class _CreateQuizScreenState extends State<CreateQuizScreen> {
+  @override
   void initState() {
     super.initState();
     getTeacherData();
@@ -190,9 +193,9 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: saveQuiz,
-              child: Text("Enregistrer le Quiz"),
               style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50)),
+              child: Text("Enregistrer le Quiz"),
             ),
           ],
         ),

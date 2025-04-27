@@ -5,7 +5,7 @@ import 'package:hear_learn1/componente/student_side/quizz_contaner.dart';
 import 'package:hear_learn1/screanses/espace_student/quzz_student/take_quiz.dart';
 
 class QuizPassThrough extends StatelessWidget {
-  const QuizPassThrough({Key? key}) : super(key: key);
+  const QuizPassThrough({super.key});
 
   Future<Map<String, dynamic>> _getStudentInfo() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;

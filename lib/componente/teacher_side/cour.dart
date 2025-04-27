@@ -6,10 +6,10 @@ class Cour extends StatelessWidget {
   final VoidCallback realonpressed; // better type than just Function
 
   const Cour({
-    Key? key,
+    super.key,
     required this.onpressed,
     required this.realonpressed, 
-  }) : super(key: key);
+  });
   
 
   @override

@@ -25,7 +25,6 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
   double progress = 0.0;
   String status = "le début du téléchargement";
 
-  // 🔁 For sentence-based playback
   List<String> textChunks = [];
   int currentChunkIndex = 0;
 
@@ -102,7 +101,7 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
       for (int i = 0; i < document.pages.count; i++) {
         final text = syncfusion.PdfTextExtractor(document)
             .extractText(startPageIndex: i, endPageIndex: i);
-        extractedText += text + "\n";
+        extractedText += "$text\n";
       }
       document.dispose();
       return extractedText.trim().isEmpty
@@ -138,7 +137,7 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
 
       final inputImage = InputImage.fromFilePath(imageFile.path);
       final recognizedText = await textRecognizer.processImage(inputImage);
-      ocrExtractedText += recognizedText.text + "\n";
+      ocrExtractedText += "${recognizedText.text}\n";
     }
 
     await textRecognizer.close();
@@ -172,7 +171,7 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
     await tts.stop();
   }
 
-  String? detectedLang; 
+  String? detectedLang;
 
   Future<void> detectGlobalLanguage(String fullText) async {
     final languageIdentifier = LanguageIdentifier(confidenceThreshold: 0.5);
@@ -264,7 +263,7 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
                 Expanded(
                   flex: 2,
                   child: Center(
-                    child: Container(
+                    child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.85,
                       height: 100,
                       child: ElevatedButton.icon(
