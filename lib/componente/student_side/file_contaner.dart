@@ -1,21 +1,102 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_learn1/extract_read_flutter_tts/PDFToSpeechScreen.dart';
-import 'package:firebase_storage/firebase_storage.dart'; // for deleting storage file
-import 'package:cloud_firestore/cloud_firestore.dart'; // for deleting firestore document
+import 'package:firebase_storage/firebase_storage.dart'; // For downloading and deleting file
+import 'package:cloud_firestore/cloud_firestore.dart'; // For deleting Firestore document
+import 'package:flutter/services.dart'; // For file download handling
+import 'package:path_provider/path_provider.dart'; // For accessing device storage
+import 'dart:io'; // For File handling
+ // For managing file downloads
 
-class FileContaner extends StatelessWidget {
+class FileContaner extends StatefulWidget {
   final String file_name;
   final String file_id;
+  final String storage_path; // Path of the file in Firebase Storage
+  final String docId; // Firestore document ID
 
   const FileContaner({
     super.key,
     required this.file_name,
     required this.file_id,
+    required this.storage_path,
+    required this.docId,
   });
 
   @override
+  _FileContanerState createState() => _FileContanerState();
+}
+
+class _FileContanerState extends State<FileContaner> {
+  int? userType;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserType();
+  }
+
+  Future<void> fetchUserType() async {
+    int type = await getUserType();
+    setState(() {
+      userType = type;
+    });
+  }
+
+  Future<int> getUserType() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) return 0;
+
+    String uid = user.uid;
+
+    try {
+      DocumentSnapshot studentDoc = await FirebaseFirestore.instance
+          .collection('etudiants')
+          .doc(uid)
+          .get();
+
+      if (studentDoc.exists) return 1;
+
+      DocumentSnapshot profDoc = await FirebaseFirestore.instance
+          .collection('utilisateurs')
+          .doc(uid)
+          .get();
+
+      if (profDoc.exists) return 2;
+
+      return 0;
+    } catch (e) {
+      print("ERROR: $e");
+      return 0;
+    }
+  }
+
+  // Function to download the file to the phone
+  Future<void> downloadFile(String storagePath, String fileName) async {
+    try {
+      // Getting the temporary directory for storing files
+      final Directory? directory = await getExternalStorageDirectory();
+      final String filePath = '${directory!.path}/$fileName';
+
+      // Start downloading the file from Firebase Storage
+      final Reference ref = FirebaseStorage.instance.ref(storagePath);
+      final File file = File(filePath);
+
+      // Write the file to local storage
+      await ref.writeToFile(file);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text(' تم تحمل الملف بنجاح')),
+      );
+    } catch (e) {
+      print("Error downloading file: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text(' حدث خطاء اثناء تحميل الملف')),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width; // get screen width
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
       children: [
@@ -25,14 +106,14 @@ class FileContaner extends StatelessWidget {
             width: screenWidth * 0.9,
             child: Row(
               children: [
-                Expanded( // make button take available space
+                Expanded(
                   child: TextButton.icon(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => Pdftospeechscreen(
-                            downloader: file_id,
+                            downloader: widget.file_id,
                           ),
                         ),
                       );
@@ -48,42 +129,61 @@ class FileContaner extends StatelessWidget {
                     ),
                     icon: const Icon(Icons.picture_as_pdf, color: Colors.black),
                     label: Text(
-                      file_name,
+                      widget.file_name,
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
-                const SizedBox(width: 8), // small space between button and icon
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () async {
-                    bool? confirmDelete = await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Confirm Delete'),
-                        content: const Text('Are you sure you want to delete this file?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, false),
-                            child: const Text('No'),
+                const SizedBox(width: 8),
+                // Show download or delete based on user type
+                if (userType == 1) // Student
+                  IconButton(
+                    icon: const Icon(Icons.download, color: Colors.blue),
+                    onPressed: () {
+                      downloadFile(widget.storage_path, widget.file_name);
+                    },
+                  )
+                else if (userType == 2) // Teacher
+                  PopupMenuButton<String>(
+                    onSelected: (value) {
+                      if (value == 'delete') {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('تاكيد الحذف'),
+                            content: const Text('هل انت متاكد من حذف هذ ملف؟'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: const Text('لا'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  await deleteFileFromFirebase(
+                                      widget.storage_path, widget.docId);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('نعم'),
+                              ),
+                            ],
                           ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, true),
-                            child: const Text('Yes'),
-                          ),
-                        ],
+                        );
+                      } else if (value == 'download') {
+                        downloadFile(widget.storage_path, widget.file_name);
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem<String>(
+                        value: 'download',
+                        child: Text('تحميل'),
                       ),
-                    );
-
-                    if (confirmDelete == true) {
-                      await deleteFileFromFirebase();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('File deleted successfully!')),
-                      );
-                    }
-                  },
-                ),
+                      const PopupMenuItem<String>(
+                        value: 'delete',
+                        child: Text('حذف'),
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -92,15 +192,16 @@ class FileContaner extends StatelessWidget {
     );
   }
 
-  Future<void> deleteFileFromFirebase() async {
+  // Delete the file from both Firebase Storage and Firestore
+  Future<void> deleteFileFromFirebase(String storagePath, String docId) async {
     try {
-      // Delete from Firebase Storage
-      await FirebaseStorage.instance.ref(file_id).delete();
+      // 1. Delete the file from Firebase Storage
+      await FirebaseStorage.instance.ref(storagePath).delete();
 
-      // Delete from Firestore
-      await FirebaseFirestore.instance.collection('urls').doc(file_id).delete();
-      
-      print('File deleted successfully from storage and database!');
+      // 2. Delete the corresponding document from Firestore
+      await FirebaseFirestore.instance.collection('urls').doc(docId).delete();
+
+      print('File deleted successfully!');
     } catch (e) {
       print('Error deleting file: $e');
     }

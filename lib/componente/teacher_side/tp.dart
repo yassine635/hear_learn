@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:hear_learn1/componente/teacher_side/deposer.dart'; 
+import 'package:hear_learn1/componente/teacher_side/deposer.dart';
 
 class Tp extends StatelessWidget {
   final VoidCallback onpressed; // better type than just Function
   final VoidCallback realonpressed;
   const Tp({
     super.key,
-    required this.onpressed, required this.realonpressed,
-     // marked as required
+    required this.onpressed,
+    required this.realonpressed,
+    // marked as required
   });
 
   @override
@@ -24,23 +25,23 @@ class Tp extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-           
             TextButton.icon(
-              onPressed: () {},
+              onPressed: realonpressed,
               label: Text(
-                "tp",
+                "اعمال تطبيقية",
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
                 ),
               ),
-              icon: Icon(Icons.computer, size: 30, color: Colors.black),
+              icon: Icon(Icons.computer, size: 30, color: Colors.white),
             ),
-
-            
-            Deposer(onpressed: onpressed,),
+            Deposer(
+              onpressed: onpressed,
+            ),
           ],
         ),
       ),

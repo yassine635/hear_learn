@@ -44,13 +44,13 @@ class _SignUpEtudState extends State<SignUpEtud> {
     if (!formKey.currentState!.validate()) return;
     if (!mdpconfirmer()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Les mots de passe ne correspondent pas")),
+        const SnackBar(content: Text("كلمات المرور غير متطابقة")),
       );
       return;
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Enregistrement en cours...")),
+      const SnackBar(content: Text("...جاري التسجيل")),
     );
     FocusScope.of(context).unfocus();
 
@@ -72,7 +72,7 @@ class _SignUpEtudState extends State<SignUpEtud> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Inscription réussie !")),
+        const SnackBar(content: Text("!تم التسجيل بنجاح")),
       );
 
       Navigator.of(context).pushNamed("/");
@@ -94,115 +94,122 @@ class _SignUpEtudState extends State<SignUpEtud> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 230, 222, 231),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.all(20),
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const CircleAvatar(
-                    radius: 100,
-                    backgroundImage: AssetImage('images/student.png'),
-                  ),
-                  const SizedBox(height: 20),
-                  buildTextField(npctr, "Nom Prénom:"),
-
-                  
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: DropdownButtonFormField<String>(
-                      value: selectedlevel,
-                      hint: const Text("Niveau:"),
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedlevel = value;
-                        });
-                      },
-                      validator: (value) =>
-                          value == null ? "Veuillez choisir un niveau" : null,
-                      items: levelOptions.map((option) {
-                        return DropdownMenuItem<String>(
-                          value: option,
-                          child: Text(option),
-                        );
-                      }).toList(),
+    return Directionality( // <--- Important to make everything RTL
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 230, 222, 231),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const CircleAvatar(
+                      radius: 100,
+                      backgroundImage: AssetImage('images/student.png'),
                     ),
-                  ),
+                    const SizedBox(height: 20),
+                    buildTextField(npctr, "الاسم واللقب"),
 
-                  // 🔽 Specialité Dropdown
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: DropdownButtonFormField<String>(
-                      value: selectedSpecialite,
-                      hint: const Text("Spécialité:"),
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                          borderRadius: BorderRadius.circular(30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: DropdownButtonFormField<String>(
+                        value: selectedlevel,
+                        hint: const Text("المستوى"),
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 160, 46, 180),
+                                width: 1.5),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 160, 46, 180),
+                                width: 1.5),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedSpecialite = value;
-                        });
-                      },
-                      validator: (value) =>
-                          value == null ? "Veuillez choisir une spécialité" : null,
-                      items: specialiteOptions.map((option) {
-                        return DropdownMenuItem<String>(
-                          value: option,
-                          child: Text(option),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-
-                  buildTextField(emailctr, "Email:", isEmail: true),
-                  buildTextField(mdpctr, "Mot de passe:", isPassword: true),
-                  buildTextField(confirmemdpctr, "Confirmer mot de passe:", isPassword: true),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(Colors.purple[300]),
-                      ),
-                      onPressed: signupetud,
-                      child: const Text(
-                        "S'inscrire",
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedlevel = value;
+                          });
+                        },
+                        validator: (value) =>
+                            value == null ? "الرجاء اختيار المستوى" : null,
+                        items: levelOptions.map((option) {
+                          return DropdownMenuItem<String>(
+                            value: option,
+                            child: Text(option),
+                          );
+                        }).toList(),
                       ),
                     ),
-                  ),
-                ],
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: DropdownButtonFormField<String>(
+                        value: selectedSpecialite,
+                        hint: const Text("التخصص"),
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 160, 46, 180),
+                                width: 1.5),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 160, 46, 180),
+                                width: 1.5),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedSpecialite = value;
+                          });
+                        },
+                        validator: (value) =>
+                            value == null ? "الرجاء اختيار التخصص" : null,
+                        items: specialiteOptions.map((option) {
+                          return DropdownMenuItem<String>(
+                            value: option,
+                            child: Text(option),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+
+                    buildTextField(emailctr, "البريد الإلكتروني", isEmail: true),
+                    buildTextField(mdpctr, "كلمة المرور", isPassword: true),
+                    buildTextField(confirmemdpctr, "تأكيد كلمة المرور", isPassword: true),
+
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateProperty.all(Colors.purple[300]),
+                        ),
+                        onPressed: signupetud,
+                        child: const Text(
+                          "التسجيل",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -216,24 +223,25 @@ class _SignUpEtudState extends State<SignUpEtud> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
+        textDirection: TextDirection.rtl, // TextField content RTL
         controller: controller,
         obscureText: isPassword,
         keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
         decoration: InputDecoration(
           hintText: hintText,
           enabledBorder: OutlineInputBorder(
-            borderSide:
-                const BorderSide(color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderSide: const BorderSide(
+                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
             borderRadius: BorderRadius.circular(30),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide:
-                const BorderSide(color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderSide: const BorderSide(
+                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
             borderRadius: BorderRadius.circular(30),
           ),
         ),
         validator: (value) =>
-            value == null || value.isEmpty ? "Ce champ est obligatoire" : null,
+            value == null || value.isEmpty ? "هذا الحقل إجباري" : null,
       ),
     );
   }

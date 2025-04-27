@@ -12,10 +12,17 @@ class Deposer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: onpressed,
-      icon: const Icon(Icons.add, color: Colors.black),
-      label: const Text("OPTIONS"),
+      icon: const Icon(Icons.add, color: Colors.white),
+      label: const Text(
+        "اضف",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold
+        ),
+        ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.purple[800],
+        backgroundColor: const Color.fromARGB(255, 213, 146, 255),
         foregroundColor: Colors.white,
         textStyle: const TextStyle(fontSize: 18),
       ),

@@ -18,9 +18,9 @@ class Home_Teacher extends StatelessWidget {
 
     final data = snapshot.data() as Map<String, dynamic>;
     final String departement = data['departement'];
-    final List<dynamic> niveaux = data['niveaux']; // From Firebase
+    final List<dynamic> niveaux = data['niveaux']; 
 
-    // Prepare the list of subjects
+    
     List<String> allSubjects = [];
 
     for (String level in niveaux) {
@@ -32,9 +32,7 @@ class Home_Teacher extends StatelessWidget {
       print(list.subjectsByGroup[key]);
     }
 
-    print(key);
-    print(list.subjectsByGroup[key]);
-    print(allSubjects);
+   
     return allSubjects;
   }
 
@@ -44,7 +42,7 @@ class Home_Teacher extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("teacher Page",
+        title: const Text("صفحة الاستاذ ",
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -65,9 +63,9 @@ class Home_Teacher extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text("Erreur de chargement"));
+            return const Center(child: Text("خطاء في تحميل"));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("Aucune matière trouvée"));
+            return const Center(child: Text("لم يتم العثور على أي مادة"));
           }
 
           List<String> subjects = snapshot.data!;

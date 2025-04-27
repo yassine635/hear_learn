@@ -4,6 +4,7 @@ import 'package:hear_learn1/extract_read_flutter_tts/PDFToSpeechScreen.dart';
 import 'package:hear_learn1/data/auth.dart';
 import 'package:hear_learn1/firebase_options.dart';
 import 'package:hear_learn1/home/Home_student.dart';
+import 'package:hear_learn1/screanses/espace_prof/teacher_functions/upload_course.dart';
 import 'package:hear_learn1/screanses/espace_student/bille_reconaisence.dart/billeit.dart';
 import 'package:hear_learn1/screanses/espace_student/filemanegment_cour_td_tp/contnue_module_student.dart';
 import 'package:hear_learn1/screanses/espace_prof/teacher_functions/contnue_module_teacher.dart';
@@ -40,7 +41,7 @@ class hearlern extends StatelessWidget {
         "/signup_etud_screen": (context) => const SignUpEtud(),
         "/contnu_module_student": (context) => Contnue_Module_Student(module: '',),
         "/contnu_module_teacher": (context) => Contnue_Module_Teacher(),
-        "/teacher_option": (context) => TeacherDashboard(type: '',),
+        //"/teacher_option": (context) => TeacherDashboard(type: '',),
         "/home_student": (context) => Home_student(),
         "/home_techer": (context) => Home_Teacher(),
         "/emergency": (context) => EmergencyScreen(),
@@ -51,6 +52,7 @@ class hearlern extends StatelessWidget {
            "/_PDFToSpeechScreenState": (context) => Pdftospeechscreen(downloader: '',),
            "/reconnaissence_couleur_sceen": (context) => ReconnaissanceCouleur(),
            "/reconnaissence_billet_sceen": (context) => ReconBillet(),
+           "/uploade": (context) => UploadCourse(),
       },
       debugShowCheckedModeBanner: false,
     );

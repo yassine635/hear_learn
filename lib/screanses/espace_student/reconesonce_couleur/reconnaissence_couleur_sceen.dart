@@ -6,8 +6,6 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class ReconnaissanceCouleur extends StatefulWidget {
-  const ReconnaissanceCouleur({super.key});
-
   @override
   _ReconnaissanceCouleurState createState() => _ReconnaissanceCouleurState();
 }
@@ -21,9 +19,7 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
   void initState() {
     super.initState();
     initializeCamera();
-    parler(
-      "vous êtes dans l'interface de reconnaissance couleur. Cliquez sur l'ecran pour prendre une photo.",
-    );
+    parler("انت في واجهة التعرف على الالوان اضغط على الشاشة لالتقاط الصورة");
   }
 
   Future<void> initializeCamera() async {
@@ -36,7 +32,6 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
   }
 
   Future<void> parler(String text) async {
-    await flutterTts.setLanguage("fr");
     await flutterTts.setSpeechRate(0.75);
     await flutterTts.setPitch(1.0); // Garde une voix naturelle
     await flutterTts.setVolume(1.0); // Volume au maximum
@@ -50,8 +45,8 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
         imagepath = image.path;
       });
       print("Photo prise : ${image.path}");
-      print("Photo prise2 : $imagepath");
-      parler("Vous avez prendre une photo.");
+      print("Photo prise2 : ${imagepath}");
+      parler("تم التقاط الصورة");
       analyse_img(imagepath!);
     } catch (e) {
       print("Erreur lors de la capture : $e");
@@ -66,7 +61,7 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
     );
     List<Color> couleurs = palette.colors.toList();
     if (couleurs.isEmpty) {
-      await parler("Aucune couleur detecter");
+      await parler("لم يتم التعرف على اي لون");
     } else {
       print("les couleur sont :");
       for (int i = 0; i < couleurs.length; i++) {
@@ -78,13 +73,13 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
       print("$similaire");
       if (similaire) {
         final nomCouleur = getColorName(couleurs[0]);
-        parler("La couleur detecté est : $nomCouleur");
+        parler("تم التعرف على اللون : $nomCouleur");
         print("coleur $nomCouleur");
       } else {
         List<String> nomcouleurs = [];
         for (int i = 0; i < 3; i++) {
           nomcouleurs.add(getColorName(couleurs[i]));
-          await parler("les couleur detectés sont  ${nomcouleurs.join(", ")}");
+          await parler("تم التعرف على الالوان ${nomcouleurs.join(", ")}");
         }
       }
     }
@@ -114,47 +109,46 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
     int b = color.blue;
 
     // 🔴 ROUGE (de clair à foncé)
-    if (r > 120 && g < 80 && b < 80) return "Rouge";
+    if (r > 120 && g < 80 && b < 80) return "احمر";
 
     // 🟢 VERT (clair à foncé)
-    if (g > 120 && r < 100 && b < 100) return "Vert";
+    if (g > 120 && r < 100 && b < 100) return "اخضر";
 
     // 🟡 JAUNE (de clair à foncé)
-    if (r > 180 && g > 180 && b < 100) return "Jaune";
+    if (r > 180 && g > 180 && b < 100) return "اصفر";
 
     // 🟠 ORANGE (de clair à foncé)
-    if (r > 180 && g > 100 && g < 180 && b < 80) return "Orange";
+    if (r > 180 && g > 100 && g < 180 && b < 80) return "برتقالي";
 
     // 🔵 BLEU (de clair à foncé)
-    if (b > 120 && r < 100 && g < 100) return "Bleu";
+    if (b > 120 && r < 100 && g < 100) return "ازرق";
 
     // 🟣 VIOLET (de clair à foncé)
-    if (r > 100 && b > 100 && g < 80) return "Violet";
+    if (r > 100 && b > 100 && g < 80) return "بنفسجي";
 
     // ⚫️ NOIR (de clair à foncé)
-    if (r < 50 && g < 50 && b < 50) return "Noir";
+    if (r < 50 && g < 50 && b < 50) return "اسود";
 
     // ⚪️ BLANC (de clair à foncé)
-    if (r > 200 && g > 200 && b > 200) return "Blanc";
+    if (r > 200 && g > 200 && b > 200) return "ابيض";
 
     // 🟤 MARRON (de clair à foncé)
-    if (r > 100 && g < 70 && b < 50) return "Marron";
+    if (r > 100 && g < 70 && b < 50) return "بني";
 
     // 🏾 BEIGE (de clair à foncé)
-    if (r > 180 && g > 150 && b > 100) return "Beige";
+    if (r > 180 && g > 150 && b > 100) return "رملي فاتح";
 
     // 🔵🌙 BLEU NUIT (de clair à foncé)
-    if (b > 100 && r < 50 && g < 50) return "Bleu nuit";
+    if (b > 100 && r < 50 && g < 50) return "ازرق داكن";
 
     // ⚪️ GRIS (de clair à foncé)
-    if (r > 100 && r < 200 && g > 100 && g < 200 && b > 100 && b < 200) {
-      return "Gris";
-    }
+    if (r > 100 && r < 200 && g > 100 && g < 200 && b > 100 && b < 200)
+      return "رمادي";
 
     // 🎀 ROSE (de clair à foncé)
-    if (r > 200 && g < 150 && b < 150) return "Rose";
+    if (r > 200 && g < 150 && b < 150) return "وردي";
 
-    return "Inconnue";
+    return "غير معروف";
   }
 
   @override
@@ -170,7 +164,7 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 208, 169, 212),
         title: Text(
-          "Reconnaissance Couleur",
+          "التعرف على الالوان",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
@@ -178,19 +172,20 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: cameraController == null ||
-                    !cameraController!.value.isInitialized
-                ? Center(child: CircularProgressIndicator())
-                : GestureDetector(
-                    onTap: prendrePhoto,
-                    child: CameraPreview(cameraController!),
-                  ),
+            child:
+                cameraController == null ||
+                        !cameraController!.value.isInitialized
+                    ? Center(child: CircularProgressIndicator())
+                    : GestureDetector(
+                      onTap: prendrePhoto,
+                      child: CameraPreview(cameraController!),
+                    ),
           ),
           if (imagepath != null) ...[
             SizedBox(height: 10),
             Center(
               child: Text(
-                "Photo capturée :",
+                "الصورة :",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),

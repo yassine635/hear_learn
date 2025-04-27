@@ -27,16 +27,18 @@ class Cour extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween, 
           children: [
+            
             TextButton.icon(
               onPressed: realonpressed,
               label: Text(
-                "cour",
+                "الدروس",
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold
                 ),
               ),
-              icon: Icon(Icons.book, size: 30, color: Colors.black),
+              icon: Icon(Icons.book, size: 30, color: Colors.white),
             ),
             Deposer(onpressed: onpressed,),
           ],

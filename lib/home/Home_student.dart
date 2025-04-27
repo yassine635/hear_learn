@@ -40,7 +40,7 @@ class Home_student extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("student Page",
+        title: const Text("صفحة الطلبة",
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -64,9 +64,9 @@ class Home_student extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                return const Center(child: Text("Erreur de chargement"));
+                return const Center(child: Text("خطأ في التحميل"));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text("Aucune matière trouvée"));
+                return const Center(child: Text("لم يتم العثور على أي مادة"));
               }
 
               List<String> subjects = snapshot.data!;

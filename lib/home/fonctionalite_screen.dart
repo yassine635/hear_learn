@@ -80,13 +80,11 @@ class _FonctionaliteState extends State<Fonctionalite> {
 
       for (var doc in quizzesSnapshot.docs) {
         final quizData = doc.data();
-        final addedAt = quizData['addedAt'] as Timestamp?;
+        final addedAt = quizData['timestamp'] as Timestamp?;
 
         if (addedAt != null &&
             Cheker.isMoreThanThreeDaysAgo(addedAt.toDate())) {
           await doc.reference.delete();
-          print(
-              'Quiz with ID ${doc.id} deleted due to being older than three days.');
         }
       }
     } catch (e) {
@@ -121,20 +119,20 @@ class _FonctionaliteState extends State<Fonctionalite> {
           children: [
             Text(
               userType == 1
-                  ? "Welcome Student"
+                  ? "مرحباً بالطالب"
                   : userType == 2
-                      ? "Welcome Professor"
-                      : "Loading...",
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ? "مرحباً أستاذ"
+                      : "تحميل...",
+              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
 
             // Shared
-            _buildButton("Espace d'éducation", Icons.book, navigateToModule),
+            _buildButton("فضاء التعليمي", Icons.book, navigateToModule),
 
             // Teacher-only
             if (!isStudent())
-              _buildButton("Créer un quiz", Icons.computer, () {
+              _buildButton("انشاء اسئلة", Icons.computer, () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => CreateQuizScreen()),
@@ -142,7 +140,7 @@ class _FonctionaliteState extends State<Fonctionalite> {
               }),
 
             if (!isStudent())
-              _buildButton("Gérer mes quiz", Icons.list_alt, () {
+              _buildButton("دارة الاسئلة", Icons.list_alt, () {
                 final teacherId = FirebaseAuth.instance.currentUser?.uid;
 
                 if (teacherId != null) {
@@ -158,7 +156,7 @@ class _FonctionaliteState extends State<Fonctionalite> {
 
             // Student-only
             if (isStudent())
-              _buildButton("Commencer le Quiz", Icons.quiz, () {
+              _buildButton("بدءالاسئلة", Icons.quiz, () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => QuizPassThrough()),
@@ -166,17 +164,17 @@ class _FonctionaliteState extends State<Fonctionalite> {
               }),
 
             if (isStudent())
-              _buildButton("Reconnaissance couleur", Icons.color_lens, () {
+              _buildButton("تعرف على الالوان", Icons.color_lens, () {
                 Navigator.pushNamed(context, "/reconnaissence_couleur_sceen");
               }),
 
             if (isStudent())
-              _buildButton("Reconnaissance de billets", Icons.money, () {
+              _buildButton("تعرف على نقود", Icons.money, () {
                 Navigator.pushNamed(context, "/reconnaissence_billet_sceen");
               }),
 
             if (isStudent())
-              _buildButton("Bouton d'urgence", Icons.phone, () {
+              _buildButton("زر الاستعجالات", Icons.phone, () {
                 Navigator.pushNamed(context, "/emergency");
               }),
           ],
@@ -199,16 +197,23 @@ class _FonctionaliteState extends State<Fonctionalite> {
           backgroundColor: Colors.purple[400],
           foregroundColor: Colors.black,
         ),
-        child: ListTile(
-          leading: Icon(icon, color: Colors.black, size: 40),
-          title: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+        child: Row(
+            // Set RTL direction for row
+          mainAxisAlignment: MainAxisAlignment.end, // Align content to the right
+          children: [
+            
+            Icon(icon, color: Colors.black, size: 40), // Icon comes first on the right
+            Spacer(),
+            const SizedBox(width: 10),  // Space between icon and text
+            Text(
+              text,
+              style: const TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

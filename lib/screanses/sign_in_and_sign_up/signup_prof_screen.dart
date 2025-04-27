@@ -30,13 +30,13 @@ class _SignupprofState extends State<SignUpProf> {
     if (formKey.currentState!.validate()) {
       if (!mdpconfirmer()) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Vous avez saisi 2 mots de passe différents")),
+          const SnackBar(content: Text("لقد أدخلت كلمتي مرور مختلفتين")),
         );
         return;
       }
 
       try {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Envoi en cours...")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("إرسال البيانات...")));
         FocusScope.of(context).unfocus();
 
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -58,7 +58,7 @@ class _SignupprofState extends State<SignUpProf> {
 
         Navigator.pushNamed(context, "/");
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur: ${e.toString()}")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("خطأ: ${e.toString()}")));
       }
     }
   }
@@ -111,9 +111,9 @@ class _SignupprofState extends State<SignUpProf> {
                 ),
               ),
               actions: [
-                TextButton(child: Text("Annuler"), onPressed: () => Navigator.pop(context)),
+                TextButton(child: Text("إلغاء"), onPressed: () => Navigator.pop(context)),
                 ElevatedButton(
-                  child: Text("Valider"),
+                  child: Text("تأكيد"),
                   onPressed: () {
                     setState(() {
                       onItemsSelected(tempSelected);
@@ -130,7 +130,7 @@ class _SignupprofState extends State<SignUpProf> {
   }
 
   void _showLevelDialog() {
-    _showSelectionDialog("Choisir les niveaux", selectedLevels, list.levelOptions, (newLevels) {
+    _showSelectionDialog("اختيار المستويات", selectedLevels, list.levelOptions, (newLevels) {
       setState(() {
         selectedLevels = newLevels;
       });
@@ -140,7 +140,7 @@ class _SignupprofState extends State<SignUpProf> {
   void _showmoduleDialog(BuildContext context, Map<String, List<String>> subjectsByGroup) {
     if (selecteddepartement == null || selectedLevels.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Veuillez sélectionner un département et un niveau')),
+        SnackBar(content: Text('يرجى اختيار القسم والمستوى')),
       );
       return;
     }
@@ -153,7 +153,7 @@ class _SignupprofState extends State<SignUpProf> {
       }
     }
 
-    _showSelectionDialog("Choisir les modules", selectedmodule, allModules.toList(), (newModules) {
+    _showSelectionDialog("اختيار الوحدات", selectedmodule, allModules.toList(), (newModules) {
       setState(() {
         selectedmodule = newModules;
       });
@@ -162,63 +162,66 @@ class _SignupprofState extends State<SignUpProf> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:  Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.all(20),
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const CircleAvatar(radius: 60, backgroundImage: AssetImage('images/Teacher.png')),
-                  const SizedBox(height: 20),
-                  _buildTextField(npctr, "Nom Prenom"),
-                  const SizedBox(height: 10),
-                  _buildDropdownField(
-                    selecteddepartement,
-                    "Département",
-                    list.departementOptions,
-                    (value) {
-                      setState(() {
-                        selecteddepartement = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  _buildSelectableField(
-                    "Choisir un ou plusieurs niveaux",
-                    selectedLevels,
-                    _showLevelDialog,
-                  ),
-                  const SizedBox(height: 10),
-                  _buildSelectableField(
-                    "Choisir un ou plusieurs modules",
-                    selectedmodule,
-                    () => _showmoduleDialog(context, list.subjectsByGroup),
-                  ),
-                  const SizedBox(height: 10),
-                  _buildTextField(emailctr, "Email"),
-                  const SizedBox(height: 10),
-                  _buildTextField(mdpctr, "Mot de passe", isPassword: true),
-                  const SizedBox(height: 10),
-                  _buildTextField(confirmmdpctr, "Confirmer mot de passe", isPassword: true),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.purple[300])),
-                      onPressed: signup,
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black),
+    return  Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor:  Colors.white,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const CircleAvatar(radius: 60, backgroundImage: AssetImage('images/Teacher.png')),
+                    const SizedBox(height: 20),
+                    buildTextField(npctr, "الاسم الكامل"),
+                    const SizedBox(height: 10),
+                    _buildDropdownField(
+                      selecteddepartement,
+                      "القسم",
+                      list.departementOptions,
+                      (value) {
+                        setState(() {
+                          selecteddepartement = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    _buildSelectableField(
+                      "اختيار مستوى واحد أو أكثر",
+                      selectedLevels,
+                      _showLevelDialog,
+                    ),
+                    const SizedBox(height: 10),
+                    _buildSelectableField(
+                      "اختيار وحدة أو أكثر",
+                      selectedmodule,
+                      () => _showmoduleDialog(context, list.subjectsByGroup),
+                    ),
+                    const SizedBox(height: 10),
+                    buildTextField(emailctr, "البريد الإلكتروني"),
+                    const SizedBox(height: 10),
+                    buildTextField(mdpctr, "كلمة المرور", isPassword: true),
+                    const SizedBox(height: 10),
+                    buildTextField(confirmmdpctr, "تأكيد كلمة المرور", isPassword: true),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.purple[300])),
+                        onPressed: signup,
+                        child: const Text(
+                          "التسجيل",
+                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -227,22 +230,31 @@ class _SignupprofState extends State<SignUpProf> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hintText, {bool isPassword = false}) {
-    return TextFormField(
-      controller: controller,
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        hintText: hintText,
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-          borderRadius: BorderRadius.circular(30),
+ Widget buildTextField(TextEditingController controller, String hintText,
+      {bool isPassword = false, bool isEmail = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: TextFormField(
+        textDirection: TextDirection.rtl, // TextField content RTL
+        controller: controller,
+        obscureText: isPassword,
+        keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
+        decoration: InputDecoration(
+          hintText: hintText,
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderRadius: BorderRadius.circular(30),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderRadius: BorderRadius.circular(30),
+          ),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-          borderRadius: BorderRadius.circular(30),
-        ),
+        validator: (value) =>
+            value == null || value.isEmpty ? "هذا الحقل إجباري" : null,
       ),
-      validator: (value) => value == null || value.isEmpty ? "Remplissez ce champ" : null,
     );
   }
 
@@ -263,7 +275,7 @@ class _SignupprofState extends State<SignUpProf> {
           ),
         ),
         onChanged: onChanged,
-        validator: (value) => value == null ? "Veuillez choisir un $label" : null,
+        validator: (value) => value == null ? "يرجى اختيار $label" : null,
         items: options.map((option) {
           return DropdownMenuItem<String>(value: option, child: Text(option));
         }).toList(),

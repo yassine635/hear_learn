@@ -63,21 +63,29 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Bouton d'Urgence"),
+        title: const Text(
+          "أزرار الطوارئ",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold
+          ),
+          textAlign: TextAlign.right,
+          ),
+          
         backgroundColor: Colors.purple[800],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildButton(context, "Family", Colors.purple, () => callNumber(familyNumber)),
+            _buildButton(context, "عائلة", Colors.purple, () => callNumber(familyNumber)),
             const SizedBox(height: 30),
-            _buildButton(context, "Friend", Colors.purple, () => callNumber(friendNumber)),
+            _buildButton(context, "صديق", Colors.purple, () => callNumber(friendNumber)),
             const SizedBox(height: 30),
-            _buildButton(context, "Custom", Colors.purple, () => callNumber(customNumber)),
+            _buildButton(context, "مخصص", Colors.purple, () => callNumber(customNumber)),
             const SizedBox(height: 30),
             _buildButton(context, "Change Numbers", Colors.redAccent, () {
-              Navigator.pushReplacementNamed(
+              Navigator.pushNamed(
                 context,
                 "/emergency_enterise",
                 arguments: uid,
@@ -110,9 +118,9 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         child: Text(
           text,
           style: const TextStyle(
-            fontSize: 20,
+            fontSize: 30,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
       ),

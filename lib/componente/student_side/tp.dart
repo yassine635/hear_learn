@@ -19,23 +19,36 @@ class Tp extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: 90,
       child: Align(
-        alignment: Alignment.centerLeft, 
+        alignment: Alignment.center,  // Align to the right for RTL
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20), 
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: TextButton.icon(
-            onPressed: () {},
+            
+            onPressed: onpressed,
             label: Text(
-              "tp",
+              "اعمال تطبيقية",
               style: TextStyle(
-              color: Colors.black,
-              fontSize: 24,
-              
+                color: Colors.black,
+                fontSize: 30,
+                fontWeight: FontWeight.bold
               ),
             ),
-            icon: Icon(Icons.computer,size: 30,color: Colors.black,),
+            icon: Icon(
+              Icons.book,
+              size: 30,
+              color: Colors.black,
+            ),
+            // Change text direction to RTL
+            style: ElevatedButton.styleFrom(
+              
+              textStyle: TextStyle(
+                textBaseline: TextBaseline.alphabetic,
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 }
+//

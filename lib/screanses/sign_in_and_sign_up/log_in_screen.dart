@@ -43,59 +43,62 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Scrollbar(
-        child: SafeArea(
-          child: Center(
-            
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment:MainAxisAlignment.center, 
-                crossAxisAlignment: CrossAxisAlignment.center, 
-                    
-                children: [
-                  CircleAvatar(
-                    radius: 100,
-                    backgroundImage: AssetImage('images/Visually.png'),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    "Sign In",
-                    style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 20),
-
-                  // Email TextField
-                  _buildTextField(emailctr, "Email :"),
-                  SizedBox(height: 10),
-
-                  // Password TextField
-                  _buildTextField(mdpctr, "Mot de passe :", obscureText: true),
-                  SizedBox(height: 20),
-
-                  // Login Button
-                  _isLoading
-                      ? CircularProgressIndicator()
-                      : _buildButton(
-                          "Connexion", Colors.purple[300], signin),
-                  SizedBox(height: 20),
-
-                  // Signup as Teacher Button
-                  _buildButton(
-                    "Inscrire comme enseignant(e)",
-                    Colors.purple[300],
-                    () => Navigator.pushNamed(context, "/signup_prof_screen"),
-                  ),
-                  SizedBox(height: 10),
-
-                  // Signup as Student Button
-                  _buildButton(
-                    "Inscrire comme étudiant(e)",
-                    Colors.purple[300],
-                    () => Navigator.pushNamed(context, "/signup_etud_screen"),
-                  ),
-                ],
+    return Directionality( // <--- Important to make everything RTL
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Scrollbar(
+          child: SafeArea(
+            child: Center(
+              
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment:MainAxisAlignment.center, 
+                  crossAxisAlignment: CrossAxisAlignment.center, 
+                      
+                  children: [
+                    CircleAvatar(
+                      radius: 100,
+                      backgroundImage: AssetImage('images/Visually.png'),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "تسجيل الدخول",
+                      style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 20),
+      
+                    // Email TextField
+                    _buildTextField(emailctr, "بريد إلكتروني:"),
+                    SizedBox(height: 10),
+      
+                    // Password TextField
+                    _buildTextField(mdpctr, "كلمة المرور:", obscureText: true),
+                    SizedBox(height: 20),
+      
+                    // Login Button
+                    _isLoading
+                        ? CircularProgressIndicator()
+                        : _buildButton(
+                            "تسجيل الدخول", Colors.purple[300], signin),
+                    SizedBox(height: 20),
+      
+                    // Signup as Teacher Button
+                    _buildButton(
+                      "التسجيل كمدرس",
+                      Colors.purple[300],
+                      () => Navigator.pushNamed(context, "/signup_prof_screen"),
+                    ),
+                    SizedBox(height: 10),
+      
+                    // Signup as Student Button
+                    _buildButton(
+                      "التسجيل كطالب",
+                      Colors.purple[300],
+                      () => Navigator.pushNamed(context, "/signup_etud_screen"),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -115,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextField(
+        textDirection: TextDirection.rtl,
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
@@ -123,6 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
           hintStyle: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
+            
           ),
         ),
       ),

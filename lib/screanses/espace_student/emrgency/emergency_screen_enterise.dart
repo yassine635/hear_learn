@@ -16,11 +16,13 @@ class EmergencyScreenEnterise extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.purple[800],
-        title: const Text(
-          "Emergency Numbers",
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.blueGrey,
+        title: Center(
+          child: Text(
+            "أرقام الطوارئ",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.blueGrey,
+            ),
           ),
         ),
       ),
@@ -32,30 +34,30 @@ class EmergencyScreenEnterise extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text("Please enter your emergency numbers"),
+              const Text("الرجاء إدخال أرقام الطوارئ الخاصة بك"),
               const SizedBox(height: 20),
               _buildTextField(
                 context,
                 familyController,
-                "Family Number",
+                "رقم العائلة",
                 TFValidator: (val) => Cheker.isEmpty(val),
               ),
               const SizedBox(height: 15),
               _buildTextField(
                 context,
                 friendController,
-                "Friend Number",
+                "رقم الصديق",
                 TFValidator: (val) => Cheker.isEmpty(val),
               ),
               const SizedBox(height: 15),
               _buildTextField(
                 context,
                 choiceController,
-                "Custom Emergency Number",
+                "رقم الطوارئ المخصص",
                 TFValidator: (val) => Cheker.isEmpty(val),
               ),
               const SizedBox(height: 30),
-              _buildButton(context, "Save Numbers", Colors.purple, () async {
+              _buildButton(context, "حفظ الأرقام", Colors.purple, () async {
                 if (keyFormState.currentState!.validate()) {
                   await Cheker.saveEmergencyNumbers(
                     uid: uid,
@@ -65,7 +67,7 @@ class EmergencyScreenEnterise extends StatelessWidget {
                   );
                   
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Emergency numbers saved!")),
+                    const SnackBar(content: Text("تم حفظ أرقام الطوارئ!")),
                   );
                   Navigator.pushReplacementNamed(context, "/emergency");
                 }

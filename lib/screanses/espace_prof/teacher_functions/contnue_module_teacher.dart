@@ -84,7 +84,7 @@ class _Contnue_Module_TeacherState extends State<Contnue_Module_Teacher> {
   @override
   Widget build(BuildContext context) {
     final Object? args = ModalRoute.of(context)?.settings.arguments;
-    module = args is String ? args : "Unknown Module";
+    module = args is String ? args : "مادة غير معروفة";
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -107,19 +107,19 @@ class _Contnue_Module_TeacherState extends State<Contnue_Module_Teacher> {
               children: [
                 Cour(
                   onpressed: () {
-                      Navigator.pushNamed(context, "/teacher_option", arguments: ["cour",module],);
+                      Navigator.pushNamed(context, "/uploade", arguments: ["cour",module],);
                     },
                   realonpressed: ()=> fetchTeacherAndFiles("cour")
                   ),
                 Td(
                   onpressed: () {
-                      Navigator.pushNamed(context, "/teacher_option", arguments: ["TD",module]);
+                      Navigator.pushNamed(context, "/uploade", arguments: ["TD",module]);
                     }, 
                   realonpressed: () => fetchTeacherAndFiles("td")
                   ),
                 Tp(
                   onpressed: () {
-                      Navigator.pushNamed(context, "/teacher_option", arguments: ["TP",module]);
+                      Navigator.pushNamed(context, "/uploade", arguments: ["TP",module]);
                     },
                    realonpressed: () => fetchTeacherAndFiles("tp")),
               ],

@@ -8,7 +8,7 @@ class Module extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.purple[400],
+        color: Colors.purple[300],
         borderRadius: BorderRadius.circular(20),
       ),
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -31,7 +31,8 @@ class Module extends StatelessWidget {
               module,
               style: TextStyle(
               color: Colors.black,
-              fontSize: 16,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
               
               ),
             ),

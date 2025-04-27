@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'upload_course.dart';
 
 class TeacherDashboard extends StatelessWidget {
@@ -105,4 +105,33 @@ class TeacherDashboard extends StatelessWidget {
       ),
     );
   }
-}
+}*/
+/*DropdownButtonFormField<String>(
+                value: selectedType,
+                hint: const Text("type:"),
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    selectedType = value;
+                  });
+                },
+                validator: (value) =>
+                    value == null ? "Veuillez choisir un type" : null,
+                items: typeoptions.map((option) {
+                  return DropdownMenuItem<String>(
+                    value: option.toString(),
+                    child: Text(option.toString()),
+                  );
+                }).toList(),
+              ),*/

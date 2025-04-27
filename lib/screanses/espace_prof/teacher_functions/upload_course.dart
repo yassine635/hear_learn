@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 class UploadCourse extends StatefulWidget {
-  final String module_name;
-  const UploadCourse({super.key, required this.module_name});
+  const UploadCourse({
+    super.key,
+  });
   @override
   _UploadCourseState createState() => _UploadCourseState();
 }
@@ -22,6 +23,9 @@ class _UploadCourseState extends State<UploadCourse> {
   String? selectedType;
   List<String> typeoptions = ["cour", "td", "tp"];
   String uploadStatus = "";
+  String module_name = "";
+  String typemodule = "";
+
   @override
   void initState() {
     super.initState();
@@ -42,12 +46,8 @@ class _UploadCourseState extends State<UploadCourse> {
           modulse = data["modules"];
           deprtemnt = data["departement"];
         });
-      } else {
-        print("User document not found.");
-      }
-    } else {
-      print("User not signed in.");
-    }
+      } 
+    } 
   }
 
   Future<void> pickFile() async {
@@ -60,67 +60,91 @@ class _UploadCourseState extends State<UploadCourse> {
       setState(() {
         selectedFile = result.files.single;
       });
-      print("File selected: ${selectedFile!.name}");
-    } else {
-      print("No file selected");
-    }
+      
+    } 
   }
 
   Future<void> uploadFile() async {
-  if (selectedFile == null) {
-    setState(() {
-      uploadStatus = "Aucun fichier sélectionné.";
-    });
-    return;
+    if (selectedFile == null) {
+      setState(() {
+        uploadStatus = "Aucun fichier sélectionné.";
+      });
+      return;
+    }
+
+    if (selectedlevel == null ||
+        selectedmodule == null ||
+        selectedType == null) {
+      setState(() {
+        uploadStatus = "يرجى ملء جميع الحقول.";
+      });
+      return;
+    }
+
+    try {
+      setState(() {
+        uploadStatus = "جاري التحميل..."; // Uploading...
+      });
+
+      String fileName =
+          "${DateTime.now().millisecondsSinceEpoch}_${selectedFile!.name}";
+
+      var storageRef = FirebaseStorage.instance
+          .ref()
+          .child("espace_teacher_student/$fileName");
+
+     
+      UploadTask uploadTask = storageRef.putData(selectedFile!.bytes!);
+      TaskSnapshot snapshot = await uploadTask;
+
+      
+      String downloadURL = await snapshot.ref.getDownloadURL();
+      String storagePath = snapshot.ref.fullPath;
+
+     
+      String identifire =
+          "${deprtemnt}_${selectedlevel}_${selectedmodule}_$selectedType";
+
+    
+      DocumentReference docRef =
+          await FirebaseFirestore.instance.collection("urls").add({
+        "file_id": downloadURL,
+        "storage_path": storagePath,
+        "identifire": identifire,
+        "file_name": selectedFile!.name,
+        "uploaded_at": FieldValue.serverTimestamp(),
+      });
+
+     
+      String docId = docRef.id;
+
+      
+      await docRef.update({
+        "docID": docId,
+      });
+
+      setState(() {
+        uploadStatus = "Fichier Téléverser avec succès ✅";
+      });
+    } catch (e) {
+      print("Erreur: $e");
+      setState(() {
+        uploadStatus = "Erreur lors du téléchargement ❌";
+      });
+    }
   }
-
-  if (selectedlevel == null || selectedmodule == null || selectedType == null) {
-    setState(() {
-      uploadStatus = "Veuillez remplir tous les champs.";
-    });
-    return;
-  }
-
-  try {
-    setState(() {
-      uploadStatus = "Téléchargement en cours..."; // Uploading...
-    });
-
-    String fileName = "${DateTime.now().millisecondsSinceEpoch}_${selectedFile!.name}";
-    var storageRef = FirebaseStorage.instance.ref().child("espace_teacher_student/$fileName");
-
-    UploadTask uploadTask = storageRef.putData(selectedFile!.bytes!);
-    TaskSnapshot snapshot = await uploadTask;
-    String downloadURL = await snapshot.ref.getDownloadURL();
-
-    String identifire = "${deprtemnt}_${selectedlevel}_${selectedmodule}_$selectedType";
-
-    await FirebaseFirestore.instance.collection("urls").add({
-      "file_id": downloadURL,
-      "identifire": identifire,
-      "file_name": selectedFile!.name,
-      "uploaded_at": FieldValue.serverTimestamp(),
-    });
-
-    setState(() {
-      uploadStatus = "Fichier Téléverser avec succès ✅";
-    });
-  } catch (e) {
-    print("Erreur: $e");
-    setState(() {
-      uploadStatus = "Erreur lors du téléchargement ❌";
-    });
-  }
-}
-
 
   @override
   Widget build(BuildContext context) {
+    final Object? args = ModalRoute.of(context)?.settings.arguments;
+    final List data = args as List;
+    module_name = data[1];
+    selectedType = data[0];
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("Upload file ",
+        title: Text("تحميل الملفات ",
             style: TextStyle(fontSize: 24, color: Colors.white)),
         backgroundColor: Colors.purple[800],
         actions: [
@@ -137,12 +161,14 @@ class _UploadCourseState extends State<UploadCourse> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+
               Row(
                 children: [
                   SizedBox(width: 50),
+                  
                   Expanded(
                     child: Text(
-                      "Upload file to ${widget.module_name}",
+                      "تحميل الملف إلى",
                       style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -151,13 +177,20 @@ class _UploadCourseState extends State<UploadCourse> {
                   ),
                 ],
               ),
+              Text(
+                    "${module_name}",
+                     style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
               Icon(Icons.upload_file, size: 100, color: Colors.black),
               SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: pickFile,
                 icon: Icon(Icons.folder_open, color: Colors.black),
-                label: Text("Select File",
-                    style: TextStyle(color: Colors.black, fontSize: 18)),
+                label: Text("حدد الملف",
+                    style: TextStyle(color: Colors.black, fontSize: 24,fontWeight: FontWeight.bold)),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                   backgroundColor: Colors.purple[400],
@@ -175,125 +208,96 @@ class _UploadCourseState extends State<UploadCourse> {
                 ),
                 child: Text(
                   selectedFile != null
-                      ? "Fichier sélectionné: ${selectedFile!.name}"
-                      : "Aucun fichier sélectionné",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      ? "${selectedFile!.name}:الملف محدد"
+                      : "لم يتم تحديد أي ملف",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(height: 20),
               DropdownButtonFormField<String>(
-                value: selectedlevel,
-                hint: const Text("Niveau:"),
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                    borderRadius: BorderRadius.circular(30),
+                  value: selectedlevel,
+                  hint: const Text("مستوى:", textDirection: TextDirection.rtl),
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedlevel = value;
+                    });
+                  },
+                  validator: (value) =>
+                      value == null ? "الرجاء اختيار المستوى" : null,
+                  items: niveaux.map((option) {
+                    return DropdownMenuItem<String>(
+                      value: option.toString(),
+                      child: Text(option.toString(), textDirection: TextDirection.rtl),
+                    );
+                  }).toList(),
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    selectedlevel = value;
-                  });
-                },
-                validator: (value) =>
-                    value == null ? "Veuillez choisir un niveau" : null,
-                items: niveaux.map((option) {
-                  return DropdownMenuItem<String>(
-                    value: option.toString(),
-                    child: Text(option.toString()),
-                  );
-                }).toList(),
-              ),
+                SizedBox(height: 20),
+                DropdownButtonFormField<String>(
+                  value: selectedmodule,
+                  hint: const Text("الوحدة:", textDirection: TextDirection.rtl),
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedmodule = value;
+                    });
+                  },
+                  validator: (value) =>
+                      value == null ? "الرجاء اختيار الوحدة" : null,
+                  items: modulse.map((option) {
+                    return DropdownMenuItem<String>(
+                      value: option.toString(),
+                      child: Text(option.toString(), textDirection: TextDirection.rtl),
+                    );
+                  }).toList(),
+                ),
+
               SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                value: selectedmodule,
-                hint: const Text("Module:"),
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    selectedmodule = value;
-                  });
-                },
-                validator: (value) =>
-                    value == null ? "Veuillez choisir un module" : null,
-                items: modulse.map((option) {
-                  return DropdownMenuItem<String>(
-                    value: option.toString(),
-                    child: Text(option.toString()),
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                value: selectedType,
-                hint: const Text("type:"),
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    selectedType = value;
-                  });
-                },
-                validator: (value) =>
-                    value == null ? "Veuillez choisir un type" : null,
-                items: typeoptions.map((option) {
-                  return DropdownMenuItem<String>(
-                    value: option.toString(),
-                    child: Text(option.toString()),
-                  );
-                }).toList(),
-              ),
               
               Text(
                 uploadStatus,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: uploadStatus.contains("succès") ? Colors.green :
-                        uploadStatus.contains("Erreur") ? Colors.red :
-                        Colors.orange,
+                  color: uploadStatus.contains("نجاح")
+                      ? Colors.green
+                      : uploadStatus.contains("خطأ")
+                          ? Colors.red
+                          : Colors.orange,
                 ),
               ),
               ElevatedButton.icon(
                 onPressed: uploadFile,
                 icon: Icon(Icons.cloud_upload, color: Colors.black),
-                label: Text("Upload File",
-                    style: TextStyle(color: Colors.black, fontSize: 18)),
+                label: Text("تحميل الملف",
+                    style: TextStyle(color: Colors.black, fontSize: 24,fontWeight: FontWeight.bold)),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                   backgroundColor: Colors.purple[400],
                 ),
               ),
-              
-              
-
             ],
           ),
         ),

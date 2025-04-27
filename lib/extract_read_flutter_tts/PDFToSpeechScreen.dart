@@ -66,7 +66,9 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
 
       setState(() {
         status =
-            "le telecharjement est terminer le fichier restera jusqu'à ce que vous quittiez cette page";
+            "الملف المحمل سيبقى حتى تخرج من الصفحة";
+            detectGlobalLanguage(status);
+            splitTextIntoChunks(status, 100);
         isDownloading = false;
       });
 
@@ -176,7 +178,7 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
   Future<void> detectGlobalLanguage(String fullText) async {
     final languageIdentifier = LanguageIdentifier(confidenceThreshold: 0.5);
     detectedLang = await languageIdentifier.identifyLanguage(fullText);
-    print("Detected language: $detectedLang");
+    
   }
 
   @override
@@ -186,7 +188,7 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.purple[800],
         title: const Text(
-          "text extraction",
+          "استخراج النص",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white70),
         ),
         actions: [
@@ -290,7 +292,7 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
                           size: 30,
                         ),
                         label: Text(
-                          isPlaying ? "PAUSE" : "START",
+                          isPlaying ? "ايقاف" : "تشغيل",
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),

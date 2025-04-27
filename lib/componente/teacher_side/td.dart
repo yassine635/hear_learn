@@ -25,15 +25,16 @@ class Td extends StatelessWidget {
           children: [
            
             TextButton.icon(
-              onPressed: () {},
+              onPressed: realonpressed,
               label: Text(
-                "td",
+                "اعمال موجهة",
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
+                  color: Colors.white,
+                  fontSize: 27,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              icon: Icon(Icons.menu_book, size: 30, color: Colors.black),
+              icon: Icon(Icons.menu_book, size: 30, color: Colors.white),
             ),
 
             

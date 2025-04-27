@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Cour extends StatelessWidget {
-  
-  final VoidCallback onpressed; 
+  final VoidCallback onpressed;
 
   const Cour({
     super.key,
     required this.onpressed, // marked as required
   });
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,22 +19,31 @@ class Cour extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: 90,
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.center,  // Align to the right for RTL
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: TextButton.icon(
+            
             onPressed: onpressed,
             label: Text(
-              "cour",
+              "الدروس",
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 24,
+                fontSize: 30,
+                fontWeight: FontWeight.bold
               ),
             ),
             icon: Icon(
               Icons.book,
               size: 30,
               color: Colors.black,
+            ),
+            // Change text direction to RTL
+            style: ElevatedButton.styleFrom(
+              
+              textStyle: TextStyle(
+                textBaseline: TextBaseline.alphabetic,
+              ),
             ),
           ),
         ),
