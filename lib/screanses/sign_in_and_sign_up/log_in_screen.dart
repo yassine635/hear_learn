@@ -7,12 +7,12 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
- 
+
 class _LoginScreenState extends State<LoginScreen> {
   final emailctr = TextEditingController();
   final mdpctr = TextEditingController();
   bool _isLoading = false;
-
+  final GlobalKey<FormState> keyFormState = GlobalKey<FormState>();
   Future<void> signin() async {
     setState(() {
       _isLoading = true;
@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
         email: emailctr.text.trim(),
         password: mdpctr.text.trim(),
       );
+      FocusScope.of(context).unfocus();
       Navigator.pushNamed(context, "/fonctionalite_screen");
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -33,6 +34,13 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     }
   }
+  String? is_empty(String? val){
+  
+                      if (val == null || val.isEmpty) {
+                        return "لا يمكن أن يكون فارغا";
+                      }
+                      return null;
+      }
 
   @override
   void dispose() {
@@ -43,61 +51,93 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality( // <--- Important to make everything RTL
+    return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Scrollbar(
           child: SafeArea(
             child: Center(
-              
               child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment:MainAxisAlignment.center, 
-                  crossAxisAlignment: CrossAxisAlignment.center, 
-                      
-                  children: [
-                    CircleAvatar(
-                      radius: 100,
-                      backgroundImage: AssetImage('images/Visually.png'),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "تسجيل الدخول",
-                      style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 20),
-      
-                    // Email TextField
-                    _buildTextField(emailctr, "بريد إلكتروني:"),
-                    SizedBox(height: 10),
-      
-                    // Password TextField
-                    _buildTextField(mdpctr, "كلمة المرور:", obscureText: true),
-                    SizedBox(height: 20),
-      
-                    // Login Button
-                    _isLoading
-                        ? CircularProgressIndicator()
-                        : _buildButton(
-                            "تسجيل الدخول", Colors.purple[300], signin),
-                    SizedBox(height: 20),
-      
-                    // Signup as Teacher Button
-                    _buildButton(
-                      "التسجيل كمدرس",
-                      Colors.purple[300],
-                      () => Navigator.pushNamed(context, "/signup_prof_screen"),
-                    ),
-                    SizedBox(height: 10),
-      
-                    // Signup as Student Button
-                    _buildButton(
-                      "التسجيل كطالب",
-                      Colors.purple[300],
-                      () => Navigator.pushNamed(context, "/signup_etud_screen"),
-                    ),
-                  ],
+                child: Form(
+                  key: keyFormState,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 100,
+                        backgroundImage: AssetImage('images/Visually.png'),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "تسجيل الدخول",
+                        style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 20),
+                  
+                      // Email TextField
+                      _buildTextField(
+                        emailctr,
+                         "بريد إلكتروني:",
+                         TFValidator: (val)=>is_empty(val),
+                         ),
+                      SizedBox(height: 10),
+                  
+                      // Password TextField
+                      _buildTextField(
+                        mdpctr,
+                         "كلمة المرور:",
+                          obscureText: true,
+                          TFValidator: (val)=>is_empty(val),
+                          ),
+                      SizedBox(height: 20),
+                  
+                      // Login Button
+                      _isLoading
+                          ? CircularProgressIndicator()
+                          : _buildButton(
+                              "تسجيل الدخول",
+                              Colors.purple[300],
+                              () {
+                                // VALIDATION CODE ADDED HERE 👇
+                                if (keyFormState.currentState!.validate()) {
+                                  signin();
+                                } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("لا يمكن أن يكون حقل النص فارغًا",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 24
+                                      ),
+                                      ),
+                                      backgroundColor: Colors.red,
+                                      
+                                      ),
+                                  );
+                                  
+                                }
+                              },
+                            ),
+                      SizedBox(height: 20),
+                  
+                      // Signup as Teacher Button
+                      _buildButton(
+                        "التسجيل كمدرس",
+                        Colors.purple[300],
+                        () => Navigator.pushNamed(context, "/signup_prof_screen"),
+                      ),
+                      SizedBox(height: 10),
+                  
+                      // Signup as Student Button
+                      _buildButton(
+                        "التسجيل كطالب",
+                        Colors.purple[300],
+                        () => Navigator.pushNamed(context, "/signup_etud_screen"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -106,18 +146,18 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  
+
   Widget _buildTextField(TextEditingController controller, String hintText,
-      {bool obscureText = false}) {
+      {bool obscureText = false,final String? Function(String?)? TFValidator}) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
-      padding:
-          EdgeInsets.symmetric(horizontal: 20), 
+      padding: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 251, 227, 255),
         borderRadius: BorderRadius.circular(15),
       ),
-      child: TextField(
+      child: TextFormField(
+        validator: TFValidator, 
         textDirection: TextDirection.rtl,
         controller: controller,
         obscureText: obscureText,
@@ -127,7 +167,6 @@ class _LoginScreenState extends State<LoginScreen> {
           hintStyle: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            
           ),
         ),
       ),
@@ -136,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildButton(String text, Color? color, VoidCallback onPressed) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.9, 
+      width: MediaQuery.of(context).size.width * 0.9,
       height: 60,
       child: ElevatedButton(
         onPressed: onPressed,

@@ -98,9 +98,21 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Scaffold(
-        appBar: AppBar(title: Text('Take Quiz')),
-        body: Center(child: CircularProgressIndicator()),
+      return Directionality( 
+      textDirection: TextDirection.rtl,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'الاختبار',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ),
+          body: Center(child: CircularProgressIndicator()),
+        ),
       );
     }
 
@@ -109,7 +121,16 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
     final options = Map<String, dynamic>.from(quiz.get('options') ?? {});
 
     return Scaffold(
-      appBar: AppBar(title: Text('Question ${currentQuestionIndex + 1}/${quizzes.length}')),
+      appBar: AppBar(
+        title: Text(
+          'Question ${currentQuestionIndex + 1}/${quizzes.length}',
+          style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+                fontWeight: FontWeight.bold
+              ),
+            )
+          ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -129,12 +150,12 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
                   _checkAnswer(value!);
                 },
               );
-            }).toList(),
+            }),
             SizedBox(height: 20),
             Center(
               child: ElevatedButton(
                 onPressed: _submitQuiz,
-                child: Text('Submit Answer'),
+                child: Text('إرسال الإجابة'),
               ),
             ),
           ],
