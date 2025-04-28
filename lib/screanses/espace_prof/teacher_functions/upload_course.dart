@@ -178,7 +178,7 @@ class _UploadCourseState extends State<UploadCourse> {
                 ],
               ),
               Text(
-                    "${module_name}",
+                    module_name,
                      style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,

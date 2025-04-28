@@ -55,10 +55,10 @@ class QuizPassThrough extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
-            ),
           ),
-        backgroundColor: Colors.purple[800],
         ),
+        backgroundColor: Colors.purple[800],
+      ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _getStudentInfo(),
         builder: (context, snapshot) {
@@ -87,14 +87,11 @@ class QuizPassThrough extends StatelessWidget {
               return FutureBuilder<List<String>>(
                 future: _getCompletedQuizIds(userId!),
                 builder: (context, completedSnapshot) {
-                  if (completedSnapshot.connectionState ==
-                      ConnectionState.waiting) {
+                  if (completedSnapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
                   final completedQuizIds = completedSnapshot.data ?? [];
-
-                  // Filter out quizzes the student already did
                   final quizzesToShow = allQuizzes.where((quiz) {
                     return !completedQuizIds.contains(quiz.id);
                   }).toList();
@@ -103,42 +100,30 @@ class QuizPassThrough extends StatelessWidget {
                     return const Center(child: Text('No quizzes available'));
                   }
 
-                  // Group quizzes by module
-                  final Map<String, List<DocumentSnapshot>> quizzesByModule =
-                      {};
+                  final Map<String, List<String>> quizzesByModule = {};
                   for (var quiz in quizzesToShow) {
                     final module = quiz.get('quiz_module');
                     if (!quizzesByModule.containsKey(module)) {
                       quizzesByModule[module] = [];
                     }
-                    quizzesByModule[module]!.add(quiz);
+                    quizzesByModule[module]!.add(quiz.id);
                   }
 
                   return ListView(
                     children: quizzesByModule.entries.map((entry) {
                       final module = entry.key;
-                      final quizzes = entry.value;
+                      final quizIds = entry.value;
 
-                      return ExpansionTile(
-                        title: Text(
-                          module,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                        children: quizzes.map((quiz) {
-                          return ListTile(
-                            title: QuizzContaner(text: quiz.get('question')),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      TakeQuizScreen(quizId: quiz.id),
-                                ),
-                              );
-                            },
+                      return ListTile(
+                        title: QuizzContaner(text:module,),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TakeQuizScreen(quizIds: quizIds),
+                            ),
                           );
-                        }).toList(),
+                        },
                       );
                     }).toList(),
                   );

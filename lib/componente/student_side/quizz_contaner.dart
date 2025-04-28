@@ -10,9 +10,9 @@ class QuizzContaner extends StatelessWidget {
     return Center(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
-        height: 50,
+        height: 100,
         decoration: BoxDecoration(
-          color: Colors.white, // White background
+          color: Colors.purple, // White background
           borderRadius: BorderRadius.circular(400),
           border: Border.all( 
             color: Colors.purple,
@@ -24,9 +24,9 @@ class QuizzContaner extends StatelessWidget {
             text,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 20,
+              fontSize: 30,
               fontWeight: FontWeight.bold,
-              color: Colors.purple,
+              color: Colors.black,
             ),
           ),
         ),

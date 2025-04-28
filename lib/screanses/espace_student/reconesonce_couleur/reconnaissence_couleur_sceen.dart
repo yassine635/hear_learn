@@ -6,6 +6,8 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class ReconnaissanceCouleur extends StatefulWidget {
+  const ReconnaissanceCouleur({super.key});
+
   @override
   _ReconnaissanceCouleurState createState() => _ReconnaissanceCouleurState();
 }
@@ -45,7 +47,7 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
         imagepath = image.path;
       });
       print("Photo prise : ${image.path}");
-      print("Photo prise2 : ${imagepath}");
+      print("Photo prise2 : $imagepath");
       parler("تم التقاط الصورة");
       analyse_img(imagepath!);
     } catch (e) {
@@ -142,8 +144,9 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
     if (b > 100 && r < 50 && g < 50) return "ازرق داكن";
 
     // ⚪️ GRIS (de clair à foncé)
-    if (r > 100 && r < 200 && g > 100 && g < 200 && b > 100 && b < 200)
+    if (r > 100 && r < 200 && g > 100 && g < 200 && b > 100 && b < 200) {
       return "رمادي";
+    }
 
     // 🎀 ROSE (de clair à foncé)
     if (r > 200 && g < 150 && b < 150) return "وردي";

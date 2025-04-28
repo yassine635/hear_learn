@@ -8,7 +8,6 @@ import 'package:hear_learn1/screanses/espace_prof/teacher_functions/upload_cours
 import 'package:hear_learn1/screanses/espace_student/bille_reconaisence.dart/billeit.dart';
 import 'package:hear_learn1/screanses/espace_student/filemanegment_cour_td_tp/contnue_module_student.dart';
 import 'package:hear_learn1/screanses/espace_prof/teacher_functions/contnue_module_teacher.dart';
-import 'package:hear_learn1/screanses/espace_prof/teacher_functions/teacher_dashboard.dart';
 import 'package:hear_learn1/home/fonctionalite_screen.dart';
 import 'package:hear_learn1/home/home.techer.dart';
 import 'package:hear_learn1/screanses/espace_student/emrgency/emergency_screen.dart';
