@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,6 +14,16 @@ class _LoginScreenState extends State<LoginScreen> {
   final mdpctr = TextEditingController();
   bool _isLoading = false;
   final GlobalKey<FormState> keyFormState = GlobalKey<FormState>();
+
+  FlutterTts flutterTts = FlutterTts();
+  Future<void> parler(String text) async {
+    await flutterTts.setLanguage("ar");
+    await flutterTts.setSpeechRate(0.75);
+    await flutterTts.setPitch(1.0);
+    await flutterTts.setVolume(1.0);
+    await flutterTts.speak(text);
+  }
+
   Future<void> signin() async {
     setState(() {
       _isLoading = true;
@@ -26,7 +37,15 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushNamed(context, "/fonctionalite_screen");
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${e.toString()}")),
+        SnackBar(
+          content: Text(
+            "يرجى إعادة إدخال بريدك الإلكتروني وكلمة المرور ",
+           style: TextStyle(
+                color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.red,
+
+          ),
       );
     } finally {
       setState(() {
@@ -34,13 +53,13 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     }
   }
-  String? is_empty(String? val){
-  
-                      if (val == null || val.isEmpty) {
-                        return "لا يمكن أن يكون فارغا";
-                      }
-                      return null;
-      }
+
+  String? is_empty(String? val) {
+    if (val == null || val.isEmpty) {
+      return "لا يمكن أن يكون فارغا";
+    }
+    return null;
+  }
 
   @override
   void dispose() {
@@ -61,82 +80,86 @@ class _LoginScreenState extends State<LoginScreen> {
               child: SingleChildScrollView(
                 child: Form(
                   key: keyFormState,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 100,
-                        backgroundImage: AssetImage('images/Visually.png'),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "تسجيل الدخول",
-                        style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 20),
-                  
-                      // Email TextField
-                      _buildTextField(
-                        emailctr,
-                         "بريد إلكتروني:",
-                         TFValidator: (val)=>is_empty(val),
-                         ),
-                      SizedBox(height: 10),
-                  
-                      // Password TextField
-                      _buildTextField(
-                        mdpctr,
-                         "كلمة المرور:",
-                          obscureText: true,
-                          TFValidator: (val)=>is_empty(val),
-                          ),
-                      SizedBox(height: 20),
-                  
-                      // Login Button
-                      _isLoading
-                          ? CircularProgressIndicator()
-                          : _buildButton(
-                              "تسجيل الدخول",
-                              Colors.purple[300],
-                              () {
-                                // VALIDATION CODE ADDED HERE 👇
-                                if (keyFormState.currentState!.validate()) {
-                                  signin();
-                                } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text("لا يمكن أن يكون حقل النص فارغًا",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 24
+                  child: Container(
+                    margin: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 100,
+                          backgroundImage: AssetImage('images/Visually.png'),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "تسجيل الدخول",
+                          style: TextStyle(
+                              fontSize: 45, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 20),
+                    
+                        // Email TextField
+                        buildTextField(
+                          emailctr,
+                          "بريد إلكتروني:",
+                          isEmail: true,
+                          TFValidator: (val) => is_empty(val),
+                        ),
+                        SizedBox(height: 10),
+                    
+                        // Password TextField
+                        buildTextField(
+                          mdpctr,
+                          "كلمة المرور:",
+                          isPassword: true,
+                          TFValidator: (val) => is_empty(val),
+                        ),
+                        SizedBox(height: 20),
+                    
+                        // Login Button
+                        _isLoading
+                            ? CircularProgressIndicator()
+                            : _buildButton(
+                                "تسجيل الدخول",
+                                Colors.purple[300],
+                                () {
+                                  if (keyFormState.currentState!.validate()) {
+                                    signin();
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "لا يمكن أن يكون حقل النص فارغًا",
+                                          style: TextStyle(
+                                              color: Colors.black, fontSize: 24),
+                                        ),
+                                        backgroundColor: Colors.red,
                                       ),
-                                      ),
-                                      backgroundColor: Colors.red,
-                                      
-                                      ),
-                                  );
-                                  
-                                }
-                              },
-                            ),
-                      SizedBox(height: 20),
-                  
-                      // Signup as Teacher Button
-                      _buildButton(
-                        "التسجيل كمدرس",
-                        Colors.purple[300],
-                        () => Navigator.pushNamed(context, "/signup_prof_screen"),
-                      ),
-                      SizedBox(height: 10),
-                  
-                      // Signup as Student Button
-                      _buildButton(
-                        "التسجيل كطالب",
-                        Colors.purple[300],
-                        () => Navigator.pushNamed(context, "/signup_etud_screen"),
-                      ),
-                    ],
+                                    );
+                                    parler("لا يمكن أن يكون حقل النص فارغًا");
+                                  }
+                                },
+                              ),
+                        SizedBox(height: 20),
+                    
+                        // Signup as Teacher Button
+                        _buildButton(
+                          "التسجيل كمدرس",
+                          Colors.purple[300],
+                          () =>
+                              Navigator.pushNamed(context, "/signup_prof_screen"),
+                        ),
+                        SizedBox(height: 10),
+                    
+                        // Signup as Student Button
+                        _buildButton(
+                          "التسجيل كطالب",
+                          Colors.purple[300],
+                          () =>
+                              Navigator.pushNamed(context, "/signup_etud_screen"),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -147,28 +170,30 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hintText,
-      {bool obscureText = false,final String? Function(String?)? TFValidator}) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.9,
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 251, 227, 255),
-        borderRadius: BorderRadius.circular(15),
-      ),
+  Widget buildTextField(TextEditingController controller, String hintText,
+      {bool isPassword = false, bool isEmail = false, required String? Function(dynamic val) TFValidator}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
-        validator: TFValidator, 
-        textDirection: TextDirection.rtl,
+        textDirection: TextDirection.rtl, // TextField content RTL
         controller: controller,
-        obscureText: obscureText,
+        obscureText: isPassword,
+        keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
         decoration: InputDecoration(
-          border: InputBorder.none,
           hintText: hintText,
-          hintStyle: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderRadius: BorderRadius.circular(30),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderRadius: BorderRadius.circular(30),
           ),
         ),
+        validator: TFValidator,
+            
       ),
     );
   }

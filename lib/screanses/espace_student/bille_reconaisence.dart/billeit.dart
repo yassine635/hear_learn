@@ -5,8 +5,6 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'package:palette_generator/palette_generator.dart';
 import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
-// ignore: unused_import
-import 'package:path/path.dart';
 
 class ReconBillet extends StatefulWidget {
   const ReconBillet({super.key});
@@ -29,14 +27,21 @@ class _ReconBilletState extends State<ReconBillet> {
   }
 
   Future<void> _initCamera() async {
+  try {
     final cameras = await availableCameras();
     final backCamera = cameras.firstWhere(
       (camera) => camera.lensDirection == CameraLensDirection.back,
     );
     _cameraController = CameraController(backCamera, ResolutionPreset.high);
+
     await _cameraController!.initialize();
     setState(() => _isCameraInitialized = true);
+  } on CameraException catch (e) {
+    await tts.speak("لا يمكن فتح الكاميرا. تأكد من إعطاء الصلاحيات");
+    print("Camera error: $e");
   }
+}
+
 
   void _initTTS() {
     tts.setLanguage("ar-AR");
@@ -47,9 +52,7 @@ class _ReconBilletState extends State<ReconBillet> {
   }
 
   Future<void> _takePictureAndAnalyze() async {
-    if (!_isCameraInitialized || _cameraController!.value.isTakingPicture) {
-      return;
-    }
+    if (!_isCameraInitialized || _cameraController!.value.isTakingPicture) return;
 
     final _ = await getTemporaryDirectory();
     final file = await _cameraController!.takePicture();
@@ -61,7 +64,11 @@ class _ReconBilletState extends State<ReconBillet> {
     if (billet == 'أعد المحاولة') {
       final colorName = await getDominantColorName(imageFile);
       if (colorName == 'رمادي') {
-        billet = '1000 دينار';
+        billet = '١٠٠٠ دينار';
+      } else if (colorName == 'أزرق') {
+        billet = '٥٠٠ دينار';
+      } else if (colorName == 'أخضر') {
+        billet = '٢٠٠٠ دينار';
       }
     }
 
@@ -80,24 +87,32 @@ class _ReconBilletState extends State<ReconBillet> {
     return recognizedText.text;
   }
 
+  String convertArabicToEnglishNumbers(String input) {
+    const arabicDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    for (int i = 0; i < arabicDigits.length; i++) {
+      input = input.replaceAll(arabicDigits[i], i.toString());
+    }
+    return input;
+  }
+
   String _analyzeBillet(String text) {
     final lowerText = text.toLowerCase();
-    final cleanText = text.replaceAll(RegExp(r'\D'), '');
+    final convertedText = convertArabicToEnglishNumbers(lowerText);
+    final cleanText = convertedText.replaceAll(RegExp(r'[^\d]'), '');
 
-    if (cleanText.contains('2000')) return '2000 دينار';
-    if (cleanText.contains('1000') ||
-        cleanText.contains('100') ||
-        lowerText.contains('الف دينار')) {
-      return '1000 دينار';
+    if (cleanText.contains('2000')) return '٢٠٠٠ دينار';
+    if (cleanText.contains('1000') || lowerText.contains('1000') || lowerText.contains('الف')) {
+      return '١٠٠٠ دينار';
     }
-    if (cleanText.contains('500') || lowerText.contains('خمسمائة دينار')) {
-      return '500 دينار';
+    if (cleanText.contains('500') || lowerText.contains('500') || lowerText.contains('خمسمائة')) {
+      return '٥٠٠ دينار';
     }
 
+    // Extra Arabic word fallback
     if (lowerText.contains('دينار')) {
-      if (lowerText.contains('الفين')) return '٢٠٠٠ دينار';
-      if (lowerText.contains('الف')) return '١٠٠٠ دينار';
-      if (lowerText.contains('خمسمائة')) return '٥٠٠ دينار';
+      if (lowerText.contains('الفين') || lowerText.contains('٢٠٠٠')) return '٢٠٠٠ دينار';
+      if (lowerText.contains('الف') || lowerText.contains('١٠٠٠')) return '١٠٠٠ دينار';
+      if (lowerText.contains('خمسمائة') || lowerText.contains('٥٠٠')) return '٥٠٠ دينار';
     }
 
     return 'أعد المحاولة';
@@ -106,7 +121,7 @@ class _ReconBilletState extends State<ReconBillet> {
   Future<String> getDominantColorName(File imageFile) async {
     final palette = await PaletteGenerator.fromImageProvider(
       FileImage(imageFile),
-      maximumColorCount: 3,
+      maximumColorCount: 5,
     );
     final List<Color> colors = palette.colors.toList();
     if (colors.isEmpty) return 'غير معروف';
@@ -114,9 +129,9 @@ class _ReconBilletState extends State<ReconBillet> {
     final color = colors[0];
     final r = color.red, g = color.green, b = color.blue;
 
-    if (r > 100 && r < 200 && g > 100 && g < 200 && b > 100 && b < 200) {
-      return 'رمادي';
-    }
+   
+    if (b > r && b > g) return 'أزرق';
+    if (g > r && g > b) return 'أخضر';
 
     return 'غير معروف';
   }
@@ -134,25 +149,21 @@ class _ReconBilletState extends State<ReconBillet> {
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 253, 239, 255),
         appBar: AppBar(
-          title: Text("reconnaissance de billets",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white
-          ),),
+          title: const Text(
+            "التعرف على المال",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          ),
           backgroundColor: Colors.purple[800],
         ),
-        
-          body: _isCameraInitialized
+        body: _isCameraInitialized
             ? Stack(
                 children: [
-                  // Make CameraPreview fill the available space
                   Positioned.fill(
                     child: GestureDetector(
                       onTap: _takePictureAndAnalyze,
                       child: CameraPreview(_cameraController!),
                     ),
                   ),
-                  // Show result text in center if available
                   if (_resultText.isNotEmpty)
                     Align(
                       alignment: Alignment.center,

@@ -1,18 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_learn1/extract_read_flutter_tts/PDFToSpeechScreen.dart';
-import 'package:firebase_storage/firebase_storage.dart'; // For downloading and deleting file
-import 'package:cloud_firestore/cloud_firestore.dart'; // For deleting Firestore document
-// For file download handling
-import 'package:path_provider/path_provider.dart'; // For accessing device storage
-import 'dart:io'; // For File handling
- // For managing file downloads
+import 'package:firebase_storage/firebase_storage.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart'; 
+
+import 'package:path_provider/path_provider.dart'; 
+import 'dart:io'; 
+ 
 
 class FileContaner extends StatefulWidget {
   final String file_name;
   final String file_id;
-  final String storage_path; // Path of the file in Firebase Storage
-  final String docId; // Firestore document ID
+  final String storage_path; 
+  final String docId; 
 
   const FileContaner({
     super.key,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class SignUpEtud extends StatefulWidget {
   const SignUpEtud({super.key});
@@ -17,7 +18,15 @@ class _SignUpEtudState extends State<SignUpEtud> {
   final mdpctr = TextEditingController();
   final confirmemdpctr = TextEditingController();
 
-  
+  FlutterTts flutterTts = FlutterTts();
+  Future<void> parler(String text) async {
+    await flutterTts.setLanguage("ar");
+    await flutterTts.setSpeechRate(0.75);
+    await flutterTts.setPitch(1.0);
+    await flutterTts.setVolume(1.0);
+    await flutterTts.speak(text);
+  }
+
   String? selectedSpecialite;
   List<String> specialiteOptions = [
     'Informatique',
@@ -26,7 +35,6 @@ class _SignUpEtudState extends State<SignUpEtud> {
     'Science de la matière',
   ];
 
-  
   String? selectedlevel;
   List<String> levelOptions = [
     'Licence1',
@@ -41,11 +49,22 @@ class _SignUpEtudState extends State<SignUpEtud> {
   }
 
   Future<void> signupetud() async {
-    if (!formKey.currentState!.validate()) return;
+    if (!formKey.currentState!.validate()) {
+      parler("هذه الحقول النصية إلزامية");
+      return;
+    }
     if (!mdpconfirmer()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("كلمات المرور غير متطابقة")),
+        const SnackBar(
+          content: Text(
+            "لقد أدخلت كلمتي مرور مختلفتين",
+            style: TextStyle(
+                color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.red,
+        ),
       );
+      parler("لقد أدخلت كلمتي مرور مختلفتين");
       return;
     }
 
@@ -72,14 +91,20 @@ class _SignUpEtudState extends State<SignUpEtud> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("!تم التسجيل بنجاح")),
+        const SnackBar(
+          content: Text(
+            "لقد قمت بالتسجيل بنجاح",
+            style: TextStyle(
+                color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.green,
+        ),
       );
+      parler("لقد قمت بالتسجيل بنجاح");
 
-      Navigator.of(context).pushNamed("/");
+      Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erreur: $e")),
-      );
+      print("$e");
     }
   }
 
@@ -92,9 +117,26 @@ class _SignUpEtudState extends State<SignUpEtud> {
     super.dispose();
   }
 
+  String? splni(String? text) {
+    if (text == null || text.isEmpty) {
+      parler("الرجاء اختيار المستوى");
+      return "الرجاء اختيار المستوى";
+    }
+    return null;
+  }
+
+  String? spl(String? text) {
+    if (text == null || text.isEmpty) {
+      parler("الرجاء اختيار التخصص");
+      return "الرجاء اختيار التخصص";
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Directionality( // <--- Important to make everything RTL
+    return Directionality(
+      // <--- Important to make everything RTL
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 230, 222, 231),
@@ -113,7 +155,6 @@ class _SignUpEtudState extends State<SignUpEtud> {
                     ),
                     const SizedBox(height: 20),
                     buildTextField(npctr, "الاسم واللقب"),
-
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: DropdownButtonFormField<String>(
@@ -138,8 +179,7 @@ class _SignUpEtudState extends State<SignUpEtud> {
                             selectedlevel = value;
                           });
                         },
-                        validator: (value) =>
-                            value == null ? "الرجاء اختيار المستوى" : null,
+                        validator: (value) => splni(value),
                         items: levelOptions.map((option) {
                           return DropdownMenuItem<String>(
                             value: option,
@@ -148,7 +188,6 @@ class _SignUpEtudState extends State<SignUpEtud> {
                         }).toList(),
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: DropdownButtonFormField<String>(
@@ -173,8 +212,7 @@ class _SignUpEtudState extends State<SignUpEtud> {
                             selectedSpecialite = value;
                           });
                         },
-                        validator: (value) =>
-                            value == null ? "الرجاء اختيار التخصص" : null,
+                        validator: (value) => spl(value),
                         items: specialiteOptions.map((option) {
                           return DropdownMenuItem<String>(
                             value: option,
@@ -183,11 +221,11 @@ class _SignUpEtudState extends State<SignUpEtud> {
                         }).toList(),
                       ),
                     ),
-
-                    buildTextField(emailctr, "البريد الإلكتروني", isEmail: true),
+                    buildTextField(emailctr, "البريد الإلكتروني",
+                        isEmail: true),
                     buildTextField(mdpctr, "كلمة المرور", isPassword: true),
-                    buildTextField(confirmemdpctr, "تأكيد كلمة المرور", isPassword: true),
-
+                    buildTextField(confirmemdpctr, "تأكيد كلمة المرور",
+                        isPassword: true),
                     const SizedBox(height: 10),
                     SizedBox(
                       width: double.infinity,

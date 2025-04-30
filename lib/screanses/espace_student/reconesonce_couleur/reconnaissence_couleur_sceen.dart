@@ -25,18 +25,32 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
   }
 
   Future<void> initializeCamera() async {
+  try {
     final cameras = await availableCameras();
-    cameraController = CameraController(cameras[0], ResolutionPreset.high);
+    final backCamera = cameras.firstWhere(
+      (camera) => camera.lensDirection == CameraLensDirection.back,
+      orElse: () => cameras[0], // fallback to first camera
+    );
+
+    cameraController = CameraController(backCamera, ResolutionPreset.high);
     await cameraController!.initialize();
+
     if (mounted) {
       setState(() {});
     }
+  } on CameraException catch (e) {
+    print('Camera initialization failed: ${e.description}');
+  } catch (e) {
+    print('Unknown error: $e');
   }
+}
+
 
   Future<void> parler(String text) async {
+    await flutterTts.setLanguage("ar");
     await flutterTts.setSpeechRate(0.75);
-    await flutterTts.setPitch(1.0); // Garde une voix naturelle
-    await flutterTts.setVolume(1.0); // Volume au maximum
+    await flutterTts.setPitch(1.0); 
+    await flutterTts.setVolume(1.0); 
     await flutterTts.speak(text);
   }
 
