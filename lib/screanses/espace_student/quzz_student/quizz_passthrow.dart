@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_learn1/componente/student_side/quizz_contaner.dart';
+import 'package:hear_learn1/data/cheker.dart';
 import 'package:hear_learn1/screanses/espace_student/quzz_student/take_quiz.dart';
 
 class QuizPassThrough extends StatelessWidget {
@@ -59,7 +60,7 @@ class QuizPassThrough extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          backgroundColor: Colors.purple[800],
+          backgroundColor: Cheker.first_color,
         ),
         body: FutureBuilder<Map<String, dynamic>>(
           future: _getStudentInfo(),

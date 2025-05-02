@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hear_learn1/data/cheker.dart';
 
 class EditQuizScreen extends StatefulWidget {
   final DocumentSnapshot quizDoc;
@@ -79,58 +80,64 @@ class _EditQuizScreenState extends State<EditQuizScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Modifier le Quiz")),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: questionController,
-              decoration: InputDecoration(labelText: "Question"),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: optionAController,
-              decoration: InputDecoration(labelText: "Option A"),
-            ),
-            TextField(
-              controller: optionBController,
-              decoration: InputDecoration(labelText: "Option B"),
-            ),
-            TextField(
-              controller: optionCController,
-              decoration: InputDecoration(labelText: "Option C"),
-            ),
-            TextField(
-              controller: optionDController,
-              decoration: InputDecoration(labelText: "Option D"),
-            ),
-            SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              value: correctAnswer,
-              items: ['a', 'b', 'c', 'd'].map((letter) {
-                return DropdownMenuItem(
-                  value: letter,
-                  child: Text("Bonne réponse : ${letter.toUpperCase()}"),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  correctAnswer = value;
-                });
-              },
-              decoration: InputDecoration(labelText: "Bonne réponse"),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: saveEdits,
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Cheker.first_color,
+          title: Text("تعديل سؤال")),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: questionController,
+                decoration: InputDecoration(labelText: "سؤال"),
               ),
-              child: Text("Enregistrer les modifications"),
-            ),
-          ],
+              SizedBox(height: 16),
+              TextField(
+                controller: optionAController,
+                decoration: InputDecoration(labelText: "الخيار أ"),
+              ),
+              TextField(
+                controller: optionBController,
+                decoration: InputDecoration(labelText: "الخيار ب"),
+              ),
+              TextField(
+                controller: optionCController,
+                decoration: InputDecoration(labelText: "الخيار ج"),
+              ),
+              TextField(
+                controller: optionDController,
+                decoration: InputDecoration(labelText: "الخيار د"),
+              ),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: correctAnswer,
+                items: ['a', 'b', 'c', 'd'].map((letter) {
+                  return DropdownMenuItem(
+                    value: letter,
+                    child: Text("الإجابة الصحيحة: ${letter.toUpperCase()}"),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    correctAnswer = value;
+                  });
+                },
+                decoration: InputDecoration(labelText: "الإجابة الصحيحة"),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: saveEdits,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Cheker.second_color,
+                  minimumSize: Size(double.infinity, 50),
+                ),
+                child: Text("حفظ التغييرات"),
+              ),
+            ],
+          ),
         ),
       ),
     );

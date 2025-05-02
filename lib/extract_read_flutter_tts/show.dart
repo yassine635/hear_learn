@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hear_learn1/componente/student_side/file_contaner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart'; // For deleting storage file
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:hear_learn1/data/cheker.dart'; // For deleting storage file
 
 class Shou extends StatefulWidget {
   final String type;
@@ -77,7 +78,7 @@ class _ShouCourState extends State<Shou> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple[800],
+        backgroundColor: Cheker.first_color,
         title: Text(
           widget.type,
           style: TextStyle(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hear_learn1/data/cheker.dart';
 import 'package:hear_learn1/screanses/espace_student/filemanegment_cour_td_tp/contnue_module_student.dart';
 
 class Module extends StatelessWidget {
@@ -8,7 +9,7 @@ class Module extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.purple[400],
+        color: Cheker.second_color,
         borderRadius: BorderRadius.circular(20),
       ),
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hear_learn1/componente/student_side/module.dart';
+import 'package:hear_learn1/data/cheker.dart';
 import 'package:hear_learn1/data/listyears.dart';
 
 //import 'package:hear_learn1/screanses/teacher_dashboard.dart';
@@ -53,7 +54,7 @@ class Home_student extends StatelessWidget {
             icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
           ),
         ],
-        backgroundColor: Colors.purple[800],
+        backgroundColor: Cheker.first_color,
       ),
       body: Column(
         children: [

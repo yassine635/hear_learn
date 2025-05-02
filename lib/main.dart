@@ -31,6 +31,7 @@ class hearlern extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "بصيرتي",
       initialRoute: "/",
       routes: {
         "/": (context) => const Auth(),

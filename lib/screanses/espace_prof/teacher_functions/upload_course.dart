@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:hear_learn1/data/cheker.dart';
 
 class UploadCourse extends StatefulWidget {
   const UploadCourse({
@@ -124,12 +125,12 @@ class _UploadCourseState extends State<UploadCourse> {
       });
 
       setState(() {
-        uploadStatus = "Fichier Téléverser avec succès ✅";
+        uploadStatus = "تم تحميل الملف بنجاح ✅";
       });
     } catch (e) {
       print("Erreur: $e");
       setState(() {
-        uploadStatus = "Erreur lors du téléchargement ❌";
+        uploadStatus = "خطأ أثناء التنزيل ❌";
       });
     }
   }
@@ -140,165 +141,168 @@ class _UploadCourseState extends State<UploadCourse> {
     final List data = args as List;
     module_name = data[1];
     selectedType = data[0];
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text("تحميل الملفات ",
-            style: TextStyle(fontSize: 24, color: Colors.white)),
-        backgroundColor: Colors.purple[800],
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-
-              Row(
-                children: [
-                  SizedBox(width: 50),
-                  
-                  Expanded(
-                    child: Text(
-                      "تحميل الملف إلى",
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text("تحميل الملفات ",
+              style: TextStyle(fontSize: 24, color: Colors.white)),
+          backgroundColor: Cheker.first_color,
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
+            ),
+          ],
+        ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+      
+                Row(
+                  children: [
+                    SizedBox(width: 50),
+                    
+                    Expanded(
+                      child: Text(
+                        "تحميل الملف إلى",
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Text(
-                    module_name,
-                     style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                    ),
-              Icon(Icons.upload_file, size: 100, color: Colors.black),
-              SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: pickFile,
-                icon: Icon(Icons.folder_open, color: Colors.black),
-                label: Text("حدد الملف",
-                    style: TextStyle(color: Colors.black, fontSize: 24,fontWeight: FontWeight.bold)),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50),
-                  backgroundColor: Colors.purple[400],
+                  ],
                 ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.purple, // Purple border
-                    width: 1.5,
+                Text(
+                      module_name,
+                       style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                Icon(Icons.upload_file, size: 100, color: Colors.black),
+                SizedBox(height: 20),
+                ElevatedButton.icon(
+                  onPressed: pickFile,
+                  icon: Icon(Icons.folder_open, color: Colors.black),
+                  label: Text("حدد الملف",
+                      style: TextStyle(color: Colors.black, fontSize: 24,fontWeight: FontWeight.bold)),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50),
+                    backgroundColor: Cheker.second_color,
                   ),
-                  borderRadius: BorderRadius.circular(8), // Rounded corners
                 ),
-                child: Text(
-                  selectedFile != null
-                      ? "${selectedFile!.name}:الملف محدد"
-                      : "لم يتم تحديد أي ملف",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                  value: selectedlevel,
-                  hint: const Text("مستوى:", textDirection: TextDirection.rtl),
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                      borderRadius: BorderRadius.circular(30),
+                SizedBox(height: 20),
+                Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Cheker.first_color, // Purple border
+                      width: 1.5,
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedlevel = value;
-                    });
-                  },
-                  validator: (value) =>
-                      value == null ? "الرجاء اختيار المستوى" : null,
-                  items: niveaux.map((option) {
-                    return DropdownMenuItem<String>(
-                      value: option.toString(),
-                      child: Text(option.toString(), textDirection: TextDirection.rtl),
-                    );
-                  }).toList(),
+                  child: Text(
+                    selectedFile != null
+                        ? "${selectedFile!.name}:الملف محدد"
+                        : "لم يتم تحديد أي ملف",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(height: 20),
                 DropdownButtonFormField<String>(
-                  value: selectedmodule,
-                  hint: const Text("الوحدة:", textDirection: TextDirection.rtl),
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                      borderRadius: BorderRadius.circular(30),
+                    value: selectedlevel,
+                    hint: const Text("مستوى:", textDirection: TextDirection.rtl),
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:  BorderSide(
+                            color: Cheker.first_color, width: 1.5),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:  BorderSide(
+                            color: Cheker.first_color, width: 1.5),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedlevel = value;
+                      });
+                    },
+                    validator: (value) =>
+                        value == null ? "الرجاء اختيار المستوى" : null,
+                    items: niveaux.map((option) {
+                      return DropdownMenuItem<String>(
+                        value: option.toString(),
+                        child: Text(option.toString(), textDirection: TextDirection.rtl),
+                      );
+                    }).toList(),
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedmodule = value;
-                    });
-                  },
-                  validator: (value) =>
-                      value == null ? "الرجاء اختيار الوحدة" : null,
-                  items: modulse.map((option) {
-                    return DropdownMenuItem<String>(
-                      value: option.toString(),
-                      child: Text(option.toString(), textDirection: TextDirection.rtl),
-                    );
-                  }).toList(),
+                  SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    value: selectedmodule,
+                    hint: const Text("الوحدة:", textDirection: TextDirection.rtl),
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:  BorderSide(
+                            color: Cheker.first_color, width: 1.5),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:  BorderSide(
+                            color: Cheker.first_color, width: 1.5),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedmodule = value;
+                      });
+                    },
+                    validator: (value) =>
+                        value == null ? "الرجاء اختيار الوحدة" : null,
+                    items: modulse.map((option) {
+                      return DropdownMenuItem<String>(
+                        value: option.toString(),
+                        child: Text(option.toString(), textDirection: TextDirection.rtl),
+                      );
+                    }).toList(),
+                  ),
+      
+                SizedBox(height: 20),
+                
+                Text(
+                  uploadStatus,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: uploadStatus.contains("نجاح")
+                        ? Colors.green
+                        : uploadStatus.contains("خطأ")
+                            ? Colors.red
+                            : Colors.orange,
+                  ),
                 ),
-
-              SizedBox(height: 20),
-              
-              Text(
-                uploadStatus,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: uploadStatus.contains("نجاح")
-                      ? Colors.green
-                      : uploadStatus.contains("خطأ")
-                          ? Colors.red
-                          : Colors.orange,
+                ElevatedButton.icon(
+                  onPressed: uploadFile,
+                  icon: Icon(Icons.cloud_upload, color: Colors.black),
+                  label: Text("تحميل الملف",
+                      style: TextStyle(color: Colors.black, fontSize: 24,fontWeight: FontWeight.bold)),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50),
+                    backgroundColor: Cheker.second_color,
+                  ),
                 ),
-              ),
-              ElevatedButton.icon(
-                onPressed: uploadFile,
-                icon: Icon(Icons.cloud_upload, color: Colors.black),
-                label: Text("تحميل الملف",
-                    style: TextStyle(color: Colors.black, fontSize: 24,fontWeight: FontWeight.bold)),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50),
-                  backgroundColor: Colors.purple[400],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

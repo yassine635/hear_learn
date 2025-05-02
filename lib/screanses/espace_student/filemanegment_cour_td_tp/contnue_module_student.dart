@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hear_learn1/componente/student_side/cour.dart';
 import 'package:hear_learn1/componente/student_side/td.dart';
 import 'package:hear_learn1/componente/student_side/tp.dart';
+import 'package:hear_learn1/data/cheker.dart';
 import 'package:hear_learn1/extract_read_flutter_tts/show.dart';
 
 class Contnue_Module_Student extends StatefulWidget {
@@ -81,40 +82,43 @@ class _Contnue_Module_StudentState extends State<Contnue_Module_Student> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(widget.module,
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold)),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
-          ),
-        ],
-        backgroundColor: Colors.purple[800],
-      ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Cour(
-                  onpressed: () => fetchStudentAndFiles("cour"),
-                ),
-                Td(
-                  onpressed: () => fetchStudentAndFiles("td"),
-                ),
-                Tp(
-                  onpressed: () => fetchStudentAndFiles("tp"),
-                ),
-              ],
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(widget.module,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold)),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
             ),
+          ],
+          backgroundColor: Cheker.first_color,
+        ),
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  Cour(
+                    onpressed: () => fetchStudentAndFiles("cour"),
+                  ),
+                  Td(
+                    onpressed: () => fetchStudentAndFiles("td"),
+                  ),
+                  Tp(
+                    onpressed: () => fetchStudentAndFiles("tp"),
+                  ),
+                ],
+              ),
+      ),
     );
   }
 }

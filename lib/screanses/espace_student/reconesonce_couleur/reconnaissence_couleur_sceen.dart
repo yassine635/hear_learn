@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:hear_learn1/data/cheker.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class ReconnaissanceCouleur extends StatefulWidget {
@@ -176,39 +177,42 @@ class _ReconnaissanceCouleurState extends State<ReconnaissanceCouleur> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 208, 169, 212),
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 208, 169, 212),
-        title: Text(
-          "التعرف على الالوان",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child:
-                cameraController == null ||
-                        !cameraController!.value.isInitialized
-                    ? Center(child: CircularProgressIndicator())
-                    : GestureDetector(
-                      onTap: prendrePhoto,
-                      child: CameraPreview(cameraController!),
-                    ),
+    return Directionality( 
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor:  const Color.fromARGB(255, 133, 218, 255),
+        appBar: AppBar(
+          backgroundColor: Cheker.first_color,
+          title: Text(
+            "التعرف على الالوان",
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          if (imagepath != null) ...[
-            SizedBox(height: 10),
-            Center(
-              child: Text(
-                "الصورة :",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child:
+                  cameraController == null ||
+                          !cameraController!.value.isInitialized
+                      ? Center(child: CircularProgressIndicator())
+                      : GestureDetector(
+                        onTap: prendrePhoto,
+                        child: CameraPreview(cameraController!),
+                      ),
             ),
-            Image.file(File(imagepath!), height: 200),
+            if (imagepath != null) ...[
+              SizedBox(height: 10),
+              Center(
+                child: Text(
+                  "الصورة :",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Image.file(File(imagepath!), height: 200),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

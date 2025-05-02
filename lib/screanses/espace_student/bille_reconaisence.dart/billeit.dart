@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:hear_learn1/data/cheker.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
@@ -145,47 +146,50 @@ class _ReconBilletState extends State<ReconBillet> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 253, 239, 255),
-        appBar: AppBar(
-          title: const Text(
-            "التعرف على المال",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: const Color.fromARGB(255, 253, 239, 255),
+          appBar: AppBar(
+            title: const Text(
+              "التعرف على المال",
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            backgroundColor: Cheker.first_color,
           ),
-          backgroundColor: Colors.purple[800],
-        ),
-        body: _isCameraInitialized
-            ? Stack(
-                children: [
-                  Positioned.fill(
-                    child: GestureDetector(
-                      onTap: _takePictureAndAnalyze,
-                      child: CameraPreview(_cameraController!),
+          body: _isCameraInitialized
+              ? Stack(
+                  children: [
+                    Positioned.fill(
+                      child: GestureDetector(
+                        onTap: _takePictureAndAnalyze,
+                        child: CameraPreview(_cameraController!),
+                      ),
                     ),
-                  ),
-                  if (_resultText.isNotEmpty)
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.black54,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Text(
-                          _resultText,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
+                    if (_resultText.isNotEmpty)
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Text(
+                            _resultText,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                ],
-              )
-            : const Center(child: CircularProgressIndicator()),
+                  ],
+                )
+              : const Center(child: CircularProgressIndicator()),
+        ),
       ),
     );
   }

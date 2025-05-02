@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:hear_learn1/data/cheker.dart';
 
 class SignUpEtud extends StatefulWidget {
   const SignUpEtud({super.key});
@@ -136,10 +137,10 @@ class _SignUpEtudState extends State<SignUpEtud> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      // <--- Important to make everything RTL
+      
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 230, 222, 231),
+        backgroundColor:  Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Container(
@@ -162,14 +163,14 @@ class _SignUpEtudState extends State<SignUpEtud> {
                         hint: const Text("المستوى"),
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 160, 46, 180),
+                            borderSide:  BorderSide(
+                                color: Cheker.first_color,
                                 width: 1.5),
                             borderRadius: BorderRadius.circular(30),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 160, 46, 180),
+                            borderSide:  BorderSide(
+                                color: Cheker.first_color,
                                 width: 1.5),
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -195,14 +196,14 @@ class _SignUpEtudState extends State<SignUpEtud> {
                         hint: const Text("التخصص"),
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 160, 46, 180),
+                            borderSide:  BorderSide(
+                                color: Cheker.first_color,
                                 width: 1.5),
                             borderRadius: BorderRadius.circular(30),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 160, 46, 180),
+                            borderSide:  BorderSide(
+                                color: Cheker.first_color,
                                 width: 1.5),
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -233,7 +234,8 @@ class _SignUpEtudState extends State<SignUpEtud> {
                       child: ElevatedButton(
                         style: ButtonStyle(
                           backgroundColor:
-                              WidgetStateProperty.all(Colors.purple[300]),
+                              WidgetStateProperty.all(Cheker.second_color
+                            ),
                         ),
                         onPressed: signupetud,
                         child: const Text(
@@ -261,20 +263,20 @@ class _SignUpEtudState extends State<SignUpEtud> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
-        textDirection: TextDirection.rtl, // TextField content RTL
+        textDirection: TextDirection.rtl, 
         controller: controller,
         obscureText: isPassword,
         keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
         decoration: InputDecoration(
           hintText: hintText,
           enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderSide:  BorderSide(
+                color: Cheker.first_color, width: 1.5),
             borderRadius: BorderRadius.circular(30),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderSide:  BorderSide(
+                color: Cheker.first_color, width: 1.5),
             borderRadius: BorderRadius.circular(30),
           ),
         ),

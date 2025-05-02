@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hear_learn1/data/cheker.dart';
 import 'package:hear_learn1/screanses/espace_student/quzz_student/quiz_results.dart';
 
 class TakeQuizScreen extends StatefulWidget {
@@ -101,7 +102,9 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
       return Directionality( 
       textDirection: TextDirection.rtl,
         child: Scaffold(
+          
           appBar: AppBar(
+            backgroundColor: Cheker.first_color,
             title: Text(
               'الاختبار',
                 style: TextStyle(
@@ -120,45 +123,49 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
     final question = quiz.get('question') ?? '';
     final options = Map<String, dynamic>.from(quiz.get('options') ?? {});
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Question ${currentQuestionIndex + 1}/${quizzes.length}',
-          style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-                fontWeight: FontWeight.bold
+    return Directionality( 
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Cheker.first_color,
+          title: Text(
+            'سؤال ${currentQuestionIndex + 1}/${quizzes.length}',
+            style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold
+                ),
+              )
+            ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                question,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-            )
+              SizedBox(height: 20),
+              ...options.entries.map((entry) {
+                return RadioListTile<String>(
+                  title: Text(entry.value),
+                  value: entry.key,
+                  groupValue: selectedAnswer,
+                  onChanged: (value) {
+                    _checkAnswer(value!);
+                  },
+                );
+              }),
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _submitQuiz,
+                  child: Text('إرسال الإجابة'),
+                ),
+              ),
+            ],
           ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              question,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            ...options.entries.map((entry) {
-              return RadioListTile<String>(
-                title: Text(entry.value),
-                value: entry.key,
-                groupValue: selectedAnswer,
-                onChanged: (value) {
-                  _checkAnswer(value!);
-                },
-              );
-            }),
-            SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: _submitQuiz,
-                child: Text('إرسال الإجابة'),
-              ),
-            ),
-          ],
         ),
       ),
     );

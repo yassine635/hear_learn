@@ -96,88 +96,91 @@ class _FonctionaliteState extends State<Fonctionalite> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.purple[700],
-        title: const Text(
-          "HearLearn",
-          style: TextStyle(
-              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Cheker.first_color,
+          title: const Text(
+            "بصيرتي",
+            style: TextStyle(
+                fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          leading: IconButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushNamed(context, "/log_in_screen");
+            },
+            icon: const Icon(Icons.logout),
+          ),
         ),
-        leading: IconButton(
-          onPressed: () async {
-            await FirebaseAuth.instance.signOut();
-            Navigator.pushNamed(context, "/log_in_screen");
-          },
-          icon: const Icon(Icons.logout),
-        ),
-      ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              userType == 1
-                  ? "مرحباً بالطالب"
-                  : userType == 2
-                      ? "مرحباً أستاذ"
-                      : "تحميل...",
-              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-
-            // Shared
-            _buildButton("فضاء التعليمي", Icons.book, navigateToModule),
-
-            // Teacher-only
-            if (!isStudent())
-              _buildButton("انشاء اسئلة", Icons.computer, () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CreateQuizScreen()),
-                );
-              }),
-
-            if (!isStudent())
-              _buildButton("دارة الاسئلة", Icons.list_alt, () {
-                final teacherId = FirebaseAuth.instance.currentUser?.uid;
-
-                if (teacherId != null) {
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                userType == 1
+                    ? "مرحباً بالطالب"
+                    : userType == 2
+                        ? "مرحباً أستاذ"
+                        : "تحميل...",
+                style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+      
+              // Shared
+              _buildButton("الفضاء التعليمي", Icons.book, navigateToModule),
+      
+              // Teacher-only
+              if (!isStudent())
+                _buildButton("انشاء اسئلة", Icons.computer, () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          TeacherQuizDashboard(teacherId: teacherId),
-                    ),
+                    MaterialPageRoute(builder: (context) => CreateQuizScreen()),
                   );
-                }
-              }),
-
-            // Student-only
-            if (isStudent())
-              _buildButton("بدءالاسئلة", Icons.quiz, () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => QuizPassThrough()),
-                );
-              }),
-
-            if (isStudent())
-              _buildButton("تعرف على الالوان", Icons.color_lens, () {
-                Navigator.pushNamed(context, "/reconnaissence_couleur_sceen");
-              }),
-
-            if (isStudent())
-              _buildButton("تعرف على نقود", Icons.money, () {
-                Navigator.pushNamed(context, "/reconnaissence_billet_sceen");
-              }),
-
-            if (isStudent())
-              _buildButton("زر الاستعجالات", Icons.phone, () {
-                Navigator.pushNamed(context, "/emergency");
-              }),
-          ],
+                }),
+      
+              if (!isStudent())
+                _buildButton("ادارة الاسئلة", Icons.list_alt, () {
+                  final teacherId = FirebaseAuth.instance.currentUser?.uid;
+      
+                  if (teacherId != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            TeacherQuizDashboard(teacherId: teacherId),
+                      ),
+                    );
+                  }
+                }),
+      
+              // Student-only
+              if (isStudent())
+                _buildButton("بدء الاسئلة", Icons.quiz, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => QuizPassThrough()),
+                  );
+                }),
+      
+              if (isStudent())
+                _buildButton("التعرف على الالوان", Icons.color_lens, () {
+                  Navigator.pushNamed(context, "/reconnaissence_couleur_sceen");
+                }),
+      
+              if (isStudent())
+                _buildButton("التعرف على النقود", Icons.money, () {
+                  Navigator.pushNamed(context, "/reconnaissence_billet_sceen");
+                }),
+      
+              if (isStudent())
+                _buildButton("زر الاستعجالات", Icons.phone, () {
+                  Navigator.pushNamed(context, "/emergency");
+                }),
+            ],
+          ),
         ),
       ),
     );
@@ -188,22 +191,22 @@ class _FonctionaliteState extends State<Fonctionalite> {
       height: 80,
       margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Colors.purple,
+        color: Cheker.second_color,
         borderRadius: BorderRadius.circular(40),
       ),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.purple[400],
+          backgroundColor: Cheker.second_color,
           foregroundColor: Colors.black,
         ),
         child: Row(
             // Set RTL direction for row
-          mainAxisAlignment: MainAxisAlignment.end, // Align content to the right
+          
           children: [
             
             Icon(icon, color: Colors.black, size: 40), // Icon comes first on the right
-            Spacer(),
+            
             const SizedBox(width: 10),  // Space between icon and text
             Text(
               text,

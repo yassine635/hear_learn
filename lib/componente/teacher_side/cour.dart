@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hear_learn1/componente/teacher_side/deposer.dart';
+import 'package:hear_learn1/data/cheker.dart';
 
 class Cour extends StatelessWidget {
   final VoidCallback onpressed;
@@ -16,7 +17,7 @@ class Cour extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.purple[600],
+        color: Cheker.second_color,
         borderRadius: BorderRadius.circular(20),
       ),
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -33,12 +34,12 @@ class Cour extends StatelessWidget {
               label: Text(
                 "الدروس",
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 30,
                   fontWeight: FontWeight.bold
                 ),
               ),
-              icon: Icon(Icons.book, size: 30, color: Colors.white),
+              icon: Icon(Icons.book, size: 30, color: Colors.black),
             ),
             Deposer(onpressed: onpressed,),
           ],

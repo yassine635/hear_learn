@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hear_learn1/data/cheker.dart';
 
 class QuizResultsScreen extends StatelessWidget {
   final int correctAnswers;
@@ -13,7 +14,7 @@ class QuizResultsScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.purple,
+          backgroundColor: Cheker.first_color,
           automaticallyImplyLeading: false,
           title: Text(
             'نتائج الاختبار',
@@ -46,7 +47,7 @@ class QuizResultsScreen extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purple, // Background color
+                      backgroundColor: Cheker.second_color, // Background color
                       foregroundColor: Colors.white, // Text color
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(

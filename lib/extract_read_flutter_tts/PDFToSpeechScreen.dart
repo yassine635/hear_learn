@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_mlkit_language_id/google_mlkit_language_id.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:hear_learn1/data/cheker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf_render/pdf_render.dart' as pdf_render;
 import 'package:syncfusion_flutter_pdf/pdf.dart' as syncfusion;
@@ -186,7 +187,7 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.purple[800],
+        backgroundColor: Cheker.first_color,
         title: const Text(
           "استخراج النص",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white70),
@@ -252,7 +253,7 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.purple, width: 2),
+                      border: Border.all(color: Cheker.first_color, width: 2),
                     ),
                     child: SingleChildScrollView(
                       child: Text(
@@ -270,7 +271,7 @@ class _PdftospeechscreenState extends State<Pdftospeechscreen> {
                       height: 100,
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple,
+                          backgroundColor: Cheker.second_color,
                           foregroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               vertical: 16, horizontal: 24),

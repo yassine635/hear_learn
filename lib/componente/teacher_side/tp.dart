@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:hear_learn1/componente/teacher_side/deposer.dart';
+import 'package:hear_learn1/data/cheker.dart';
 
 class Tp extends StatelessWidget {
   final VoidCallback onpressed; // better type than just Function
@@ -16,7 +17,7 @@ class Tp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.purple[600],
+        color: Cheker.second_color,
         borderRadius: BorderRadius.circular(20),
       ),
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -32,12 +33,12 @@ class Tp extends StatelessWidget {
               label: Text(
                 "اعمال تطبيقية",
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 25,
                 ),
               ),
-              icon: Icon(Icons.computer, size: 30, color: Colors.white),
+              icon: Icon(Icons.computer, size: 30, color: Colors.black),
             ),
             Deposer(
               onpressed: onpressed,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hear_learn1/componente/teacher_side/cour.dart';
 import 'package:hear_learn1/componente/teacher_side/td.dart';
 import 'package:hear_learn1/componente/teacher_side/tp.dart';
+import 'package:hear_learn1/data/cheker.dart';
 import 'package:hear_learn1/extract_read_flutter_tts/show.dart';
 
 class Contnue_Module_Teacher extends StatefulWidget {
@@ -74,7 +75,6 @@ class _Contnue_Module_TeacherState extends State<Contnue_Module_Teacher> {
         ),
       );
     } catch (e) {
-      print("Erreur: $e");
       setState(() {
         isLoading = false;
       });
@@ -99,7 +99,7 @@ class _Contnue_Module_TeacherState extends State<Contnue_Module_Teacher> {
             icon: const Icon(Icons.arrow_back, size: 30, color: Colors.white),
           ),
         ],
-        backgroundColor: Colors.purple[800],
+        backgroundColor: Cheker.first_color,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())

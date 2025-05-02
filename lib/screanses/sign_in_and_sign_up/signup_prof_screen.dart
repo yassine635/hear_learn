@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:hear_learn1/data/cheker.dart';
 
 import 'package:hear_learn1/data/listyears.dart';
 
@@ -289,7 +290,7 @@ class _SignupprofState extends State<SignUpProf> {
                       child: ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor:
-                                WidgetStateProperty.all(Colors.purple[300])),
+                                WidgetStateProperty.all(Cheker.second_color)),
                         onPressed: signup,
                         child: const Text(
                           "التسجيل",
@@ -322,13 +323,13 @@ class _SignupprofState extends State<SignUpProf> {
         decoration: InputDecoration(
           hintText: hintText,
           enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderSide:  BorderSide(
+                color: Cheker.first_color, width: 1.5),
             borderRadius: BorderRadius.circular(30),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderSide:  BorderSide(
+                color: Cheker.first_color, width: 1.5),
             borderRadius: BorderRadius.circular(30),
           ),
         ),
@@ -347,13 +348,13 @@ class _SignupprofState extends State<SignUpProf> {
         hint: Text(label),
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderSide:  BorderSide(
+                color: Cheker.first_color, width: 1.5),
             borderRadius: BorderRadius.circular(30),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: Color.fromARGB(255, 160, 46, 180), width: 1.5),
+            borderSide:  BorderSide(
+                color: Cheker.first_color, width: 1.5),
             borderRadius: BorderRadius.circular(30),
           ),
         ),
@@ -377,7 +378,7 @@ class _SignupprofState extends State<SignUpProf> {
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
           decoration: BoxDecoration(
             border: Border.all(
-                color: const Color.fromARGB(255, 160, 46, 180), width: 1.5),
+                color:  Cheker.first_color, width: 1.5),
             borderRadius: BorderRadius.circular(30),
             color: Colors.white,
           ),

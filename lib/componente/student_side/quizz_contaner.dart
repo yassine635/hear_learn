@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hear_learn1/data/cheker.dart';
 
 class QuizzContaner extends StatelessWidget {
   final String text;
@@ -12,10 +13,10 @@ class QuizzContaner extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.9,
         height: 100,
         decoration: BoxDecoration(
-          color: Colors.purple, // White background
+          color: Cheker.second_color, 
           borderRadius: BorderRadius.circular(400),
           border: Border.all( 
-            color: Colors.purple,
+            color: Cheker.second_color,
             width: 3,
           ),
         ),

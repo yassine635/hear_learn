@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hear_learn1/data/cheker.dart';
 
 class Td extends StatelessWidget {
   final VoidCallback onpressed; 
@@ -10,7 +11,7 @@ class Td extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.purple[400],
+        color: Cheker.second_color,
         borderRadius: BorderRadius.circular(20),
       ),
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),

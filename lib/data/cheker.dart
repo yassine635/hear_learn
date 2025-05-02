@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:flutter/material.dart';
 
 class Cheker {
+  static final Color first_color = Color.fromARGB(255, 53, 124, 186);
+  static final Color second_color = Color.fromARGB(255, 0, 148, 47);
+
   static Future<bool> isFirstTimeEmergency(String uid) async {
     try {
       DocumentSnapshot doc = await FirebaseFirestore.instance
@@ -34,7 +37,6 @@ class Cheker {
         'num_custome': choice,
         'first_time': false,
       });
-      
     } catch (e) {
       print("Error saving emergency numbers: $e");
     }

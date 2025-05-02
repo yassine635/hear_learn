@@ -61,37 +61,40 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "أزرار الطوارئ",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "أزرار الطوارئ",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold
+            ),
+            textAlign: TextAlign.right,
+            ),
+            
+          backgroundColor: Cheker.first_color,
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildButton(context, "عائلة", Cheker.second_color, () => callNumber(familyNumber)),
+              const SizedBox(height: 30),
+              _buildButton(context, "صديق", Cheker.second_color, () => callNumber(friendNumber)),
+              const SizedBox(height: 30),
+              _buildButton(context, "مخصص", Cheker.second_color, () => callNumber(customNumber)),
+              const SizedBox(height: 30),
+              _buildButton(context, "تغيير الأرقام", Cheker.first_color, () {
+                Navigator.pushNamed(
+                  context,
+                  "/emergency_enterise",
+                  arguments: uid,
+                );
+              }),
+            ],
           ),
-          textAlign: TextAlign.right,
-          ),
-          
-        backgroundColor: Colors.purple[800],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildButton(context, "عائلة", Colors.purple, () => callNumber(familyNumber)),
-            const SizedBox(height: 30),
-            _buildButton(context, "صديق", Colors.purple, () => callNumber(friendNumber)),
-            const SizedBox(height: 30),
-            _buildButton(context, "مخصص", Colors.purple, () => callNumber(customNumber)),
-            const SizedBox(height: 30),
-            _buildButton(context, "Change Numbers", Colors.redAccent, () {
-              Navigator.pushNamed(
-                context,
-                "/emergency_enterise",
-                arguments: uid,
-              );
-            }),
-          ],
         ),
       ),
     );

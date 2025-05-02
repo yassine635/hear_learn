@@ -49,7 +49,7 @@ dependencies:
   google_mlkit_text_recognition: ^0.15.0
   pdf_render: ^1.4.12
   path: ^1.8.3
-  image: ^3.0.1
+  image: ^4.2.0
   google_mlkit_language_id: ^0.10.0
   camera: ^0.10.5+2
   palette_generator: ^0.3.3
@@ -57,12 +57,15 @@ dependencies:
   dio: ^5.4.0
   flutter_downloader: ^1.7.0
   permission_handler: ^11.0.1
+  flutter_bloc: ^9.1.0
+  flutter_launcher_icons : ^0.14.3
   
-  
-  #pdf_text: ^0.5.0
-  #flutter_ffmpeg: ^0.4.2
-  
-  #ffmpeg_kit_flutter: ^6.0.3
+flutter_icons:  
+    android: true
+    ios: true
+    image_path: "images/Capturefinal.PNG"  
+    min_sdk_android: 21
+    remove_alpha_ios: true  
   
 
 dev_dependencies:

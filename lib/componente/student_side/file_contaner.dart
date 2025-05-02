@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hear_learn1/data/cheker.dart';
 import 'package:hear_learn1/extract_read_flutter_tts/PDFToSpeechScreen.dart';
 import 'package:firebase_storage/firebase_storage.dart'; 
 import 'package:cloud_firestore/cloud_firestore.dart'; 
@@ -70,18 +71,18 @@ class _FileContanerState extends State<FileContaner> {
     }
   }
 
-  // Function to download the file to the phone
+  
   Future<void> downloadFile(String storagePath, String fileName) async {
     try {
-      // Getting the temporary directory for storing files
+      
       final Directory? directory = await getExternalStorageDirectory();
       final String filePath = '${directory!.path}/$fileName';
 
-      // Start downloading the file from Firebase Storage
+      
       final Reference ref = FirebaseStorage.instance.ref(storagePath);
       final File file = File(filePath);
 
-      // Write the file to local storage
+      
       await ref.writeToFile(file);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text(' تم تحمل الملف بنجاح')),
@@ -124,7 +125,7 @@ class _FileContanerState extends State<FileContaner> {
                       padding: const EdgeInsets.all(16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        side: BorderSide(color: Colors.purple.shade400, width: 2),
+                        side: BorderSide(color: Cheker.second_color, width: 2),
                       ),
                     ),
                     icon: const Icon(Icons.picture_as_pdf, color: Colors.black),
@@ -136,15 +137,15 @@ class _FileContanerState extends State<FileContaner> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                // Show download or delete based on user type
-                if (userType == 1) // Student
+                
+                if (userType == 1) 
                   IconButton(
                     icon: const Icon(Icons.download, color: Colors.blue),
                     onPressed: () {
                       downloadFile(widget.storage_path, widget.file_name);
                     },
                   )
-                else if (userType == 2) // Teacher
+                else if (userType == 2)
                   PopupMenuButton<String>(
                     onSelected: (value) {
                       if (value == 'delete') {
@@ -192,13 +193,13 @@ class _FileContanerState extends State<FileContaner> {
     );
   }
 
-  // Delete the file from both Firebase Storage and Firestore
+  
   Future<void> deleteFileFromFirebase(String storagePath, String docId) async {
     try {
-      // 1. Delete the file from Firebase Storage
+      
       await FirebaseStorage.instance.ref(storagePath).delete();
 
-      // 2. Delete the corresponding document from Firestore
+      
       await FirebaseFirestore.instance.collection('urls').doc(docId).delete();
 
       print('File deleted successfully!');

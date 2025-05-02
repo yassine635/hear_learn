@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hear_learn1/data/cheker.dart';
 
 class CreateQuizScreen extends StatefulWidget {
   const CreateQuizScreen({super.key});
@@ -90,7 +91,7 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Quiz enregistré avec succès!")),
+        SnackBar(content: Text("تم تسجيل الاختبار بنجاح!")),
       );
 
       questionController.clear();
@@ -104,100 +105,112 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erreur lors de l'enregistrement: $e")),
+        SnackBar(content: Text("Erreur lors de l'enregistrement: $e"),
+        backgroundColor: Colors.green,),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Créer un Quiz"),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: questionController,
-              decoration:
-                  InputDecoration(labelText: "Question avec un espace vide"),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Cheker.first_color,
+          title: Text(
+            "انشاء سؤال",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight:FontWeight.bold,
+                fontSize: 24
+              ),
             ),
-            SizedBox(height: 16),
-            TextField(
-              controller: optionAController,
-              decoration: InputDecoration(labelText: "Option A"),
-            ),
-            TextField(
-              controller: optionBController,
-              decoration: InputDecoration(labelText: "Option B"),
-            ),
-            TextField(
-              controller: optionCController,
-              decoration: InputDecoration(labelText: "Option C"),
-            ),
-            TextField(
-              controller: optionDController,
-              decoration: InputDecoration(labelText: "Option D"),
-            ),
-            SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              value: correctAnswer,
-              items: ['a', 'b', 'c', 'd'].map((letter) {
-                return DropdownMenuItem(
-                  value: letter,
-                  child: Text("Bonne réponse : ${letter.toUpperCase()}"),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  correctAnswer = value;
-                });
-              },
-              decoration:
-                  InputDecoration(labelText: "Choisir la bonne réponse"),
-            ),
-            SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              value: selectedModule,
-              items: modules?.map((module) {
-                return DropdownMenuItem<String>(
-                  value: module.toString(),
-                  child: Text(module.toString()),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedModule = value;
-                });
-              },
-              decoration: InputDecoration(labelText: "Choisir le module"),
-            ),
-            SizedBox(height: 20),
-            DropdownButtonFormField<String>(
-              value: selectedlevel,
-              items: levels?.map((level) {
-                return DropdownMenuItem<String>(
-                  value: level.toString(),
-                  child: Text(level.toString()),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedlevel = value;
-                });
-              },
-              decoration: InputDecoration(labelText: "Choisir le neveau"),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: saveQuiz,
-              style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50)),
-              child: Text("Enregistrer le Quiz"),
-            ),
-          ],
+        ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              TextField(
+                controller: questionController,
+                decoration:
+                    InputDecoration(labelText: "سؤال"),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: optionAController,
+                decoration: InputDecoration(labelText: "الخيار أ"),
+              ),
+              TextField(
+                controller: optionBController,
+                decoration: InputDecoration(labelText: "الخيار ب"),
+              ),
+              TextField(
+                controller: optionCController,
+                decoration: InputDecoration(labelText: "الخيار ج"),
+              ),
+              TextField(
+                controller: optionDController,
+                decoration: InputDecoration(labelText: "الخيار د"),
+              ),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: correctAnswer,
+                items: ['a', 'b', 'c', 'd'].map((letter) {
+                  return DropdownMenuItem(
+                    value: letter,
+                    child: Text("Bonne réponse : ${letter.toUpperCase()}"),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    correctAnswer = value;
+                  });
+                },
+                decoration:
+                    InputDecoration(labelText: "اختر الإجابة الصحيحة"),
+              ),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: selectedModule,
+                items: modules?.map((module) {
+                  return DropdownMenuItem<String>(
+                    value: module.toString(),
+                    child: Text(module.toString()),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedModule = value;
+                  });
+                },
+                decoration: InputDecoration(labelText: "اختر الوحدة"),
+              ),
+              SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: selectedlevel,
+                items: levels?.map((level) {
+                  return DropdownMenuItem<String>(
+                    value: level.toString(),
+                    child: Text(level.toString()),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedlevel = value;
+                  });
+                },
+                decoration: InputDecoration(labelText: "اختر المستوى"),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: saveQuiz,
+                style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50)),
+                child: Text("احفظ السؤال"),
+              ),
+            ],
+          ),
         ),
       ),
     );
