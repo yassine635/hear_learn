@@ -59,6 +59,7 @@ dependencies:
   permission_handler: ^11.0.1
   flutter_bloc: ^9.1.0
   flutter_launcher_icons : ^0.14.3
+  flutter_native_splash: ^2.3.5
   
 flutter_icons:  
     android: true
@@ -106,10 +107,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: arab
+      fonts:
+        - asset: fonts/arab.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
@@ -120,3 +121,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_native_splash:
+  color: "#f5f5f5"  # Background color
+  image: images/Capturefinal_empty.png  # Your splash image
+  android: true
+  ios: true

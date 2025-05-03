@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hear_learn1/SplashScreen.dart';
+
 import 'package:hear_learn1/extract_read_flutter_tts/PDFToSpeechScreen.dart';
-import 'package:hear_learn1/data/auth.dart';
+//import 'package:hear_learn1/data/auth.dart';
 import 'package:hear_learn1/firebase_options.dart';
 import 'package:hear_learn1/home/Home_student.dart';
 import 'package:hear_learn1/screanses/espace_prof/teacher_functions/upload_course.dart';
@@ -34,7 +36,7 @@ class hearlern extends StatelessWidget {
       title: "بصيرتي",
       initialRoute: "/",
       routes: {
-        "/": (context) => const Auth(),
+        "/": (context) => const SplashScreen(),
         "/fonctionalite_screen": (context) => const Fonctionalite(),
         "/log_in_screen": (context) => const LoginScreen(),
         "/signup_prof_screen": (context) => const SignUpProf(),
