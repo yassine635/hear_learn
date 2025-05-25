@@ -23,27 +23,31 @@ class Tp extends StatelessWidget {
         alignment: Alignment.center,  // Align to the right for RTL
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: TextButton.icon(
-            
-            onPressed: onpressed,
-            label: Text(
-              "اعمال تطبيقية",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 30,
-                fontWeight: FontWeight.bold
-              ),
-            ),
-            icon: Icon(
-              Icons.book,
-              size: 30,
-              color: Colors.black,
-            ),
-            // Change text direction to RTL
-            style: ElevatedButton.styleFrom(
+          child: Semantics(
+            label: 'زر اعمال تطبيقية', // 👈 TalkBack will now say "زر الدروس"
+            button: true,
+            child: TextButton.icon(
               
-              textStyle: TextStyle(
-                textBaseline: TextBaseline.alphabetic,
+              onPressed: onpressed,
+              label: Text(
+                "اعمال تطبيقية",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              icon: Icon(
+                Icons.book,
+                size: 30,
+                color: Colors.black,
+              ),
+              // Change text direction to RTL
+              style: ElevatedButton.styleFrom(
+                
+                textStyle: TextStyle(
+                  textBaseline: TextBaseline.alphabetic,
+                ),
               ),
             ),
           ),
